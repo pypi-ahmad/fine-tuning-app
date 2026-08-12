@@ -136,8 +136,21 @@ def launch_job(job_id: str) -> int:
     }
     if any(row["status"] in active for row in list_jobs() if row["id"] != job_id):
         raise RuntimeError("Another training job is already active.")
+    job = get_job(job_id)
+    if not job:
+        raise ValueError(f"Unknown job: {job_id}")
+    manifest = RunManifest.from_dict(
+        json.loads(Path(job["manifest_path"]).read_text(encoding="utf-8"))
+    )
+    interpreter = Path(sys.executable)
+    if manifest.training.runtime_profile != "current":
+        from fine_tuning_studio.runtimes import profile_python
+
+        managed = profile_python(studio_home(), manifest.training.runtime_profile)
+        if managed.exists():
+            interpreter = managed
     process = subprocess.Popen(
-        [sys.executable, "-m", "fine_tuning_studio.worker", job_id],
+        [str(interpreter), "-m", "fine_tuning_studio.worker", job_id],
         cwd=Path.cwd(),
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,

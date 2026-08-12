@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import subprocess
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -30,7 +31,9 @@ from fine_tuning_studio.jobs import (
     launch_job,
     list_jobs,
     request_cancel,
+    studio_home,
 )
+from fine_tuning_studio.runtimes import PROFILES, provision_profile, runtime_verdict
 from fine_tuning_studio.system_info import MachineReport, qlora_capability, scan_machine
 
 st.set_page_config(page_title="Fine-Tuning Studio", page_icon="🧪", layout="wide")
@@ -102,6 +105,31 @@ def system_page() -> None:
         st.dataframe([gpu.__dict__ for gpu in report.gpus], width="stretch", hide_index=True)
     else:
         st.info("No GPU was detected.")
+    st.subheader("Managed training runtimes")
+    st.dataframe(
+        [
+            {
+                "profile": name,
+                "support": profile.status,
+                "verdict": runtime_verdict(report, name).state,
+                "platforms": ", ".join(profile.operating_systems),
+            }
+            for name, profile in PROFILES.items()
+        ],
+        hide_index=True,
+        width="stretch",
+    )
+    st.caption("WSL is an optional Linux host. Native Windows is supported directly.")
+    with st.expander("Install a managed runtime"):
+        profile = st.selectbox("Profile to install", list(PROFILES), key="install_profile")
+        st.warning("Installation downloads a separate PyTorch environment and can use several GB.")
+        if st.button("Install selected runtime"):
+            with st.spinner(f"Installing {profile} runtime…"):
+                try:
+                    python = provision_profile(studio_home(), profile)
+                    st.success(f"Installed managed interpreter: {python}")
+                except (OSError, subprocess.SubprocessError, RuntimeError) as exc:
+                    st.error(f"Runtime installation failed: {exc}")
     with st.expander("Software and integrations"):
         st.json(
             {
@@ -238,7 +266,25 @@ def training_page() -> None:
             "Unsloth" if value == "unsloth" else "Transformers + PEFT + TRL"
         ),
     )
-    training: dict[str, Any] = {"objective": objective, "method": method, "backend": backend}
+    detected_vendors = {gpu.vendor for gpu in machine_report().gpus}
+    suggested = next(
+        (name for name, profile in PROFILES.items() if profile.vendor in detected_vendors),
+        "cuda",
+    )
+    runtime_profile = st.selectbox(
+        "Runtime profile", list(PROFILES), index=list(PROFILES).index(suggested)
+    )
+    training: dict[str, Any] = {
+        "objective": objective,
+        "method": method,
+        "backend": backend,
+        "runtime_profile": runtime_profile,
+    }
+    if PROFILES[runtime_profile].status == "experimental":
+        st.warning("AMD ROCm and Intel XPU profiles are experimental until the smoke test passes.")
+        training["experimental_acknowledged"] = st.toggle(
+            "I understand this runtime is experimental", value=False
+        )
     c1, c2 = st.columns(2)
     training["epochs"] = c1.number_input("Epochs", 0.1, 100.0, 1.0, 0.5)
     training["learning_rate"] = c2.number_input("Learning rate", 1e-7, 1.0, 2e-4, format="%.7f")

@@ -152,6 +152,11 @@ def validate_manifest(manifest: RunManifest) -> list[str]:
         errors.append("GRPO supports LoRA or QLoRA only.")
     if manifest.training.method == "full" and manifest.export.adapter:
         errors.append("Full fine-tuning does not produce a LoRA adapter.")
+    if (
+        manifest.training.runtime_profile in {"rocm", "xpu"}
+        and not manifest.training.experimental_acknowledged
+    ):
+        errors.append("Acknowledge the experimental AMD or Intel runtime before launching.")
     if manifest.export.push_to_hub and not manifest.export.hub_repo_id.strip():
         errors.append("Enter a Hugging Face repository ID before enabling Hub upload.")
     if manifest.export.import_to_ollama and not manifest.export.ollama_model_name.strip():
