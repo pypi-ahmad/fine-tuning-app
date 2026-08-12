@@ -6,7 +6,8 @@ Hugging Face datasets accept either a dataset ID such as `MatrAIx2026/MatrAIx_Pe
 or its `https://huggingface.co/datasets/...` repository URL. Revision defaults to `main`
 and split defaults to `train`. **Validate & download dataset** checks the reference,
 reports its files and bytes, and downloads it into the standard Hugging Face cache.
-Authentication for gated or private datasets comes from `HF_TOKEN`.
+Authentication for gated or private datasets comes from `HF_TOKEN` (preferred) or the
+legacy `HUGGING_FACE_HUB_TOKEN` alias.
 
 Tree, viewer, blob, and resolve URLs are normalized to the containing repository. The
 Revision field remains authoritative; a pasted file URL does not select only that file.

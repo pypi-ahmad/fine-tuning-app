@@ -17,7 +17,7 @@ additional memory and disk space beyond training requirements.
 
 Enable Hub upload, enter `username/repository`, and choose repository visibility. The
 worker pushes the adapter through the authenticated Hugging Face client. `HF_TOKEN`
-must have suitable write permission.
+(preferred) or `HUGGING_FACE_HUB_TOKEN` must have suitable write permission.
 
 ## Ollama
 

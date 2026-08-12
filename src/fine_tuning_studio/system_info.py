@@ -83,6 +83,10 @@ def _package_versions() -> dict[str, str | None]:
     return versions
 
 
+def _hugging_face_token_present() -> bool:
+    return bool(os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN"))
+
+
 def _nvidia_gpus() -> list[GPUInfo]:
     if not shutil.which("nvidia-smi"):
         return []
@@ -256,7 +260,10 @@ def scan_machine(workspace: Path | None = None) -> MachineReport:
             "xpu_smi": bool(shutil.which("xpu-smi")),
         },
         packages=_package_versions(),
-        integrations={"hf_token_present": "HF_TOKEN" in os.environ, "ollama": _ollama_status()},
+        integrations={
+            "hf_token_present": _hugging_face_token_present(),
+            "ollama": _ollama_status(),
+        },
         warnings=warnings,
     )
 
