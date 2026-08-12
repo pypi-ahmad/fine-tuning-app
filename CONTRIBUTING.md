@@ -43,7 +43,7 @@ uv lock --check
 uv audit --frozen
 ```
 
-CI runs this suite on Windows and Ubuntu with Python 3.13 and 3.14.
+CI runs this suite on Windows and Ubuntu with Python 3.12.10, 3.13, and 3.14.
 
 ## Style and compatibility
 
