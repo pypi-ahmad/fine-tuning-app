@@ -1,0 +1,52 @@
+# Troubleshooting
+
+## Training button is disabled
+
+Open **System** and read every capability warning. Version 0.1 requires an NVIDIA GPU,
+CUDA-enabled PyTorch, all listed training packages, and at least 3.5 GB of currently
+free VRAM. Also verify that a dataset and model are selected and the run manifest has no
+validation errors.
+
+## CUDA is unavailable
+
+Check `nvidia-smi`, the NVIDIA driver, and the PyTorch runtime shown in the system
+report. Restart the app after driver or environment changes. The project lockfile uses
+the configured PyTorch CUDA package index; do not mix unrelated PyTorch builds into the
+managed environment.
+
+## Out of memory
+
+Close other GPU applications, select a smaller base model, reduce maximum sequence
+length or device batch size, keep gradient checkpointing enabled, and increase gradient
+accumulation if needed to preserve effective batch size. Model merging may require more
+memory than adapter training.
+
+## Gated model or dataset fails to load
+
+Accept the resource license on Hugging Face, set `HF_TOKEN` in the user environment,
+confirm the token has read access, and restart the launcher. The UI reports presence,
+not the token value.
+
+## Dataset fails after preview
+
+Confirm the file has at least two rows and the configured text, prompt/response, or
+messages columns exist. For messages data, each row should contain a list of role/content
+objects.
+
+## A job appears stuck
+
+Inspect the Monitor page events and free disk/GPU memory. Cancellation takes effect at
+the next trainer logging callback and may wait for model loading, evaluation, or the
+current training step.
+
+## Ollama is unavailable
+
+Confirm the service is running, `ollama` is on `PATH`, and `OLLAMA_HOST` points to its
+HTTP API. Test the configured endpoint's `/api/tags` route. Ollama import also requires
+a merged model and an architecture Ollama supports.
+
+## Resetting local state
+
+Jobs live under `FINE_TUNING_STUDIO_HOME` or `~/.fine-tuning-studio`. Back up anything
+important before manually removing job data. Fine-Tuning Studio has no built-in delete
+or reset operation in v0.1.

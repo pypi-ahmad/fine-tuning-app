@@ -1,0 +1,49 @@
+[project]
+name = "fine-tuning-studio"
+version = "0.1.0"
+description = "Local-first UI for fine-tuning and exporting AI models"
+readme = "README.md"
+requires-python = ">=3.13,<3.15"
+license = "Apache-2.0"
+dependencies = [
+  "accelerate",
+  "bitsandbytes",
+  "datasets",
+  "huggingface-hub",
+  "pyarrow",
+  "peft",
+  "psutil",
+  "safetensors",
+  "streamlit",
+  "torch",
+  "transformers",
+  "trl",
+]
+
+[dependency-groups]
+dev = ["pytest", "ruff", "ty"]
+
+[build-system]
+requires = ["uv_build>=0.8.15,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ty.environment]
+python-version = "3.13"
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu130" }

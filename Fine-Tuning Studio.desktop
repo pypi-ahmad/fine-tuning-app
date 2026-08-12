@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Fine-Tuning Studio
+Comment=Launch the local fine-tuning workbench
+Terminal=true
+Exec=sh -c 'cd "$(dirname "$1")" && exec ./launch.sh' sh %k
+Icon=applications-science
+Categories=Development;Science;
+
