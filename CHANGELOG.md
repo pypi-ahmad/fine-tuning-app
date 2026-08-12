@@ -7,16 +7,19 @@ this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-- Added Hugging Face dataset/model repository URL inputs with canonical ID resolution,
-  validation, disk checks, and cache-aware downloads from the Streamlit UI.
-- Added pre-training GPU memory inspection and safe cleanup, confirmed termination of
-  eligible user-owned GPU processes, and a streamed installed-model Ollama playground.
-
 ## [1.0.0] - 2026-08-12
 
 - Stable local GA: schema-v4 manifests, transactional storage migrations, automatic
   pre-migration backups, integrity checks, restore tooling, loopback-only serving,
   a packaged CLI, release attestations, SBOMs, and cross-platform CI.
+- Added Hugging Face dataset/model repository URL inputs with canonical ID resolution,
+  validation, disk checks, and cache-aware downloads from the Streamlit UI.
+- Added pre-training GPU memory inspection and safe cleanup, confirmed termination of
+  eligible user-owned GPU processes, and a streamed installed-model Ollama playground.
+- Accepted `HF_TOKEN` and the legacy `HUGGING_FACE_HUB_TOKEN` environment variable while
+  reporting only credential presence.
+- Added a confirmed global stop control with cooperative cancellation, verified
+  app-owned process-tree cleanup, preserved job data, and clean local-server exit.
 
 ## [0.9.0] - 2026-08-12
 
