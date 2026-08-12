@@ -11,7 +11,7 @@ from fine_tuning_studio.domain import (
     RunManifest,
     TrainingSpec,
 )
-from fine_tuning_studio.jobs import create_job, get_job, resume_job
+from fine_tuning_studio.jobs import create_job, get_job, reconcile_jobs, resume_job, update_job
 
 
 def test_create_job_persists_manifest_and_sanitized_upload(
@@ -33,7 +33,7 @@ def test_create_job_persists_manifest_and_sanitized_upload(
     assert job["status"] == "queued"
 
 
-def test_resume_creates_v2_child_job(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+def test_resume_creates_v4_child_job(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setenv("FINE_TUNING_STUDIO_HOME", str(tmp_path))
     parent = RunManifest(
         dataset=DatasetSpec(source="hub", location="org/data"),
@@ -47,5 +47,24 @@ def test_resume_creates_v2_child_job(tmp_path: Path, monkeypatch: MonkeyPatch) -
     checkpoint.mkdir(parents=True)
     child = resume_job(parent.id, checkpoint)
     assert child.parent_job_id == parent.id
-    assert child.schema_version == 2
+    assert child.schema_version == 4
     assert child.training.resume_checkpoint == str(checkpoint.resolve())
+
+
+def test_reconcile_marks_missing_worker_interrupted(
+    tmp_path: Path, monkeypatch: MonkeyPatch
+) -> None:
+    monkeypatch.setenv("FINE_TUNING_STUDIO_HOME", str(tmp_path))
+    run = RunManifest(
+        dataset=DatasetSpec(source="hub", location="org/data"),
+        model=ModelSpec(source="hub", location="org/model"),
+        training=TrainingSpec(),
+        evaluation=EvaluationSpec(),
+        export=ExportSpec(),
+    )
+    create_job(run)
+    update_job(run.id, status="training", pid=999_999_999)
+    assert reconcile_jobs() == 1
+    job = get_job(run.id)
+    assert job is not None
+    assert job["status"] == "interrupted"

@@ -151,6 +151,36 @@ def _windows_display_adapters() -> list[GPUInfo]:
     return adapters
 
 
+def _linux_display_adapters() -> list[GPUInfo]:
+    if platform.system() != "Linux" or not shutil.which("lspci"):
+        return []
+    result = _run(["lspci"])
+    if not result or result.returncode:
+        return []
+    adapters: list[GPUInfo] = []
+    for line in result.stdout.splitlines():
+        if "VGA" not in line and "Display" not in line and "3D controller" not in line:
+            continue
+        vendor = next(
+            (
+                name
+                for marker, name in (("NVIDIA", "NVIDIA"), ("AMD", "AMD"), ("Intel", "Intel"))
+                if marker.lower() in line.lower()
+            ),
+            "Other",
+        )
+        if vendor == "NVIDIA":
+            continue
+        adapters.append(
+            GPUInfo(
+                vendor=vendor,
+                name=line.split(":", 2)[-1].strip(),
+                device_index=len(adapters),
+            )
+        )
+    return adapters
+
+
 def _torch_runtime() -> dict[str, Any]:
     try:
         import torch
@@ -191,6 +221,7 @@ def scan_machine(workspace: Path | None = None) -> MachineReport:
     disk = shutil.disk_usage(workspace)
     gpus = _nvidia_gpus()
     gpus.extend(_windows_display_adapters())
+    gpus.extend(_linux_display_adapters())
     warnings: list[str] = []
     if not gpus:
         warnings.append(
@@ -234,7 +265,7 @@ def qlora_capability(report: MachineReport) -> tuple[bool, list[str]]:
     reasons: list[str] = []
     nvidia = [gpu for gpu in report.gpus if gpu.vendor == "NVIDIA"]
     if not nvidia:
-        reasons.append("V0.1 QLoRA requires an NVIDIA GPU.")
+        reasons.append("The stable QLoRA profile requires an NVIDIA GPU.")
     if not report.runtimes.get("torch", {}).get("cuda_available"):
         reasons.append("The installed PyTorch build cannot access CUDA.")
     for package in ("transformers", "datasets", "peft", "trl", "accelerate", "bitsandbytes"):

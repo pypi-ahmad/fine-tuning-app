@@ -44,15 +44,22 @@ def test_ollama_requires_merged_model() -> None:
     assert "Ollama import requires merged-model export for adapter jobs." in errors
 
 
-def test_schema_one_manifest_is_readable_and_upgrades_on_new_runs() -> None:
+def test_schema_one_manifest_is_readable_and_new_runs_use_v4() -> None:
     raw = manifest().to_dict()
     raw["schema_version"] = 1
     raw.pop("provenance")
     assert RunManifest.from_dict(raw).schema_version == 1
-    assert manifest().schema_version == 2
+    assert manifest().schema_version == 4
 
 
 def test_path_must_remain_in_workspace(tmp_path: Path) -> None:
     assert ensure_within(tmp_path, tmp_path / "job") == (tmp_path / "job").resolve()
     with pytest.raises(ValueError, match="escapes"):
         ensure_within(tmp_path, tmp_path.parent / "outside")
+
+
+def test_cpu_profile_rejects_qlora() -> None:
+    value = manifest().to_dict()
+    value["training"]["runtime_profile"] = "cpu"
+    errors = validate_manifest(RunManifest.from_dict(value))
+    assert any("QLoRA requires" in error for error in errors)

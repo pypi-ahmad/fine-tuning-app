@@ -11,3 +11,9 @@ build/
 .codegraph/
 .code-review-graph/
 graphify-out/
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*.pem
+*.key

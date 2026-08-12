@@ -18,7 +18,7 @@ def test_cuda_ready_with_working_runtime() -> None:
     assert runtime_verdict(report("NVIDIA", cuda_available=True), "cuda").state == "ready"
 
 
-def test_amd_requires_profile_install_when_hip_is_missing() -> None:
+def test_amd_rocm_is_unsupported_on_native_windows() -> None:
     verdict = runtime_verdict(report("AMD", hip_version=None), "rocm")
-    assert verdict.state == "install-required"
-    assert "experimental" in verdict.reasons[0].lower()
+    assert verdict.state == "unsupported"
+    assert "operating system" in verdict.reasons[0].lower()

@@ -20,13 +20,16 @@ class RuntimeProfile:
     status: str
     torch_index: str
     notes: str
+    torch_version: str = "2.13.0"
+    python_minimum: str = "3.12.10"
 
 
 PROFILES = {
     profile.id: profile
     for profile in (
+        RuntimeProfile("cpu", "CPU", ("Windows", "Linux"), "stable", "cpu", "CPU validation"),
         RuntimeProfile("cuda", "NVIDIA", ("Windows", "Linux"), "stable", "cu130", "CUDA 13"),
-        RuntimeProfile("rocm", "AMD", ("Windows", "Linux"), "experimental", "rocm7.1", "ROCm"),
+        RuntimeProfile("rocm", "AMD", ("Linux",), "beta", "rocm7.2", "ROCm 7.2"),
         RuntimeProfile("xpu", "Intel", ("Windows", "Linux"), "experimental", "xpu", "Intel XPU"),
     )
 }
@@ -55,10 +58,11 @@ def runtime_verdict(report: MachineReport, profile: str, method: str = "qlora") 
     reasons: list[str] = []
     if report.os["system"] not in definition.operating_systems:
         return RuntimeVerdict(profile, "unsupported", ["Operating system is unsupported."])
-    if not any(gpu.vendor == definition.vendor for gpu in report.gpus):
+    if profile != "cpu" and not any(gpu.vendor == definition.vendor for gpu in report.gpus):
         return RuntimeVerdict(profile, "unsupported", [f"No {definition.vendor} GPU detected."])
     torch = report.runtimes.get("torch", {})
     available = {
+        "cpu": torch.get("available"),
         "cuda": torch.get("cuda_available"),
         "rocm": bool(torch.get("hip_version")),
         "xpu": torch.get("xpu_available"),
@@ -74,9 +78,9 @@ def runtime_verdict(report: MachineReport, profile: str, method: str = "qlora") 
 def smoke_test(profile: str) -> dict[str, Any]:
     import torch
 
-    device = {"cuda": "cuda", "rocm": "cuda", "xpu": "xpu"}[profile]
-    module = torch.cuda if device == "cuda" else torch.xpu
-    if not module.is_available():
+    device = {"cpu": "cpu", "cuda": "cuda", "rocm": "cuda", "xpu": "xpu"}[profile]
+    module = torch.cuda if device == "cuda" else getattr(torch, "xpu", None)
+    if device != "cpu" and (module is None or not module.is_available()):
         return {"ok": False, "error": f"{profile} device is unavailable"}
     left = torch.ones((16, 16), device=device)
     result = left @ left
@@ -105,23 +109,31 @@ def provision_profile(root: Path, profile: str) -> Path:
         ["uv", "venv", str(python.parent.parent), "--python", sys.executable], check=True
     )
     packages = [
-        "transformers",
-        "datasets",
-        "peft",
-        "trl",
-        "accelerate",
-        "safetensors",
-        "bitsandbytes",
+        "transformers==5.15.0",
+        "datasets==5.0.1",
+        "peft==0.20.0",
+        "trl==1.9.2",
+        "accelerate==1.14.0",
+        "safetensors==0.8.0",
     ]
+    if profile in {"cuda", "rocm"}:
+        packages.append("bitsandbytes==0.50.0")
     torch_source = f"https://download.pytorch.org/whl/{definition.torch_index}"
     subprocess.run(
-        ["uv", "pip", "install", "--python", str(python), "torch", "--index-url", torch_source],
+        [
+            "uv",
+            "pip",
+            "install",
+            "--python",
+            str(python),
+            f"torch=={definition.torch_version}",
+            "--index-url",
+            torch_source,
+        ],
         check=True,
     )
     subprocess.run(["uv", "pip", "install", "--python", str(python), *packages], check=True)
-    subprocess.run(
-        ["uv", "pip", "install", "--python", str(python), ".", "--no-deps"], check=True
-    )
+    subprocess.run(["uv", "pip", "install", "--python", str(python), ".", "--no-deps"], check=True)
     (directory / "profile.json").write_text(
         json.dumps(asdict(definition), indent=2), encoding="utf-8"
     )

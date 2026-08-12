@@ -6,7 +6,7 @@ if ! command -v uv >/dev/null 2>&1; then
   read -r -p "Press Enter to close..." _
   exit 1
 fi
-uv run --locked streamlit run src/fine_tuning_studio/app.py
+uv run --locked fine-tuning-studio run
 status=$?
 if [ "$status" -ne 0 ]; then
   echo
@@ -14,4 +14,3 @@ if [ "$status" -ne 0 ]; then
   read -r -p "Press Enter to close..." _
 fi
 exit "$status"
-

@@ -15,10 +15,15 @@ managed environment.
 
 ## Out of memory
 
-Close other GPU applications, select a smaller base model, reduce maximum sequence
+Open **System** or the cleanup panel in **Review & run**, refresh GPU usage, and select
+**Release reclaimable VRAM**. This clears only unused app caches and unloads running
+Ollama models. Memory owned by another application cannot be reclaimed without closing
+it; the UI can terminate an eligible same-user process only after explicit selection and
+typed confirmation. System/display processes and active training workers are protected.
+
+If memory remains insufficient, select a smaller base model, reduce maximum sequence
 length or device batch size, keep gradient checkpointing enabled, and increase gradient
-accumulation if needed to preserve effective batch size. Model merging may require more
-memory than adapter training.
+accumulation. Model merging may require more memory than adapter training.
 
 ## Gated model or dataset fails to load
 

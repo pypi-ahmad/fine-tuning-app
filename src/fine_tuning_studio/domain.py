@@ -19,6 +19,7 @@ class JobStatus(StrEnum):
     CANCELLING = "cancelling"
     CANCELLED = "cancelled"
     FAILED = "failed"
+    INTERRUPTED = "interrupted"
 
 
 @dataclass(frozen=True)
@@ -43,6 +44,7 @@ class ModelSpec:
     location: str
     revision: str = "main"
     trust_remote_code: bool = False
+    trust_remote_code_acknowledged: bool = False
 
 
 @dataclass(frozen=True)
@@ -68,6 +70,12 @@ class TrainingSpec:
     experimental_acknowledged: bool = False
     reward_module: str | None = None
     reward_functions: list[str] = field(default_factory=list)
+    preset: str = "balanced"
+    device_indices: list[int] = field(default_factory=list)
+    distributed_strategy: str = "single"
+    world_size: int = 1
+    fsdp_cpu_offload: bool = False
+    custom_code_acknowledged: bool = False
 
 
 @dataclass(frozen=True)
@@ -106,7 +114,7 @@ class RunManifest:
     evaluation: EvaluationSpec
     export: ExportSpec
     id: str = field(default_factory=lambda: str(uuid4()))
-    schema_version: int = 2
+    schema_version: int = 4
     created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     parent_job_id: str | None = None
     provenance: ProvenanceSpec = field(default_factory=ProvenanceSpec)
@@ -116,9 +124,12 @@ class RunManifest:
 
     @classmethod
     def from_dict(cls, value: dict[str, Any]) -> RunManifest:
+        schema = int(value.get("schema_version", 1))
+        if schema > 4:
+            raise ValueError(f"Manifest schema {schema} requires a newer Fine-Tuning Studio.")
         return cls(
             id=value["id"],
-            schema_version=value.get("schema_version", 1),
+            schema_version=schema,
             created_at=value["created_at"],
             parent_job_id=value.get("parent_job_id"),
             dataset=DatasetSpec(**value["dataset"]),
@@ -146,8 +157,27 @@ def validate_manifest(manifest: RunManifest) -> list[str]:
         errors.append(f"Unsupported objective: {manifest.training.objective}.")
     if manifest.training.method not in methods:
         errors.append(f"Unsupported method: {manifest.training.method}.")
+    if manifest.training.method == "qlora" and manifest.training.runtime_profile == "cpu":
+        errors.append("QLoRA requires a supported GPU runtime; choose LoRA for CPU training.")
+    if manifest.training.distributed_strategy not in {"single", "auto", "ddp", "fsdp2"}:
+        errors.append("Distributed strategy must be single, auto, DDP, or FSDP2.")
+    if manifest.training.world_size < 1:
+        errors.append("World size must be at least one.")
+    if manifest.training.world_size == 1 and manifest.training.distributed_strategy in {
+        "ddp",
+        "fsdp2",
+    }:
+        errors.append("DDP and FSDP2 require at least two selected devices.")
+    if manifest.training.fsdp_cpu_offload:
+        errors.append("FSDP CPU offload is not supported in Fine-Tuning Studio 1.0.")
+    if manifest.training.backend == "unsloth" and manifest.training.world_size != 1:
+        errors.append("Unsloth is limited to single-GPU training.")
     if manifest.training.objective != "sft" and manifest.training.backend == "unsloth":
         errors.append("Unsloth is currently available for SFT jobs only.")
+    if manifest.model.trust_remote_code and not manifest.model.trust_remote_code_acknowledged:
+        errors.append("Confirm that model repository code will execute locally.")
+    if manifest.training.reward_module and not manifest.training.custom_code_acknowledged:
+        errors.append("Confirm that the custom reward module will execute locally.")
     from fine_tuning_studio.recipes import RECIPES
 
     recipe = RECIPES.get(manifest.training.objective)

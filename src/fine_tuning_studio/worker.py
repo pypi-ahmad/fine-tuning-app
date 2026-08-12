@@ -11,8 +11,9 @@ from typing import Any, cast
 
 from fine_tuning_studio.artifacts import write_artifact_manifest
 from fine_tuning_studio.domain import JobStatus, RunManifest
-from fine_tuning_studio.evals import run_inspect
+from fine_tuning_studio.evals import EvaluationManifest, run_inspect, write_evaluation_report
 from fine_tuning_studio.jobs import get_job, job_directory, update_job
+from fine_tuning_studio.preflight import inspect_dataset, write_report
 from fine_tuning_studio.recipes import REWARDS, load_trusted_reward, validate_recipe
 from fine_tuning_studio.resources import full_training_gate
 
@@ -195,13 +196,23 @@ def run(job_id: str) -> None:
     tokenizer = cast(Any, tokenizer)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-    dataset = render_dataset(load_data(manifest, events), manifest, tokenizer)
+    raw_dataset = load_data(manifest, events)
+    dataset_report = inspect_dataset(raw_dataset, manifest.dataset)
+    write_report(directory / "dataset-preflight.json", dataset_report)
+    if dataset_report.errors:
+        raise ValueError("Dataset preflight failed: " + " ".join(dataset_report.errors))
+    dataset = render_dataset(raw_dataset, manifest, tokenizer)
     split = dataset.train_test_split(
         test_size=manifest.dataset.validation_fraction,
         seed=manifest.dataset.seed,
         shuffle=True,
     )
-    compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    if manifest.training.runtime_profile == "cpu":
+        compute_dtype = torch.float32
+    elif manifest.training.runtime_profile == "xpu":
+        compute_dtype = torch.bfloat16
+    else:
+        compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
     quantization = None
     if manifest.training.method == "qlora":
         quantization = BitsAndBytesConfig(
@@ -238,14 +249,12 @@ def run(job_id: str) -> None:
             revision=revision,
             trust_remote_code=manifest.model.trust_remote_code,
             quantization_config=quantization,
-            device_map="auto",
+            device_map=None if manifest.training.world_size > 1 else "auto",
             dtype=compute_dtype,
         )
     if manifest.training.method == "full":
         free_bytes, _ = torch.cuda.mem_get_info() if torch.cuda.is_available() else (0, 0)
-        gate = full_training_gate(
-            model.num_parameters(), free_bytes / 1024**3, directory
-        )
+        gate = full_training_gate(model.num_parameters(), free_bytes / 1024**3, directory)
         if not gate.allowed:
             raise RuntimeError("Full-training safety gate: " + " ".join(gate.reasons))
     if manifest.training.method == "qlora" and manifest.training.backend != "unsloth":
@@ -345,7 +354,7 @@ def run(job_id: str) -> None:
     trainer.train(resume_from_checkpoint=manifest.training.resume_checkpoint)
     if cancel_path.exists():
         trainer.save_model(str(artifacts / "adapter-cancelled"))
-        update_job(job_id, status=JobStatus.CANCELLED, stage="Cancelled", progress=1.0)
+        update_job(job_id, status=JobStatus.CANCELLED, stage="Cancelled", progress=1.0, exit_code=0)
         events.write("cancelled", "Cancelled safely; adapter checkpoint saved", 1.0)
         return
     if manifest.evaluation.after:
@@ -379,6 +388,19 @@ def run(job_id: str) -> None:
     (artifacts / "metrics.json").write_text(
         json.dumps(metrics, indent=2, default=str), encoding="utf-8"
     )
+    scores: dict[str, float] = {}
+    for name, values in metrics.items():
+        if not isinstance(values, dict):
+            continue
+        loss = next((value for key, value in values.items() if key.endswith("_loss")), None)
+        if loss is not None:
+            scores[name] = float(loss)
+    if scores:
+        write_evaluation_report(
+            artifacts / "evaluation",
+            EvaluationManifest(model=model_ref, tasks=list(scores)),
+            scores,
+        )
     merged_path: Path | None = output_path if manifest.training.method == "full" else None
     if manifest.export.merged_model and manifest.training.method != "full":
         events.write("exporting", "Merging adapter into base model", 0.92)
@@ -396,7 +418,7 @@ def run(job_id: str) -> None:
     if manifest.export.import_to_ollama and merged_path:
         import_into_ollama(manifest, merged_path, events)
     write_artifact_manifest(artifacts)
-    update_job(job_id, status=JobStatus.COMPLETED, stage="Completed", progress=1.0)
+    update_job(job_id, status=JobStatus.COMPLETED, stage="Completed", progress=1.0, exit_code=0)
     events.write("completed", "Training and export completed", 1.0)
 
 
@@ -415,6 +437,7 @@ def main() -> int:
             stage="Failed",
             progress=1.0,
             error=f"{type(exc).__name__}: {exc}",
+            exit_code=1,
         )
         return 1
     return 0

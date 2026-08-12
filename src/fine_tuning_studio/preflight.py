@@ -32,19 +32,27 @@ class ModelReport:
 
 
 def _required_columns(spec: DatasetSpec) -> set[str]:
+    canonical = {
+        "preference": {"prompt", "chosen", "rejected"},
+        "kto": {"prompt", "completion", "label"},
+        "grpo": {"prompt"},
+    }
+    if spec.mapping in canonical:
+        return canonical[spec.mapping]
     if spec.mapping == "prompt_response":
         return {spec.prompt_column, spec.response_column}
     return {spec.text_column}
 
 
-def inspect_dataset(dataset: Any, spec: DatasetSpec) -> DatasetReport:
+def inspect_dataset(dataset: Any, spec: DatasetSpec, sample_limit: int = 1_000) -> DatasetReport:
     columns = list(dataset.column_names)
     missing = _required_columns(spec) - set(columns)
     errors = [f"Missing column: {name}" for name in sorted(missing)]
     nulls = {name: 0 for name in columns}
     characters = 0
     digest = hashlib.sha256()
-    for row in dataset:
+    sample = dataset.select(range(min(len(dataset), sample_limit)))
+    for row in sample:
         encoded = json.dumps(row, sort_keys=True, default=str).encode()
         digest.update(encoded)
         for name in columns:

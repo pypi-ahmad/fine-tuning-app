@@ -7,6 +7,37 @@ this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+- Added Hugging Face dataset/model repository URL inputs with canonical ID resolution,
+  validation, disk checks, and cache-aware downloads from the Streamlit UI.
+- Added pre-training GPU memory inspection and safe cleanup, confirmed termination of
+  eligible user-owned GPU processes, and a streamed installed-model Ollama playground.
+
+## [1.0.0] - 2026-08-12
+
+- Stable local GA: schema-v4 manifests, transactional storage migrations, automatic
+  pre-migration backups, integrity checks, restore tooling, loopback-only serving,
+  a packaged CLI, release attestations, SBOMs, and cross-platform CI.
+
+## [0.9.0] - 2026-08-12
+
+- Added single-node Accelerate launch configurations for DDP and FSDP2, physical
+  device selection, same-run distributed provenance, and single-GPU Unsloth gating.
+
+## [0.8.0] - 2026-08-12
+
+- Added Python 3.12 support, CPU/CUDA/ROCm/XPU managed profiles, bounded hardware
+  probes, automatic precision selection, and explicit stable/beta support tiers.
+
+## [0.7.0] - 2026-08-12
+
+- Added reusable evaluation manifests, JSON/CSV/HTML reports, and two-to-four-run
+  comparison data alongside Transformers and optional Inspect AI evaluation.
+
+## [0.6.0] - 2026-08-12
+
+- Added bounded dataset preflight, persistent worker stdout/stderr, process-tree
+  cancellation, interrupted-worker reconciliation, and versioned SQLite migrations.
+
 ## [0.5.0] - 2026-08-12
 
 - Added DPO, KTO, reward-model, and GRPO recipes, built-in/custom rewards, recipe

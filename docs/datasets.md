@@ -2,8 +2,14 @@
 
 ## Sources
 
-Hugging Face datasets use a dataset ID, revision (default `main`), and split (default
-`train`). Authentication for gated or private datasets comes from `HF_TOKEN`.
+Hugging Face datasets accept either a dataset ID such as `MatrAIx2026/MatrAIx_Persona_1M`
+or its `https://huggingface.co/datasets/...` repository URL. Revision defaults to `main`
+and split defaults to `train`. **Validate & download dataset** checks the reference,
+reports its files and bytes, and downloads it into the standard Hugging Face cache.
+Authentication for gated or private datasets comes from `HF_TOKEN`.
+
+Tree, viewer, blob, and resolve URLs are normalized to the containing repository. The
+Revision field remains authoritative; a pasted file URL does not select only that file.
 
 Local uploads support `.json`, `.jsonl`, `.csv`, and `.parquet`. The UI previews up to
 100 rows. The full file is copied into the job directory before the background worker

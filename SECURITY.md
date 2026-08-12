@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are applied to the current `0.1.x` release line. Older versions are not
+Security fixes are applied to the current `1.x` release line. Older versions are not
 supported.
 
 ## Reporting a vulnerability
@@ -36,7 +36,17 @@ are sanitized and job paths are kept inside the configured application workspace
 
 Model repositories can execute code when `trust_remote_code` is enabled. Treat this as
 an explicit trust decision: review the repository and leave the option disabled unless
-it is required.
+it is required. The UI requires typing `I UNDERSTAND`. Custom reward modules have the
+same confirmation and execute without a sandbox.
+
+The application binds to loopback, keeps Streamlit XSRF/CORS protections enabled, does
+not load `.env` files, and reads Hugging Face authentication only from `HF_TOKEN`.
+
+GPU process termination is opt-in. The UI shows the PID and executable, accepts only
+same-user non-system candidates, requires typing `TERMINATE`, and revalidates process
+identity immediately before termination. The current app, active training workers,
+Ollama-managed runners, operating-system services, and inaccessible processes are
+protected. Fine-Tuning Studio never attempts a privileged GPU-driver reset.
 
 ## Out of scope
 

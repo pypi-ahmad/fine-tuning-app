@@ -7,10 +7,9 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-uv run --locked streamlit run src/fine_tuning_studio/app.py
+uv run --locked fine-tuning-studio run
 if errorlevel 1 (
   echo.
   echo Fine-Tuning Studio stopped with an error.
   pause
 )
-

@@ -36,9 +36,7 @@ RECIPES = {
 def validate_recipe(objective: str, method: str, columns: set[str]) -> list[str]:
     recipe = RECIPES[objective]
     errors = [
-        f"Missing recipe column: {name}"
-        for name in recipe.required_columns
-        if name not in columns
+        f"Missing recipe column: {name}" for name in recipe.required_columns if name not in columns
     ]
     if method not in recipe.methods:
         errors.append(f"{objective.upper()} does not support {method.upper()}.")
