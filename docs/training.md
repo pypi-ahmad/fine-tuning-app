@@ -1,10 +1,10 @@
 # Training
 
-## Supported method
+## Supported methods
 
-Version 0.1 supports supervised fine-tuning of causal language models using QLoRA. The
-backend is Transformers + PEFT + TRL, with bitsandbytes 4-bit NF4 quantization and
-double quantization. LoRA targets all linear layers.
+Version 0.5 supports SFT and continued pretraining with LoRA, QLoRA, or guarded full
+tuning. DPO, KTO, reward modeling, and GRPO use their objective-specific dataset
+contracts. ORPO remains visible but blocked because TRL 1.9 has no ORPO trainer.
 
 The worker uses bfloat16 when the GPU supports it and float16 otherwise.
 
@@ -31,9 +31,8 @@ batch size multiplied by gradient accumulation steps.
 ## Evaluation
 
 Evaluation before and after training is enabled by default and uses the validation
-split. Metrics are written to `artifacts/metrics.json`. Standard benchmark execution is
-disabled in v0.1 because of unresolved advisories in the stable Lighteval dependency
-chain.
+split. Metrics are written to `artifacts/metrics.json`. Optional MMLU, GSM8K,
+HellaSwag, ARC, TruthfulQA, and Winogrande tasks run through isolated Inspect AI.
 
 ## Jobs and cancellation
 
@@ -45,10 +44,8 @@ Cancellation is checked during trainer log callbacks. The current adapter is sav
 before the job becomes `cancelled`; cancellation is not instantaneous during model
 loading, evaluation, or a long training step.
 
-## Not currently supported
+## Limits
 
-- Standard LoRA without 4-bit base-model loading
-- Full-parameter fine-tuning
-- Unsloth backend
-- DPO, ORPO, KTO, PPO, reward modeling, or continued pretraining
-- AMD ROCm, Intel XPU, Apple Silicon, or CPU training
+- ORPO with the installed TRL release
+- PPO, multi-GPU, FSDP, DeepSpeed, CPU offload, Apple Silicon, or CPU training
+- vLLM or tool environments for GRPO

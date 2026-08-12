@@ -148,8 +148,16 @@ def validate_manifest(manifest: RunManifest) -> list[str]:
         errors.append(f"Unsupported method: {manifest.training.method}.")
     if manifest.training.objective != "sft" and manifest.training.backend == "unsloth":
         errors.append("Unsloth is currently available for SFT jobs only.")
-    if manifest.training.objective == "grpo" and manifest.training.method == "full":
-        errors.append("GRPO supports LoRA or QLoRA only.")
+    from fine_tuning_studio.recipes import RECIPES
+
+    recipe = RECIPES.get(manifest.training.objective)
+    if recipe and manifest.training.method not in recipe.methods:
+        errors.append(
+            f"{manifest.training.objective.upper()} does not support "
+            f"{manifest.training.method.upper()}."
+        )
+    if manifest.training.objective == "orpo":
+        errors.append("ORPO is experimental and unavailable in the installed TRL release.")
     if manifest.training.method == "full" and manifest.export.adapter:
         errors.append("Full fine-tuning does not produce a LoRA adapter.")
     if (

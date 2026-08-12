@@ -1,7 +1,7 @@
 # Fine-Tuning Studio
 
 Fine-Tuning Studio is a local-first Streamlit application for preparing datasets,
-running QLoRA supervised fine-tuning, evaluating results, exporting adapters or merged
+running post-training recipes, evaluating results, exporting adapters or merged
 models, and testing exported models with Ollama.
 
 The training process runs on your machine. Hugging Face credentials are read from the
@@ -13,22 +13,26 @@ user environment and are never displayed or written into the project.
   Hugging Face authentication state, and Ollama availability.
 - Load datasets from the Hugging Face Hub or upload JSON, JSONL, CSV, and Parquet files.
 - Map plain text, prompt/response, or chat-message datasets into training text.
-- Fine-tune causal language models using QLoRA SFT with Transformers, PEFT, TRL, and
-  bitsandbytes.
+- Run SFT or continued pretraining with LoRA, QLoRA, or guarded full fine-tuning.
+- Run DPO, KTO, reward-model, and GRPO recipes; ORPO is visible but blocked while the
+  installed TRL release does not provide an ORPO trainer.
+- Use Transformers/PEFT/TRL or compatible installed Unsloth builds for SFT.
+- Select native Windows/Linux CUDA, ROCm, or XPU runtime profiles. ROCm and XPU remain
+  experimental until their on-machine smoke test passes.
 - Track jobs, checkpoints, progress, logs, cancellation, and evaluation metrics.
 - Export a LoRA adapter, optionally merge it into the base model, push the adapter to
   the Hugging Face Hub, or import a merged model into Ollama.
 
-Version 0.1 supports QLoRA SFT on NVIDIA CUDA. AMD and Intel accelerators are detected
-but are not enabled as training backends. Unsloth, standard LoRA, full fine-tuning, and
-preference-optimization techniques are planned rather than implemented.
+Version 0.5 adds versioned manifests, resumable child jobs, preflight reports, managed
+accelerator runtimes, artifact hashes, objective-specific dataset contracts, trusted
+local GRPO rewards, and optional Inspect AI benchmarks.
 
 ## Requirements
 
 - Windows 11 or Linux
 - Python 3.13 or 3.14
 - [uv](https://docs.astral.sh/uv/)
-- NVIDIA GPU with a working CUDA runtime
+- Supported NVIDIA, AMD, or Intel GPU with a working selected runtime
 - At least 3.5 GB of currently free VRAM for the smallest supported jobs
 - Enough RAM and disk space for the selected model, dataset, checkpoints, and exports
 - Optional: [Ollama](https://ollama.com/) for post-training local inference
@@ -69,9 +73,9 @@ token value. Uploaded filenames are sanitized and job paths are constrained to t
 workspace. Enabling `trust_remote_code` can execute code from a model repository, so use
 it only after reviewing and trusting that repository.
 
-Standard benchmark execution is currently disabled because the stable Lighteval
-dependency chain includes unresolved security advisories. Validation loss and
-perplexity-style evaluation before and after training remain available.
+Optional benchmark execution uses an isolated Inspect AI installation. Custom Python
+reward modules are explicitly trusted, copied and hashed into the job, and execute
+unsandboxed.
 
 ## License
 

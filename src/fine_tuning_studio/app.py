@@ -33,7 +33,12 @@ from fine_tuning_studio.jobs import (
     request_cancel,
     studio_home,
 )
-from fine_tuning_studio.runtimes import PROFILES, provision_profile, runtime_verdict
+from fine_tuning_studio.runtimes import (
+    PROFILES,
+    profile_python,
+    provision_profile,
+    runtime_verdict,
+)
 from fine_tuning_studio.system_info import MachineReport, qlora_capability, scan_machine
 
 st.set_page_config(page_title="Fine-Tuning Studio", page_icon="🧪", layout="wide")
@@ -69,7 +74,9 @@ def machine_report() -> MachineReport:
 
 
 def compatibility_rail() -> None:
-    supported, _ = qlora_capability(machine_report())
+    selected = st.session_state.training.get("runtime_profile", "cuda")
+    verdict = runtime_verdict(machine_report(), selected)
+    supported = verdict.state == "ready" or profile_python(studio_home(), selected).exists()
     labels = [
         f"Machine {'ready' if supported else 'attention'}",
         f"Dataset {'ready' if st.session_state.dataset.get('location') else 'pending'}",
@@ -188,7 +195,7 @@ def dataset_page() -> None:
             data["location"] = st.session_state.dataset.get("location", "")
     mapping = st.selectbox(
         "Data shape",
-        ["text", "prompt_response", "messages"],
+        ["text", "prompt_response", "messages", "preference", "kto", "grpo"],
         format_func=lambda value: value.replace("_", " / ").title(),
     )
     data["mapping"] = mapping
@@ -198,8 +205,15 @@ def dataset_page() -> None:
         c1, c2 = st.columns(2)
         data["prompt_column"] = c1.text_input("Prompt column", value="prompt")
         data["response_column"] = c2.text_input("Response column", value="response")
-    else:
+    elif mapping == "messages":
         data["text_column"] = st.text_input("Messages column", value="messages")
+    else:
+        contracts = {
+            "preference": "prompt, chosen, rejected",
+            "kto": "prompt, completion, label (boolean)",
+            "grpo": "prompt, with optional ground_truth",
+        }
+        st.info(f"Required canonical columns: {contracts[mapping]}")
     data["chat_template"] = st.selectbox(
         "Chat template", ["tokenizer", "chatml", "alpaca", "plain"]
     )
@@ -257,7 +271,7 @@ def training_page() -> None:
     )
     method = c2.selectbox("Method", ["qlora", "lora", "full"], format_func=str.upper)
     backends = ["transformers"]
-    if importlib.util.find_spec("unsloth") and objective == "sft":
+    if importlib.util.find_spec("unsloth") and objective == "sft" and method != "full":
         backends.append("unsloth")
     backend = c3.selectbox(
         "Backend",
@@ -304,6 +318,13 @@ def training_page() -> None:
         training["gradient_checkpointing"] = c1.toggle("Gradient checkpointing", value=True)
         training["save_steps"] = c1.number_input("Checkpoint interval", 1, 10000, 100)
         training["logging_steps"] = c2.number_input("Logging interval", 1, 1000, 10)
+        if objective == "grpo":
+            training["reward_functions"] = st.multiselect(
+                "Built-in rewards", ["exact", "numeric", "regex", "length"], default=["length"]
+            )
+            st.warning("Custom Python rewards execute unsandboxed. Use only code you trust.")
+            reward_path = st.text_input("Trusted local reward module (optional)")
+            training["reward_module"] = reward_path or None
     st.session_state.training = training
 
 
@@ -323,13 +344,13 @@ def review_page() -> None:
     evaluation = {
         "before": st.toggle("Evaluate before training", value=True),
         "after": st.toggle("Evaluate after training", value=True),
-        "benchmarks": [],
-        "benchmark_limit": 100,
+        "benchmarks": st.multiselect(
+            "Optional Inspect AI benchmarks",
+            ["mmlu", "gsm8k", "hellaswag", "arc", "truthfulqa", "winogrande"],
+        ),
+        "benchmark_limit": int(st.number_input("Examples per benchmark", 1, 10000, 20)),
     }
-    st.caption(
-        "Standard benchmark execution is temporarily disabled because the latest stable "
-        "Lighteval release resolves a dependency with unfixed security advisories."
-    )
+    st.caption("Benchmarks run through the optional isolated Inspect AI environment.")
     st.subheader("Exports")
     merged = st.toggle("Create merged model", value=False)
     import_ollama = st.toggle("Import merged model into Ollama", value=False)
@@ -356,7 +377,14 @@ def review_page() -> None:
         st.error(f"Configuration is incomplete: {exc}")
         return
     errors = validate_manifest(manifest)
-    supported, reasons = qlora_capability(machine_report())
+    selected_profile = manifest.training.runtime_profile
+    verdict = runtime_verdict(machine_report(), selected_profile, manifest.training.method)
+    supported = verdict.state == "ready" or profile_python(
+        studio_home(), selected_profile
+    ).exists()
+    reasons = verdict.reasons
+    if verdict.state == "install-required" and not supported:
+        reasons = ["Install the selected managed runtime before launching.", *reasons]
     with st.expander("Run manifest", expanded=True):
         st.json(manifest.to_dict())
     for message in errors:

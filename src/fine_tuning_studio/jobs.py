@@ -63,6 +63,21 @@ def create_job(
         raw = manifest.to_dict()
         raw["dataset"]["location"] = str(input_path)
         manifest = RunManifest.from_dict(raw)
+    if manifest.training.reward_module:
+        from fine_tuning_studio.recipes import copy_trusted_reward
+
+        copied, digest = copy_trusted_reward(Path(manifest.training.reward_module), directory)
+        manifest = replace(
+            manifest,
+            training=replace(manifest.training, reward_module=str(copied)),
+            provenance=replace(
+                manifest.provenance,
+                package_versions={
+                    **manifest.provenance.package_versions,
+                    "trusted_reward_sha256": digest,
+                },
+            ),
+        )
     manifest_path = directory / "manifest.json"
     manifest_path.write_text(json.dumps(manifest.to_dict(), indent=2), encoding="utf-8")
     now = datetime.now(UTC).isoformat()

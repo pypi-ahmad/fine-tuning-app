@@ -14,13 +14,13 @@ Use `OLLAMA_HOST` to point to a non-default Ollama API and
 
 ## Fine-tune a model
 
-1. Open **System** and resolve all QLoRA capability warnings.
+1. Open **System**, choose a runtime profile, and resolve its capability warnings.
 2. In **Dataset**, choose a Hugging Face dataset or upload JSON, JSONL, CSV, or
    Parquet, then configure the dataset mapping and validation split.
 3. In **Model**, enter a Hugging Face model ID or local model directory. Review model
    code before enabling **Allow model repository code**.
 4. In **Training**, set epochs, learning rate, sequence length, and optional advanced
-   QLoRA parameters.
+   recipe, strategy, runtime, and optional advanced parameters.
 5. In **Review & run**, choose evaluation and exports, review the generated manifest,
    then start training.
 6. In **Monitor**, follow status/events or request cancellation.
@@ -28,7 +28,7 @@ Use `OLLAMA_HOST` to point to a non-default Ollama API and
 
 ## Export options
 
-- Every completed job writes an adapter and tokenizer.
+- Adapter jobs write an adapter and tokenizer; full tuning writes a full model.
 - Enable **Create merged model** to combine the adapter with its base model.
 - Enable **Push adapter to Hugging Face Hub** and enter `username/repository` to upload
   the adapter with the environment-provided Hugging Face credential.
@@ -37,7 +37,8 @@ Use `OLLAMA_HOST` to point to a non-default Ollama API and
 
 ## Important limits
 
-V0.1 runs QLoRA supervised fine-tuning only on compatible NVIDIA CUDA systems. Ollama
+V0.5 supports stable CUDA plus experimental ROCm/XPU profiles on Windows and Linux.
+WSL is optional. Ollama
 is an inference/export target, not a training backend. For dataset requirements,
 training defaults, and error recovery, see the detailed
 [documentation](README.md#documentation).

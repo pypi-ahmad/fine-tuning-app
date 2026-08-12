@@ -12,7 +12,7 @@ remote training service, hosted database, or telemetry backend is used.
 | Domain model | Dataclasses for dataset, model, training, evaluation, export, run manifest, validation, and job states. |
 | System inspection | Detects OS, CPU, memory, disk, GPU, PyTorch/CUDA, package availability, Hugging Face token presence, and Ollama status. |
 | Job registry | SQLite database and application workspace for job metadata, manifests, inputs, events, checkpoints, and artifacts. |
-| Training worker | Loads data/model, renders examples, creates a validation split, runs QLoRA SFT, evaluates, and exports. |
+| Training worker | Dispatches SFT, CPT, preference, reward, and GRPO recipes and exports results. |
 | Ollama integration | Imports a completed merged model through `ollama create` and lists local models through `/api/tags`. |
 
 ## Run lifecycle
@@ -43,9 +43,10 @@ field and creates a seeded train/validation split.
 
 ## Training and exports
 
-V0.1 supports causal-language-model supervised fine-tuning using 4-bit NF4 QLoRA.
-The backend is Transformers + PEFT + TRL + bitsandbytes. It selects bfloat16 when CUDA
-supports it and float16 otherwise. LoRA targets all linear layers.
+V0.5 supports LoRA, NF4 QLoRA, and safety-gated full training. Recipes define dataset
+contracts and trainer dispatch. Managed CUDA, ROCm, and XPU interpreters are separate
+from the lightweight UI process; SQLite is only a status projection, while immutable
+manifests, JSONL events, checkpoints, and hashed artifacts form the durable job record.
 
 Successful jobs always export an adapter and tokenizer. A merged model is optional;
 Ollama import requires it. Hub upload pushes the adapter through the authenticated
@@ -53,10 +54,9 @@ Hugging Face client.
 
 ## Constraints
 
-- Training requires a compatible NVIDIA GPU, CUDA-enabled PyTorch, required packages,
-  and at least 3.5 GB free VRAM.
-- AMD/Intel hardware may be detected but is not a training backend.
-- Standard LoRA, full fine-tuning, Unsloth, preference optimization, and benchmark
-  execution are not implemented in v0.1.
+- CUDA is stable; ROCm and XPU are experimental until validated on the target machine.
+- Full training is single-accelerator only and refuses unsafe memory or disk estimates.
+- ORPO remains blocked because the installed TRL release has no ORPO trainer.
+- Custom reward modules are trusted local Python and are not sandboxed.
 - Cancellation is cooperative and takes effect at the next trainer log callback.
 - Ollama is post-training inference/export integration, never a training backend.

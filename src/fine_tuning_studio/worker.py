@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib
 import json
 import shutil
 import subprocess
@@ -10,7 +11,9 @@ from typing import Any, cast
 
 from fine_tuning_studio.artifacts import write_artifact_manifest
 from fine_tuning_studio.domain import JobStatus, RunManifest
+from fine_tuning_studio.evals import run_inspect
 from fine_tuning_studio.jobs import get_job, job_directory, update_job
+from fine_tuning_studio.recipes import REWARDS, load_trusted_reward, validate_recipe
 from fine_tuning_studio.resources import full_training_gate
 
 
@@ -65,6 +68,15 @@ def load_data(manifest: RunManifest, events: EventWriter) -> Any:
 def render_dataset(dataset: Any, manifest: RunManifest, tokenizer: Any) -> Any:
     spec = manifest.dataset
     columns = set(dataset.column_names)
+    if manifest.training.objective in {"dpo", "kto", "reward", "orpo", "grpo"}:
+        errors = validate_recipe(manifest.training.objective, manifest.training.method, columns)
+        if errors:
+            raise ValueError(" ".join(errors))
+        if manifest.training.objective == "kto" and not all(
+            isinstance(value, bool) for value in dataset["label"]
+        ):
+            raise ValueError("KTO label values must be booleans.")
+        return dataset
     if spec.mapping == "text":
         if spec.text_column not in columns:
             raise ValueError(f"Missing text column: {spec.text_column}")
@@ -144,6 +156,7 @@ def run(job_id: str) -> None:
     from peft import LoraConfig, prepare_model_for_kbit_training
     from transformers import (
         AutoModelForCausalLM,
+        AutoModelForSequenceClassification,
         AutoTokenizer,
         BitsAndBytesConfig,
         TrainerCallback,
@@ -198,14 +211,36 @@ def run(job_id: str) -> None:
             bnb_4bit_compute_dtype=compute_dtype,
         )
     events.write("preparing", f"Loading base model for {manifest.training.method}", 0.12)
-    model = AutoModelForCausalLM.from_pretrained(
-        model_ref,
-        revision=revision,
-        trust_remote_code=manifest.model.trust_remote_code,
-        quantization_config=quantization,
-        device_map="auto",
-        dtype=compute_dtype,
-    )
+    if manifest.training.backend == "unsloth":
+        FastLanguageModel = importlib.import_module("unsloth").FastLanguageModel
+
+        model, tokenizer = FastLanguageModel.from_pretrained(
+            model_name=model_ref,
+            max_seq_length=manifest.training.max_sequence_length,
+            load_in_4bit=manifest.training.method == "qlora",
+        )
+        model = FastLanguageModel.get_peft_model(
+            model,
+            r=manifest.training.lora_rank,
+            lora_alpha=manifest.training.lora_alpha,
+            lora_dropout=manifest.training.lora_dropout,
+            target_modules="all-linear",
+            use_gradient_checkpointing=manifest.training.gradient_checkpointing,
+        )
+    else:
+        model_class = (
+            AutoModelForSequenceClassification
+            if manifest.training.objective == "reward"
+            else AutoModelForCausalLM
+        )
+        model = model_class.from_pretrained(
+            model_ref,
+            revision=revision,
+            trust_remote_code=manifest.model.trust_remote_code,
+            quantization_config=quantization,
+            device_map="auto",
+            dtype=compute_dtype,
+        )
     if manifest.training.method == "full":
         free_bytes, _ = torch.cuda.mem_get_info() if torch.cuda.is_available() else (0, 0)
         gate = full_training_gate(
@@ -213,13 +248,13 @@ def run(job_id: str) -> None:
         )
         if not gate.allowed:
             raise RuntimeError("Full-training safety gate: " + " ".join(gate.reasons))
-    if manifest.training.method == "qlora":
+    if manifest.training.method == "qlora" and manifest.training.backend != "unsloth":
         model = prepare_model_for_kbit_training(
             model,
             use_gradient_checkpointing=manifest.training.gradient_checkpointing,
         )
     peft_config = None
-    if manifest.training.method != "full":
+    if manifest.training.method != "full" and manifest.training.backend != "unsloth":
         peft_config = LoraConfig(
             r=manifest.training.lora_rank,
             lora_alpha=manifest.training.lora_alpha,
@@ -228,7 +263,7 @@ def run(job_id: str) -> None:
             task_type="CAUSAL_LM",
             target_modules="all-linear",
         )
-    args = SFTConfig(
+    common_args: dict[str, Any] = dict(
         output_dir=str(directory / "checkpoints"),
         num_train_epochs=manifest.training.epochs,
         learning_rate=manifest.training.learning_rate,
@@ -237,9 +272,6 @@ def run(job_id: str) -> None:
         per_device_eval_batch_size=manifest.training.batch_size,
         gradient_accumulation_steps=manifest.training.gradient_accumulation_steps,
         gradient_checkpointing=manifest.training.gradient_checkpointing,
-        packing=manifest.training.packing
-        or manifest.training.objective == "continued_pretraining",
-        eval_packing=False,
         bf16=compute_dtype == torch.bfloat16,
         fp16=compute_dtype == torch.float16,
         logging_steps=manifest.training.logging_steps,
@@ -248,18 +280,49 @@ def run(job_id: str) -> None:
         eval_strategy="steps",
         eval_steps=manifest.training.save_steps,
         report_to="none",
-        dataset_text_field="text",
         seed=manifest.dataset.seed,
     )
-    trainer = SFTTrainer(
+    trainer_kwargs: dict[str, Any] = dict(
         model=model,
-        args=args,
         train_dataset=split["train"],
         eval_dataset=split["test"],
         processing_class=tokenizer,
         peft_config=peft_config,
         callbacks=[ProgressCallback()],
     )
+    objective = manifest.training.objective
+    if objective in {"sft", "continued_pretraining"}:
+        args = SFTConfig(
+            **common_args,
+            packing=manifest.training.packing or objective == "continued_pretraining",
+            eval_packing=False,
+            dataset_text_field="text",
+        )
+        trainer = SFTTrainer(args=args, **trainer_kwargs)
+    elif objective == "dpo":
+        from trl import DPOConfig, DPOTrainer
+
+        trainer = DPOTrainer(args=DPOConfig(**common_args), **trainer_kwargs)
+    elif objective == "kto":
+        from trl import KTOConfig, KTOTrainer
+
+        trainer = KTOTrainer(args=KTOConfig(**common_args), **trainer_kwargs)
+    elif objective == "reward":
+        from trl import RewardConfig, RewardTrainer
+
+        trainer = RewardTrainer(args=RewardConfig(**common_args), **trainer_kwargs)
+    elif objective == "grpo":
+        from trl import GRPOConfig, GRPOTrainer
+
+        selected = manifest.training.reward_functions or ["length"]
+        reward_functions = [REWARDS[name] for name in selected]
+        if manifest.training.reward_module:
+            reward_functions.append(load_trusted_reward(Path(manifest.training.reward_module)))
+        trainer = GRPOTrainer(
+            args=GRPOConfig(**common_args), reward_funcs=reward_functions, **trainer_kwargs
+        )
+    else:
+        raise ValueError("ORPO is not provided by the installed TRL release.")
     if manifest.training.method == "full":
         events.write("preparing", "Running one-microbatch memory probe", 0.18)
         sample = split["train"][0]["text"]
@@ -305,6 +368,14 @@ def run(job_id: str) -> None:
     output_path = artifacts / ("full-model" if manifest.training.method == "full" else "adapter")
     trainer.save_model(str(output_path))
     tokenizer.save_pretrained(output_path)
+    if manifest.evaluation.benchmarks:
+        events.write("evaluating_after", "Running isolated Inspect AI benchmarks", 0.9)
+        run_inspect(
+            output_path,
+            manifest.evaluation.benchmarks,
+            manifest.evaluation.benchmark_limit,
+            artifacts / "inspect-eval.log",
+        )
     (artifacts / "metrics.json").write_text(
         json.dumps(metrics, indent=2, default=str), encoding="utf-8"
     )

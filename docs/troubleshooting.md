@@ -2,10 +2,9 @@
 
 ## Training button is disabled
 
-Open **System** and read every capability warning. Version 0.1 requires an NVIDIA GPU,
-CUDA-enabled PyTorch, all listed training packages, and at least 3.5 GB of currently
-free VRAM. Also verify that a dataset and model are selected and the run manifest has no
-validation errors.
+Open **System** and read every capability warning. CUDA requires compatible NVIDIA
+hardware; experimental ROCm/XPU profiles require compatible AMD/Intel hardware and an
+on-machine smoke test. Also verify that the recipe, dataset, model, and strategy agree.
 
 ## CUDA is unavailable
 
@@ -49,4 +48,4 @@ a merged model and an architecture Ollama supports.
 
 Jobs live under `FINE_TUNING_STUDIO_HOME` or `~/.fine-tuning-studio`. Back up anything
 important before manually removing job data. Fine-Tuning Studio has no built-in delete
-or reset operation in v0.1.
+or reset operation.

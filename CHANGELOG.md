@@ -7,11 +7,32 @@ this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-12
+
+- Added DPO, KTO, reward-model, and GRPO recipes, built-in/custom rewards, recipe
+  contracts, and optional Inspect AI tasks. ORPO is exposed as experimental and blocked
+  because TRL 1.9 does not ship an ORPO trainer.
+
+## [0.4.0] - 2026-08-12
+
+- Added continued pretraining and guarded full fine-tuning with VRAM, disk, and
+  one-microbatch safety checks.
+
+## [0.3.0] - 2026-08-12
+
+- Added native Windows/Linux CUDA, ROCm, and XPU runtime profiles and smoke tests. WSL
+  remains optional.
+
+## [0.2.0] - 2026-08-12
+
+- Added LoRA, optional Unsloth SFT, schema-v2 provenance, preflight reports, safe child
+  resumes, and hashed artifact manifests.
+
 ### Added
 
 - Project governance, security, technical, and usage documentation.
 
-## [0.1.0] - Initial baseline
+## [0.1.0] - 2026-08-12
 
 ### Added
 
