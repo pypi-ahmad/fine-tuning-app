@@ -1,0 +1,492 @@
+{
+  "name": "fine-tuning-studio",
+  "description": "Local-first UI for fine-tuning and exporting AI models.",
+  "languages": [
+    "batch",
+    "desktop",
+    "html",
+    "json",
+    "markdown",
+    "python",
+    "shell",
+    "toml",
+    "unknown",
+    "yaml"
+  ],
+  "frameworks": [
+    "Streamlit"
+  ],
+  "files": [
+    {
+      "path": ".github/dependabot.yml",
+      "language": "yaml",
+      "sizeLines": 10,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "sizeLines": 49,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "language": "yaml",
+      "sizeLines": 41,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".python-version",
+      "language": "unknown",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".streamlit/config.toml",
+      "language": "toml",
+      "sizeLines": 12,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".ua/.understandignore",
+      "language": "unknown",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".ua/config.json",
+      "language": "json",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "language": "markdown",
+      "sizeLines": 87,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "language": "markdown",
+      "sizeLines": 55,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "language": "markdown",
+      "sizeLines": 57,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "Fine-Tuning Studio.desktop",
+      "language": "desktop",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 159,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "SECURITY.md",
+      "language": "markdown",
+      "sizeLines": 67,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "TECHNICAL.md",
+      "language": "markdown",
+      "sizeLines": 78,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "USAGE.md",
+      "language": "markdown",
+      "sizeLines": 61,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/configuration.md",
+      "language": "markdown",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/datasets.md",
+      "language": "markdown",
+      "sizeLines": 47,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/development.md",
+      "language": "markdown",
+      "sizeLines": 49,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/export-and-ollama.md",
+      "language": "markdown",
+      "sizeLines": 44,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/handbook.html",
+      "language": "html",
+      "sizeLines": 20,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "docs/training.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "language": "markdown",
+      "sizeLines": 63,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/user-guide.md",
+      "language": "markdown",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "launch.cmd",
+      "language": "batch",
+      "sizeLines": 15,
+      "fileCategory": "script"
+    },
+    {
+      "path": "launch.sh",
+      "language": "shell",
+      "sizeLines": 16,
+      "fileCategory": "script"
+    },
+    {
+      "path": "pyproject.toml",
+      "language": "toml",
+      "sizeLines": 58,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/fine_tuning_studio/__init__.py",
+      "language": "python",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/app.py",
+      "language": "python",
+      "sizeLines": 939,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/artifacts.py",
+      "language": "python",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/cli.py",
+      "language": "python",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/diagnostics.py",
+      "language": "python",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/domain.py",
+      "language": "python",
+      "sizeLines": 216,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/evals.py",
+      "language": "python",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/gpu_memory.py",
+      "language": "python",
+      "sizeLines": 468,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/hub_references.py",
+      "language": "python",
+      "sizeLines": 125,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/jobs.py",
+      "language": "python",
+      "sizeLines": 274,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/lifecycle.py",
+      "language": "python",
+      "sizeLines": 195,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/ollama.py",
+      "language": "python",
+      "sizeLines": 182,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/preflight.py",
+      "language": "python",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/recipes.py",
+      "language": "python",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/resources.py",
+      "language": "python",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/runtimes.py",
+      "language": "python",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/storage.py",
+      "language": "python",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/system_info.py",
+      "language": "python",
+      "sizeLines": 286,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/fine_tuning_studio/worker.py",
+      "language": "python",
+      "sizeLines": 447,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_app.py",
+      "language": "python",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_artifacts.py",
+      "language": "python",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_cli.py",
+      "language": "python",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_diagnostics.py",
+      "language": "python",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_domain.py",
+      "language": "python",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_evals.py",
+      "language": "python",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_gpu_memory.py",
+      "language": "python",
+      "sizeLines": 216,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_hub_references.py",
+      "language": "python",
+      "sizeLines": 151,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_jobs.py",
+      "language": "python",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_lifecycle.py",
+      "language": "python",
+      "sizeLines": 203,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_ollama.py",
+      "language": "python",
+      "sizeLines": 183,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_recipes.py",
+      "language": "python",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_resources.py",
+      "language": "python",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_runtimes.py",
+      "language": "python",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_storage.py",
+      "language": "python",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_system_info.py",
+      "language": "python",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 61,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "moderate",
+  "importMap": {
+    ".github/dependabot.yml": [],
+    ".github/workflows/ci.yml": [],
+    ".github/workflows/release.yml": [],
+    ".python-version": [],
+    ".streamlit/config.toml": [],
+    ".ua/.understandignore": [],
+    ".ua/config.json": [],
+    "CHANGELOG.md": [],
+    "CODE_OF_CONDUCT.md": [],
+    "CONTRIBUTING.md": [],
+    "Fine-Tuning Studio.desktop": [],
+    "README.md": [],
+    "SECURITY.md": [],
+    "TECHNICAL.md": [],
+    "USAGE.md": [],
+    "docs/configuration.md": [],
+    "docs/datasets.md": [],
+    "docs/development.md": [],
+    "docs/export-and-ollama.md": [],
+    "docs/handbook.html": [],
+    "docs/training.md": [],
+    "docs/troubleshooting.md": [],
+    "docs/user-guide.md": [],
+    "launch.cmd": [],
+    "launch.sh": [],
+    "pyproject.toml": [],
+    "src/fine_tuning_studio/__init__.py": [],
+    "src/fine_tuning_studio/app.py": [
+      "src/fine_tuning_studio/diagnostics.py",
+      "src/fine_tuning_studio/domain.py",
+      "src/fine_tuning_studio/gpu_memory.py",
+      "src/fine_tuning_studio/hub_references.py",
+      "src/fine_tuning_studio/jobs.py",
+      "src/fine_tuning_studio/lifecycle.py",
+      "src/fine_tuning_studio/ollama.py",
+      "src/fine_tuning_studio/runtimes.py",
+      "src/fine_tuning_studio/system_info.py"
+    ],
+    "src/fine_tuning_studio/artifacts.py": [],
+    "src/fine_tuning_studio/cli.py": [
+      "src/fine_tuning_studio/__init__.py",
+      "src/fine_tuning_studio/jobs.py",
+      "src/fine_tuning_studio/storage.py",
+      "src/fine_tuning_studio/system_info.py"
+    ],
+    "src/fine_tuning_studio/diagnostics.py": [
+      "src/fine_tuning_studio/jobs.py",
+      "src/fine_tuning_studio/storage.py",
+      "src/fine_tuning_studio/system_info.py"
+    ],
+    "src/fine_tuning_studio/domain.py": [],
+    "src/fine_tuning_studio/evals.py": [],
+    "src/fine_tuning_studio/gpu_memory.py": [
+      "src/fine_tuning_studio/ollama.py"
+    ],
+    "src/fine_tuning_studio/hub_references.py": [],
+    "src/fine_tuning_studio/jobs.py": [
+      "src/fine_tuning_studio/domain.py",
+      "src/fine_tuning_studio/storage.py"
+    ],
+    "src/fine_tuning_studio/lifecycle.py": [
+      "src/fine_tuning_studio/domain.py",
+      "src/fine_tuning_studio/jobs.py"
+    ],
+    "src/fine_tuning_studio/ollama.py": [],
+    "src/fine_tuning_studio/preflight.py": [
+      "src/fine_tuning_studio/domain.py"
+    ],
+    "src/fine_tuning_studio/recipes.py": [],
+    "src/fine_tuning_studio/resources.py": [],
+    "src/fine_tuning_studio/runtimes.py": [
+      "src/fine_tuning_studio/system_info.py"
+    ],
+    "src/fine_tuning_studio/storage.py": [],
+    "src/fine_tuning_studio/system_info.py": [],
+    "src/fine_tuning_studio/worker.py": [
+      "src/fine_tuning_studio/artifacts.py",
+      "src/fine_tuning_studio/domain.py",
+      "src/fine_tuning_studio/evals.py",
+      "src/fine_tuning_studio/jobs.py",
+      "src/fine_tuning_studio/preflight.py",
+      "src/fine_tuning_studio/recipes.py",
+      "src/fine_tuning_studio/resources.py"
+    ],
+    "tests/test_app.py": [],
+    "tests/test_artifacts.py": [],
+    "tests/test_cli.py": [],
+    "tests/test_diagnostics.py": [],
+    "tests/test_domain.py": [],
+    "tests/test_evals.py": [],
+    "tests/test_gpu_memory.py": [],
+    "tests/test_hub_references.py": [],
+    "tests/test_jobs.py": [],
+    "tests/test_lifecycle.py": [],
+    "tests/test_ollama.py": [],
+    "tests/test_recipes.py": [],
+    "tests/test_resources.py": [],
+    "tests/test_runtimes.py": [],
+    "tests/test_storage.py": [],
+    "tests/test_system_info.py": []
+  }
+}

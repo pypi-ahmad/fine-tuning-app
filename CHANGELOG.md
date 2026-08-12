@@ -7,6 +7,14 @@ this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-08-12
+
+### Added
+
+- Added persistent Understand Anything and Graphify architecture graphs, including an
+  interactive HTML explorer, GraphRAG-ready JSON, guided tour, structural fingerprints,
+  and a plain-language repository audit report.
+
 ## [1.0.0] - 2026-08-12
 
 - Stable local GA: schema-v4 manifests, transactional storage migrations, automatic

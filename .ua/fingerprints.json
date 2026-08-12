@@ -1,0 +1,4444 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "5067f24f7bab43c646bd2437699a3963870c5dea",
+  "generatedAt": "2026-08-12T16:24:11.472Z",
+  "files": {
+    ".github/dependabot.yml": {
+      "filePath": ".github/dependabot.yml",
+      "contentHash": "9820e8b80838dc09ae07a83813fa1ba2313126596749d4da8544482cc29bb18a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": true
+    },
+    ".github/workflows/ci.yml": {
+      "filePath": ".github/workflows/ci.yml",
+      "contentHash": "9183bee65ac37bf9fa87f2eff2d2228ecd3ded2f0e01a5809d8f97328cace59f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 50,
+      "hasStructuralAnalysis": true
+    },
+    ".github/workflows/release.yml": {
+      "filePath": ".github/workflows/release.yml",
+      "contentHash": "995a4bf66f252a308986c2426200fb4f091db2ef4d1723469c82e9bb509bd14f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 42,
+      "hasStructuralAnalysis": true
+    },
+    ".python-version": {
+      "filePath": ".python-version",
+      "contentHash": "c4a76bbbd85bb4a0c266cdb4ad6aea31b92baede1164d4dce824fc08087cde35",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 3,
+      "hasStructuralAnalysis": false
+    },
+    ".streamlit/config.toml": {
+      "filePath": ".streamlit/config.toml",
+      "contentHash": "a0b01ab2c40ffbfb3383b928150f6e43f76ab9a0278fe09f95a5bc39351a6f78",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": true
+    },
+    ".ua/.understandignore": {
+      "filePath": ".ua/.understandignore",
+      "contentHash": "a1ec5b1a129bc141555d7c3c1c30e1c35c9457e5404ffd54afac03e40ad49a39",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 83,
+      "hasStructuralAnalysis": false
+    },
+    ".ua/config.json": {
+      "filePath": ".ua/config.json",
+      "contentHash": "08d37f20ea0af2233ae24f094723759f952381ecb6dd7f2aaa05ef96e95eae6b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    "CHANGELOG.md": {
+      "filePath": "CHANGELOG.md",
+      "contentHash": "f157e413f3fdd6a9e6968f011656961d06cb0c590dacfe0be861e306eac8a0f1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 88,
+      "hasStructuralAnalysis": true
+    },
+    "CODE_OF_CONDUCT.md": {
+      "filePath": "CODE_OF_CONDUCT.md",
+      "contentHash": "0647fd370260c3bba84e6654d5e3914e6c0934684b17046ccc3d821830367235",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    "CONTRIBUTING.md": {
+      "filePath": "CONTRIBUTING.md",
+      "contentHash": "ca91e47ce800e45fabd31a43a6fe1b5206848b6a64faa024470e8496dec60170",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 58,
+      "hasStructuralAnalysis": true
+    },
+    "Fine-Tuning Studio.desktop": {
+      "filePath": "Fine-Tuning Studio.desktop",
+      "contentHash": "2974a1a6c19e9637f32f775a5b6a21c550eafa6c3f86db8ab62b4cc0c187b54c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "7820153b9ae31e2cb78f2b636d730908164b0bb69067e5b348469b147358b918",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 160,
+      "hasStructuralAnalysis": true
+    },
+    "SECURITY.md": {
+      "filePath": "SECURITY.md",
+      "contentHash": "fd8a1545c6f179483b854d5e2571e1573d75a2b13f307a6258654b9a99fcd6da",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 68,
+      "hasStructuralAnalysis": true
+    },
+    "TECHNICAL.md": {
+      "filePath": "TECHNICAL.md",
+      "contentHash": "f9f1d81bd8be28b4649238398db997d976ce0b75005fb2b51d339df929a633a4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 79,
+      "hasStructuralAnalysis": true
+    },
+    "USAGE.md": {
+      "filePath": "USAGE.md",
+      "contentHash": "7c739c9781071d13aa2ec5f152dccbdc47045f2a8f22ec22983f87bb19899cbd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 62,
+      "hasStructuralAnalysis": true
+    },
+    "docs/configuration.md": {
+      "filePath": "docs/configuration.md",
+      "contentHash": "afabde783b6ab6c952aea73def7229b3c4585cbd9991290aa417a92099afd1b7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 40,
+      "hasStructuralAnalysis": true
+    },
+    "docs/datasets.md": {
+      "filePath": "docs/datasets.md",
+      "contentHash": "e3e391dcf7ce941d5dd962e9d13b2f07f1814eb44e3c639803a00c10e6da58ae",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 48,
+      "hasStructuralAnalysis": true
+    },
+    "docs/development.md": {
+      "filePath": "docs/development.md",
+      "contentHash": "054e17ef8e4ae0b2ba5d687b02a561047ef6cd21d6d13cc36f0d0135358988ac",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 50,
+      "hasStructuralAnalysis": true
+    },
+    "docs/export-and-ollama.md": {
+      "filePath": "docs/export-and-ollama.md",
+      "contentHash": "951d1ea218bb14f5f18cfd7cc4018b61382c38f0e2b47ba47ba81efc6fe91f0d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 45,
+      "hasStructuralAnalysis": true
+    },
+    "docs/handbook.html": {
+      "filePath": "docs/handbook.html",
+      "contentHash": "471a1c202aa31714814ac342b30730e3eef456b82e856305cbdcdac043c78761",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 21,
+      "hasStructuralAnalysis": false
+    },
+    "docs/training.md": {
+      "filePath": "docs/training.md",
+      "contentHash": "00ec8a2125ad5d23837e4ee7df8bcc4885eec8620e73ee44a18dc8ab117672fe",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 52,
+      "hasStructuralAnalysis": true
+    },
+    "docs/troubleshooting.md": {
+      "filePath": "docs/troubleshooting.md",
+      "contentHash": "a4554d72f824462205842c8b6518ddd075758dd0554a5c7fd72603c6256b9efd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 64,
+      "hasStructuralAnalysis": true
+    },
+    "docs/user-guide.md": {
+      "filePath": "docs/user-guide.md",
+      "contentHash": "acc9f53ada645d43b4cb3516e8b0f47013271f21008bfb39961ee3c357faa955",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 77,
+      "hasStructuralAnalysis": true
+    },
+    "launch.cmd": {
+      "filePath": "launch.cmd",
+      "contentHash": "5d9564009c38281026df844f01bce05dcaf9f54007cbb9526c966a9a1c7d3912",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "launch.sh": {
+      "filePath": "launch.sh",
+      "contentHash": "6f68411ce8d1591431bb5ff6ef7b21ef567792b98ddc852d165fdaa4c6d94950",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": true
+    },
+    "pyproject.toml": {
+      "filePath": "pyproject.toml",
+      "contentHash": "03e3a0fe03377a430a754f67b19920ad5ad9440d95733b8eb5c8e1393b6dd616",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 59,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/__init__.py": {
+      "filePath": "src/fine_tuning_studio/__init__.py",
+      "contentHash": "1ce9a730f12b1637b525f2fbddf76295cf63491e209f7174e72b0baee764f01d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/app.py": {
+      "filePath": "src/fine_tuning_studio/app.py",
+      "contentHash": "8be46d5827e1b2d3ea18790f2c4192d2359f4fa882f4b213e152ad84d39da70d",
+      "functions": [
+        {
+          "name": "initialize_state",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "machine_report",
+          "params": [],
+          "returnType": "MachineReport",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "compatibility_rail",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "active_worker_pids",
+          "params": [],
+          "returnType": "set[int]",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "stop_application_dialog",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "format_bytes",
+          "params": [
+            "value"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "process_label",
+          "params": [
+            "process"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "gpu_memory_rows",
+          "params": [
+            "report"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "render_gpu_cleanup",
+          "params": [
+            "key_prefix"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 100
+        },
+        {
+          "name": "system_page",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 73
+        },
+        {
+          "name": "preview_upload",
+          "params": [
+            "upload"
+          ],
+          "returnType": "pa.Table",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "hub_error_message",
+          "params": [
+            "exc"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "render_hub_download",
+          "params": [
+            "repo_id",
+            "repo_type",
+            "revision"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "dataset_page",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 63
+        },
+        {
+          "name": "model_page",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 52
+        },
+        {
+          "name": "training_page",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 103
+        },
+        {
+          "name": "build_manifest",
+          "params": [
+            "evaluation",
+            "export"
+          ],
+          "returnType": "RunManifest",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "review_page",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 60
+        },
+        {
+          "name": "monitor_page",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "export_page",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "render_ollama_metrics",
+          "params": [
+            "metrics"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "ollama_playground_page",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 126
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "importlib.util",
+          "specifiers": [
+            "importlib.util"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "pyarrow",
+          "specifiers": [
+            "pa"
+          ]
+        },
+        {
+          "source": "pyarrow.csv",
+          "specifiers": [
+            "arrow_csv"
+          ]
+        },
+        {
+          "source": "pyarrow.json",
+          "specifiers": [
+            "arrow_json"
+          ]
+        },
+        {
+          "source": "pyarrow.parquet",
+          "specifiers": [
+            "arrow_parquet"
+          ]
+        },
+        {
+          "source": "streamlit",
+          "specifiers": [
+            "st"
+          ]
+        },
+        {
+          "source": "huggingface_hub.errors",
+          "specifiers": [
+            "GatedRepoError",
+            "HfHubHTTPError",
+            "RepositoryNotFoundError",
+            "RevisionNotFoundError"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.diagnostics",
+          "specifiers": [
+            "build_diagnostics"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.domain",
+          "specifiers": [
+            "DatasetSpec",
+            "EvaluationSpec",
+            "ExportSpec",
+            "ModelSpec",
+            "RunManifest",
+            "TrainingSpec",
+            "validate_manifest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.gpu_memory",
+          "specifiers": [
+            "GpuMemoryReport",
+            "GpuProcess",
+            "inspect_gpu_memory",
+            "release_reclaimable_memory",
+            "terminate_gpu_process"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.hub_references",
+          "specifiers": [
+            "RepoType",
+            "download_hub_repository",
+            "normalize_hub_reference",
+            "plan_hub_download"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.jobs",
+          "specifiers": [
+            "create_job",
+            "get_job",
+            "job_directory",
+            "launch_job",
+            "list_jobs",
+            "reconcile_jobs",
+            "resume_job",
+            "studio_home",
+            "terminate_job"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.lifecycle",
+          "specifiers": [
+            "schedule_clean_exit",
+            "stop_application_processes"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.ollama",
+          "specifiers": [
+            "OllamaClient",
+            "OllamaError",
+            "OllamaModel"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.runtimes",
+          "specifiers": [
+            "PROFILES",
+            "profile_python",
+            "provision_profile",
+            "runtime_verdict"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.system_info",
+          "specifiers": [
+            "MachineReport",
+            "qlora_capability",
+            "scan_machine"
+          ]
+        }
+      ],
+      "exports": [
+        "initialize_state",
+        "machine_report",
+        "compatibility_rail",
+        "active_worker_pids",
+        "stop_application_dialog",
+        "format_bytes",
+        "process_label",
+        "gpu_memory_rows",
+        "render_gpu_cleanup",
+        "system_page",
+        "preview_upload",
+        "hub_error_message",
+        "render_hub_download",
+        "dataset_page",
+        "model_page",
+        "training_page",
+        "build_manifest",
+        "review_page",
+        "monitor_page",
+        "export_page",
+        "render_ollama_metrics",
+        "ollama_playground_page"
+      ],
+      "totalLines": 940,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/artifacts.py": {
+      "filePath": "src/fine_tuning_studio/artifacts.py",
+      "contentHash": "32a22a98b5c7d8a6957d45f7f24b5f9460b38cf2abca17007e838210ec9a291e",
+      "functions": [
+        {
+          "name": "file_sha256",
+          "params": [
+            "path"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "write_artifact_manifest",
+          "params": [
+            "root"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 15
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        }
+      ],
+      "exports": [
+        "file_sha256",
+        "write_artifact_manifest"
+      ],
+      "totalLines": 31,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/cli.py": {
+      "filePath": "src/fine_tuning_studio/cli.py",
+      "contentHash": "cdf87e8bf12b1f147f5efc7e0999fa072263b182f82c6139b84bb8ddb0051ede",
+      "functions": [
+        {
+          "name": "doctor",
+          "params": [
+            "as_json"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "_doctor_text",
+          "params": [
+            "result"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "run_app",
+          "params": [],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "main",
+          "params": [
+            "argv"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 26
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "collections.abc",
+          "specifiers": [
+            "Mapping"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio",
+          "specifiers": [
+            "__version__"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.jobs",
+          "specifiers": [
+            "list_jobs",
+            "reconcile_jobs",
+            "studio_home"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.storage",
+          "specifiers": [
+            "backup",
+            "integrity_check",
+            "restore"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.system_info",
+          "specifiers": [
+            "scan_machine"
+          ]
+        }
+      ],
+      "exports": [
+        "doctor",
+        "_doctor_text",
+        "run_app",
+        "main"
+      ],
+      "totalLines": 85,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/diagnostics.py": {
+      "filePath": "src/fine_tuning_studio/diagnostics.py",
+      "contentHash": "329e349a9dd5f15693462f854a295dc38ddb6f54db4be6231ad990d7af3a07e5",
+      "functions": [
+        {
+          "name": "redact",
+          "params": [
+            "value"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "build_diagnostics",
+          "params": [
+            "home"
+          ],
+          "returnType": "bytes",
+          "exported": true,
+          "lineCount": 20
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "io",
+          "specifiers": [
+            "io"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "zipfile",
+          "specifiers": [
+            "zipfile"
+          ]
+        },
+        {
+          "source": "collections",
+          "specifiers": [
+            "Counter"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.jobs",
+          "specifiers": [
+            "list_jobs"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.storage",
+          "specifiers": [
+            "SCHEMA_VERSION",
+            "integrity_check"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.system_info",
+          "specifiers": [
+            "scan_machine"
+          ]
+        }
+      ],
+      "exports": [
+        "redact",
+        "build_diagnostics"
+      ],
+      "totalLines": 41,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/domain.py": {
+      "filePath": "src/fine_tuning_studio/domain.py",
+      "contentHash": "485803dc10b3c80c3f15fef258ffc655e8d2c60e1916127007ae0ee80580568b",
+      "functions": [
+        {
+          "name": "validate_manifest",
+          "params": [
+            "manifest"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 65
+        },
+        {
+          "name": "ensure_within",
+          "params": [
+            "root",
+            "candidate"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "classes": [
+        {
+          "name": "JobStatus",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "DatasetSpec",
+          "methods": [],
+          "properties": [
+            "source",
+            "location",
+            "revision",
+            "split",
+            "format",
+            "mapping",
+            "text_column",
+            "prompt_column",
+            "response_column",
+            "chat_template",
+            "validation_fraction",
+            "seed"
+          ],
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "ModelSpec",
+          "methods": [],
+          "properties": [
+            "source",
+            "location",
+            "revision",
+            "trust_remote_code",
+            "trust_remote_code_acknowledged"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "TrainingSpec",
+          "methods": [],
+          "properties": [
+            "objective",
+            "method",
+            "backend",
+            "epochs",
+            "learning_rate",
+            "max_sequence_length",
+            "batch_size",
+            "gradient_accumulation_steps",
+            "lora_rank",
+            "lora_alpha",
+            "lora_dropout",
+            "packing",
+            "gradient_checkpointing",
+            "save_steps",
+            "logging_steps",
+            "resume_checkpoint",
+            "precision",
+            "runtime_profile",
+            "experimental_acknowledged",
+            "reward_module",
+            "reward_functions",
+            "preset",
+            "device_indices",
+            "distributed_strategy",
+            "world_size",
+            "fsdp_cpu_offload",
+            "custom_code_acknowledged"
+          ],
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "ProvenanceSpec",
+          "methods": [],
+          "properties": [
+            "dataset_fingerprint",
+            "model_revision",
+            "package_versions",
+            "recipe_version",
+            "runtime_version"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "EvaluationSpec",
+          "methods": [],
+          "properties": [
+            "before",
+            "after",
+            "benchmarks",
+            "benchmark_limit"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "ExportSpec",
+          "methods": [],
+          "properties": [
+            "adapter",
+            "merged_model",
+            "push_to_hub",
+            "hub_repo_id",
+            "hub_private",
+            "import_to_ollama",
+            "ollama_model_name"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "RunManifest",
+          "methods": [
+            "to_dict",
+            "from_dict"
+          ],
+          "properties": [
+            "dataset",
+            "model",
+            "training",
+            "evaluation",
+            "export",
+            "id",
+            "schema_version",
+            "created_at",
+            "parent_job_id",
+            "provenance"
+          ],
+          "exported": true,
+          "lineCount": 32
+        }
+      ],
+      "imports": [
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "asdict",
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "UTC",
+            "datetime"
+          ]
+        },
+        {
+          "source": "enum",
+          "specifiers": [
+            "StrEnum"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid4"
+          ]
+        }
+      ],
+      "exports": [
+        "JobStatus",
+        "DatasetSpec",
+        "ModelSpec",
+        "TrainingSpec",
+        "ProvenanceSpec",
+        "EvaluationSpec",
+        "ExportSpec",
+        "RunManifest",
+        "validate_manifest",
+        "ensure_within"
+      ],
+      "totalLines": 217,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/evals.py": {
+      "filePath": "src/fine_tuning_studio/evals.py",
+      "contentHash": "08f4bcd60f02d8b8e896d44eaa1fcd4190a6bf9e9046740c6cffa44df997b8cf",
+      "functions": [
+        {
+          "name": "write_evaluation_report",
+          "params": [
+            "output",
+            "manifest",
+            "scores"
+          ],
+          "returnType": "dict[str, Path]",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "compare_reports",
+          "params": [
+            "reports"
+          ],
+          "returnType": "dict[str, list[float]]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "inspect_command",
+          "params": [
+            "model",
+            "tasks",
+            "limit"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "run_inspect",
+          "params": [
+            "model",
+            "tasks",
+            "limit",
+            "output"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [
+        {
+          "name": "EvaluationManifest",
+          "methods": [],
+          "properties": [
+            "model",
+            "backend",
+            "tasks",
+            "limit",
+            "schema_version",
+            "created_at"
+          ],
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "imports": [
+        {
+          "source": "csv",
+          "specifiers": [
+            "csv"
+          ]
+        },
+        {
+          "source": "html",
+          "specifiers": [
+            "html"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "asdict",
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "UTC",
+            "datetime"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "EvaluationManifest",
+        "write_evaluation_report",
+        "compare_reports",
+        "inspect_command",
+        "run_inspect"
+      ],
+      "totalLines": 77,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/gpu_memory.py": {
+      "filePath": "src/fine_tuning_studio/gpu_memory.py",
+      "contentHash": "a3a2e884d1fc554e17fac1578d068c3c480b3a2a69ddb05a103ad31199675fc3",
+      "functions": [
+        {
+          "name": "inspect_gpu_memory",
+          "params": [
+            "studio_worker_pids",
+            "current_pid",
+            "current_username"
+          ],
+          "returnType": "GpuMemoryReport",
+          "exported": true,
+          "lineCount": 62
+        },
+        {
+          "name": "process_protection_reason",
+          "params": [
+            "pid",
+            "name",
+            "username",
+            "current_pid",
+            "current_username",
+            "ancestor_pids",
+            "studio_worker_pids"
+          ],
+          "returnType": "str | None",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "release_reclaimable_memory",
+          "params": [
+            "ollama",
+            "studio_worker_pids"
+          ],
+          "returnType": "GpuCleanupResult",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "terminate_gpu_process",
+          "params": [
+            "candidate"
+          ],
+          "returnType": "tuple[int, ...]",
+          "exported": true,
+          "lineCount": 22
+        },
+        {
+          "name": "_clear_torch_caches",
+          "params": [],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "_inspect_nvidia",
+          "params": [],
+          "returnType": "tuple[\n    list[GpuDeviceMemory], list[tuple[str, int, int, str, int | None]], list[str]\n]",
+          "exported": true,
+          "lineCount": 57
+        },
+        {
+          "name": "_inspect_amd",
+          "params": [],
+          "returnType": "tuple[\n    list[GpuDeviceMemory], list[tuple[str, int, int, str, int | None]], list[str]\n]",
+          "exported": true,
+          "lineCount": 45
+        },
+        {
+          "name": "_inspect_intel",
+          "params": [],
+          "returnType": "tuple[list[tuple[str, int, int, str, int | None]], list[str]]",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "_run",
+          "params": [
+            "command",
+            "timeout"
+          ],
+          "returnType": "subprocess.CompletedProcess[str] | None",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "_process_identity",
+          "params": [
+            "pid",
+            "fallback"
+          ],
+          "returnType": "tuple[str, str, str, float]",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "_current_username",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_ancestor_pids",
+          "params": [
+            "pid"
+          ],
+          "returnType": "set[int]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_integer",
+          "params": [
+            "value"
+          ],
+          "returnType": "int | None",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_megabytes",
+          "params": [
+            "value"
+          ],
+          "returnType": "int | None",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "_records",
+          "params": [
+            "value"
+          ],
+          "returnType": "Iterable[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "_find_value",
+          "params": [
+            "record"
+          ],
+          "returnType": "object | None",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "_basename",
+          "params": [
+            "value"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "GpuDeviceMemory",
+          "methods": [],
+          "properties": [
+            "vendor",
+            "gpu_index",
+            "name",
+            "total_mb",
+            "used_mb",
+            "free_mb",
+            "uuid"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "GpuProcess",
+          "methods": [],
+          "properties": [
+            "vendor",
+            "gpu_index",
+            "pid",
+            "name",
+            "executable",
+            "username",
+            "create_time",
+            "memory_mb",
+            "protected_reason"
+          ],
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "GpuMemoryReport",
+          "methods": [],
+          "properties": [
+            "devices",
+            "processes",
+            "warnings"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "GpuCleanupResult",
+          "methods": [],
+          "properties": [
+            "before",
+            "after",
+            "cache_actions",
+            "unloaded_models",
+            "warnings"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "OllamaMemoryClient",
+          "methods": [
+            "list_running_models",
+            "unload_model"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "imports": [
+        {
+          "source": "csv",
+          "specifiers": [
+            "csv"
+          ]
+        },
+        {
+          "source": "gc",
+          "specifiers": [
+            "gc"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "collections.abc",
+          "specifiers": [
+            "Iterable"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Protocol"
+          ]
+        },
+        {
+          "source": "psutil",
+          "specifiers": [
+            "psutil"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.ollama",
+          "specifiers": [
+            "OllamaClient",
+            "OllamaError",
+            "OllamaRunningModel"
+          ]
+        }
+      ],
+      "exports": [
+        "GpuDeviceMemory",
+        "GpuProcess",
+        "GpuMemoryReport",
+        "GpuCleanupResult",
+        "OllamaMemoryClient",
+        "inspect_gpu_memory",
+        "process_protection_reason",
+        "release_reclaimable_memory",
+        "terminate_gpu_process",
+        "_clear_torch_caches",
+        "_inspect_nvidia",
+        "_inspect_amd",
+        "_inspect_intel",
+        "_run",
+        "_process_identity",
+        "_current_username",
+        "_ancestor_pids",
+        "_integer",
+        "_megabytes",
+        "_records",
+        "_find_value",
+        "_basename"
+      ],
+      "totalLines": 469,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/hub_references.py": {
+      "filePath": "src/fine_tuning_studio/hub_references.py",
+      "contentHash": "f655260f6cb75adadaa4b1d3dea6f7c5dbf8b05f08dcfc9679caf715181a1f79",
+      "functions": [
+        {
+          "name": "normalize_hub_reference",
+          "params": [
+            "value",
+            "expected_type"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 44
+        },
+        {
+          "name": "plan_hub_download",
+          "params": [
+            "repo_id",
+            "repo_type",
+            "revision"
+          ],
+          "returnType": "HubDownloadPlan",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "download_hub_repository",
+          "params": [
+            "plan"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "_validated_repo_id",
+          "params": [
+            "value"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "_existing_cache_parent",
+          "params": [],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [
+        {
+          "name": "HubDownloadPlan",
+          "methods": [],
+          "properties": [
+            "repo_id",
+            "repo_type",
+            "revision",
+            "commit_hash",
+            "file_count",
+            "total_bytes",
+            "download_bytes",
+            "cached_files"
+          ],
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "imports": [
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Literal"
+          ]
+        },
+        {
+          "source": "urllib.parse",
+          "specifiers": [
+            "urlsplit"
+          ]
+        },
+        {
+          "source": "huggingface_hub",
+          "specifiers": [
+            "snapshot_download"
+          ]
+        },
+        {
+          "source": "huggingface_hub.constants",
+          "specifiers": [
+            "HF_HUB_CACHE"
+          ]
+        },
+        {
+          "source": "huggingface_hub.utils",
+          "specifiers": [
+            "HFValidationError",
+            "validate_repo_id"
+          ]
+        }
+      ],
+      "exports": [
+        "HubDownloadPlan",
+        "normalize_hub_reference",
+        "plan_hub_download",
+        "download_hub_repository",
+        "_validated_repo_id",
+        "_existing_cache_parent"
+      ],
+      "totalLines": 126,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/jobs.py": {
+      "filePath": "src/fine_tuning_studio/jobs.py",
+      "contentHash": "2a9b73cb908661c0581a66ce1975ae232a21b75f263071afbe5d432ff08d195e",
+      "functions": [
+        {
+          "name": "studio_home",
+          "params": [],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_database",
+          "params": [],
+          "returnType": "sqlite3.Connection",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "job_directory",
+          "params": [
+            "job_id"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "create_job",
+          "params": [
+            "manifest",
+            "upload_name",
+            "upload"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 37
+        },
+        {
+          "name": "resume_job",
+          "params": [
+            "parent_job_id",
+            "checkpoint"
+          ],
+          "returnType": "RunManifest",
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "update_job",
+          "params": [
+            "job_id"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "get_job",
+          "params": [
+            "job_id"
+          ],
+          "returnType": "dict[str, Any] | None",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "list_jobs",
+          "params": [
+            "limit"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "launch_job",
+          "params": [
+            "job_id"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 84
+        },
+        {
+          "name": "_rotate_logs",
+          "params": [
+            "directory",
+            "limit"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "request_cancel",
+          "params": [
+            "job_id"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "terminate_job",
+          "params": [
+            "job_id"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "reconcile_jobs",
+          "params": [],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 26
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "signal",
+          "specifiers": [
+            "signal"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "contextlib",
+          "specifiers": [
+            "closing",
+            "suppress"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "replace"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "UTC",
+            "datetime"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid4"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.domain",
+          "specifiers": [
+            "JobStatus",
+            "RunManifest",
+            "ensure_within"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.storage",
+          "specifiers": [
+            "connect"
+          ]
+        }
+      ],
+      "exports": [
+        "studio_home",
+        "_database",
+        "job_directory",
+        "create_job",
+        "resume_job",
+        "update_job",
+        "get_job",
+        "list_jobs",
+        "launch_job",
+        "_rotate_logs",
+        "request_cancel",
+        "terminate_job",
+        "reconcile_jobs"
+      ],
+      "totalLines": 275,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/lifecycle.py": {
+      "filePath": "src/fine_tuning_studio/lifecycle.py",
+      "contentHash": "6b32c12a5bc5bc9d705a31093ccb97fd6d5ee145c5dd89f853bf70871d549943",
+      "functions": [
+        {
+          "name": "_process_is_running",
+          "params": [
+            "pid"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "_registered_worker",
+          "params": [
+            "process",
+            "job_id",
+            "application_pid"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "_terminate_tree",
+          "params": [
+            "process",
+            "timeout"
+          ],
+          "returnType": "tuple[set[int], set[int]]",
+          "exported": true,
+          "lineCount": 25
+        },
+        {
+          "name": "stop_application_processes",
+          "params": [
+            "grace_period",
+            "terminate_timeout"
+          ],
+          "returnType": "ShutdownReport",
+          "exported": true,
+          "lineCount": 110
+        },
+        {
+          "name": "schedule_clean_exit",
+          "params": [
+            "delay"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [
+        {
+          "name": "ShutdownReport",
+          "methods": [],
+          "properties": [
+            "requested_jobs",
+            "stopped_pids",
+            "interrupted_jobs",
+            "errors"
+          ],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "threading",
+          "specifiers": [
+            "threading"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass"
+          ]
+        },
+        {
+          "source": "psutil",
+          "specifiers": [
+            "psutil"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.domain",
+          "specifiers": [
+            "JobStatus"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.jobs",
+          "specifiers": [
+            "get_job",
+            "list_jobs",
+            "request_cancel",
+            "update_job"
+          ]
+        }
+      ],
+      "exports": [
+        "ShutdownReport",
+        "_process_is_running",
+        "_registered_worker",
+        "_terminate_tree",
+        "stop_application_processes",
+        "schedule_clean_exit"
+      ],
+      "totalLines": 196,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/ollama.py": {
+      "filePath": "src/fine_tuning_studio/ollama.py",
+      "contentHash": "94f2346b7ba91b8334a170f13c50263c6663cfe74b0166f3508a670c6f9b3f0f",
+      "functions": [
+        {
+          "name": "_normalize_host",
+          "params": [
+            "host"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 20
+        }
+      ],
+      "classes": [
+        {
+          "name": "OllamaError",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "OllamaModel",
+          "methods": [],
+          "properties": [
+            "name",
+            "size",
+            "digest",
+            "family",
+            "parameter_size",
+            "quantization_level"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "OllamaModelDetails",
+          "methods": [],
+          "properties": [
+            "capabilities",
+            "family",
+            "parameter_size",
+            "quantization_level"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "OllamaRunningModel",
+          "methods": [],
+          "properties": [
+            "name",
+            "size_vram",
+            "context_length",
+            "expires_at"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "OllamaClient",
+          "methods": [
+            "__init__",
+            "list_models",
+            "show_model",
+            "list_running_models",
+            "unload_model",
+            "stream_chat",
+            "_request_json",
+            "_request"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 118
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "urllib.error",
+          "specifiers": [
+            "urllib.error"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "urllib.request"
+          ]
+        },
+        {
+          "source": "collections.abc",
+          "specifiers": [
+            "Iterator"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "urllib.parse",
+          "specifiers": [
+            "urlsplit"
+          ]
+        }
+      ],
+      "exports": [
+        "OllamaError",
+        "OllamaModel",
+        "OllamaModelDetails",
+        "OllamaRunningModel",
+        "OllamaClient",
+        "_normalize_host"
+      ],
+      "totalLines": 183,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/preflight.py": {
+      "filePath": "src/fine_tuning_studio/preflight.py",
+      "contentHash": "5bfb285851458021146bc697197b001ddda3ab0c1d0abef21939786eb628a334",
+      "functions": [
+        {
+          "name": "_required_columns",
+          "params": [
+            "spec"
+          ],
+          "returnType": "set[str]",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "inspect_dataset",
+          "params": [
+            "dataset",
+            "spec",
+            "sample_limit"
+          ],
+          "returnType": "DatasetReport",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "inspect_model",
+          "params": [
+            "spec",
+            "method"
+          ],
+          "returnType": "ModelReport",
+          "exported": true,
+          "lineCount": 25
+        },
+        {
+          "name": "write_report",
+          "params": [
+            "path",
+            "report"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [
+        {
+          "name": "DatasetReport",
+          "methods": [],
+          "properties": [
+            "rows",
+            "columns",
+            "null_counts",
+            "fingerprint",
+            "approximate_tokens",
+            "errors"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "ModelReport",
+          "methods": [],
+          "properties": [
+            "resolved_revision",
+            "architecture",
+            "parameters",
+            "context_length",
+            "gated",
+            "license",
+            "weight_bytes",
+            "estimated_training_vram_gb"
+          ],
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "asdict",
+            "dataclass"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.domain",
+          "specifiers": [
+            "DatasetSpec",
+            "ModelSpec"
+          ]
+        }
+      ],
+      "exports": [
+        "DatasetReport",
+        "ModelReport",
+        "_required_columns",
+        "inspect_dataset",
+        "inspect_model",
+        "write_report"
+      ],
+      "totalLines": 106,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/recipes.py": {
+      "filePath": "src/fine_tuning_studio/recipes.py",
+      "contentHash": "de385d7f48bb44010ee3d603692e1b727f8ac2d0c5902597d046051cbb655efa",
+      "functions": [
+        {
+          "name": "validate_recipe",
+          "params": [
+            "objective",
+            "method",
+            "columns"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "exact_reward",
+          "params": [
+            "completions",
+            "ground_truth"
+          ],
+          "returnType": "list[float]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "numeric_reward",
+          "params": [
+            "completions",
+            "ground_truth"
+          ],
+          "returnType": "list[float]",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "regex_reward",
+          "params": [
+            "completions",
+            "ground_truth"
+          ],
+          "returnType": "list[float]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "length_reward",
+          "params": [
+            "completions"
+          ],
+          "returnType": "list[float]",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "copy_trusted_reward",
+          "params": [
+            "source",
+            "job_directory"
+          ],
+          "returnType": "tuple[Path, str]",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "load_trusted_reward",
+          "params": [
+            "path"
+          ],
+          "returnType": "Callable[..., list[float]]",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [
+        {
+          "name": "Recipe",
+          "methods": [],
+          "properties": [
+            "id",
+            "required_columns",
+            "methods",
+            "status"
+          ],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "importlib.util",
+          "specifiers": [
+            "importlib.util"
+          ]
+        },
+        {
+          "source": "inspect",
+          "specifiers": [
+            "inspect"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "collections.abc",
+          "specifiers": [
+            "Callable"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "Recipe",
+        "validate_recipe",
+        "exact_reward",
+        "numeric_reward",
+        "regex_reward",
+        "length_reward",
+        "copy_trusted_reward",
+        "load_trusted_reward"
+      ],
+      "totalLines": 113,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/resources.py": {
+      "filePath": "src/fine_tuning_studio/resources.py",
+      "contentHash": "d9ca6223ea2b02b7874a0b228f85c2009aa827c069eb85d530b36c79ec5489bf",
+      "functions": [
+        {
+          "name": "full_training_gate",
+          "params": [
+            "parameter_count",
+            "free_vram_gb",
+            "workspace",
+            "bytes_per_parameter"
+          ],
+          "returnType": "FullTrainingGate",
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [
+        {
+          "name": "FullTrainingGate",
+          "methods": [],
+          "properties": [
+            "allowed",
+            "estimated_vram_gb",
+            "required_disk_gb",
+            "reasons"
+          ],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "imports": [
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        }
+      ],
+      "exports": [
+        "FullTrainingGate",
+        "full_training_gate"
+      ],
+      "totalLines": 32,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/runtimes.py": {
+      "filePath": "src/fine_tuning_studio/runtimes.py",
+      "contentHash": "4aed9750f1fd688d2cd0c84de3bf9994642e7e1af63b4b3e0b496d50ad6fe039",
+      "functions": [
+        {
+          "name": "profile_directory",
+          "params": [
+            "root",
+            "profile"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "profile_python",
+          "params": [
+            "root",
+            "profile"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "runtime_verdict",
+          "params": [
+            "report",
+            "profile",
+            "method"
+          ],
+          "returnType": "RuntimeVerdict",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "smoke_test",
+          "params": [
+            "profile"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "save_smoke_result",
+          "params": [
+            "root",
+            "profile",
+            "result"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "provision_profile",
+          "params": [
+            "root",
+            "profile"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 40
+        }
+      ],
+      "classes": [
+        {
+          "name": "RuntimeProfile",
+          "methods": [],
+          "properties": [
+            "id",
+            "vendor",
+            "operating_systems",
+            "status",
+            "torch_index",
+            "notes",
+            "torch_version",
+            "python_minimum"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "RuntimeVerdict",
+          "methods": [],
+          "properties": [
+            "profile",
+            "state",
+            "reasons"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "asdict",
+            "dataclass"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.system_info",
+          "specifiers": [
+            "MachineReport"
+          ]
+        }
+      ],
+      "exports": [
+        "RuntimeProfile",
+        "RuntimeVerdict",
+        "profile_directory",
+        "profile_python",
+        "runtime_verdict",
+        "smoke_test",
+        "save_smoke_result",
+        "provision_profile"
+      ],
+      "totalLines": 141,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/storage.py": {
+      "filePath": "src/fine_tuning_studio/storage.py",
+      "contentHash": "cda6c65ced6b6ef056e2fd82eb8280148891b3ba35ec0dac9e2f854086157aa6",
+      "functions": [
+        {
+          "name": "connect",
+          "params": [
+            "home"
+          ],
+          "returnType": "sqlite3.Connection",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "_schema_version",
+          "params": [
+            "database"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "migrate",
+          "params": [
+            "connection"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "backup",
+          "params": [
+            "home",
+            "label"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "integrity_check",
+          "params": [
+            "home"
+          ],
+          "returnType": "tuple[bool, str]",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "restore",
+          "params": [
+            "home",
+            "source"
+          ],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 18
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "contextlib",
+          "specifiers": [
+            "closing"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "UTC",
+            "datetime"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        }
+      ],
+      "exports": [
+        "connect",
+        "_schema_version",
+        "migrate",
+        "backup",
+        "integrity_check",
+        "restore"
+      ],
+      "totalLines": 122,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/system_info.py": {
+      "filePath": "src/fine_tuning_studio/system_info.py",
+      "contentHash": "b7ecf61c8932600cb36a89d52531fe03cd7466a219adf21e2df001cf30097966",
+      "functions": [
+        {
+          "name": "_run",
+          "params": [
+            "command",
+            "timeout"
+          ],
+          "returnType": "subprocess.CompletedProcess[str] | None",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "_package_versions",
+          "params": [],
+          "returnType": "dict[str, str | None]",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "_hugging_face_token_present",
+          "params": [],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_nvidia_gpus",
+          "params": [],
+          "returnType": "list[GPUInfo]",
+          "exported": true,
+          "lineCount": 32
+        },
+        {
+          "name": "_windows_display_adapters",
+          "params": [],
+          "returnType": "list[GPUInfo]",
+          "exported": true,
+          "lineCount": 32
+        },
+        {
+          "name": "_linux_display_adapters",
+          "params": [],
+          "returnType": "list[GPUInfo]",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "_torch_runtime",
+          "params": [],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "_ollama_status",
+          "params": [],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "scan_machine",
+          "params": [
+            "workspace"
+          ],
+          "returnType": "MachineReport",
+          "exported": true,
+          "lineCount": 47
+        },
+        {
+          "name": "qlora_capability",
+          "params": [
+            "report"
+          ],
+          "returnType": "tuple[bool, list[str]]",
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [
+        {
+          "name": "GPUInfo",
+          "methods": [],
+          "properties": [
+            "vendor",
+            "name",
+            "memory_total_mb",
+            "memory_free_mb",
+            "driver",
+            "compute_capability",
+            "device_index"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "MachineReport",
+          "methods": [
+            "sanitized_dict",
+            "to_json"
+          ],
+          "properties": [
+            "os",
+            "cpu",
+            "memory",
+            "disk",
+            "gpus",
+            "runtimes",
+            "packages",
+            "integrations",
+            "warnings"
+          ],
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "imports": [
+        {
+          "source": "importlib.metadata",
+          "specifiers": [
+            "importlib.metadata"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "platform",
+          "specifiers": [
+            "platform"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "asdict",
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "psutil",
+          "specifiers": [
+            "psutil"
+          ]
+        }
+      ],
+      "exports": [
+        "GPUInfo",
+        "MachineReport",
+        "_run",
+        "_package_versions",
+        "_hugging_face_token_present",
+        "_nvidia_gpus",
+        "_windows_display_adapters",
+        "_linux_display_adapters",
+        "_torch_runtime",
+        "_ollama_status",
+        "scan_machine",
+        "qlora_capability"
+      ],
+      "totalLines": 287,
+      "hasStructuralAnalysis": true
+    },
+    "src/fine_tuning_studio/worker.py": {
+      "filePath": "src/fine_tuning_studio/worker.py",
+      "contentHash": "6e7bd27f6bb7768b6f45d45434a16ccb35c296e586efed546ba699994354359a",
+      "functions": [
+        {
+          "name": "load_manifest",
+          "params": [
+            "job_id"
+          ],
+          "returnType": "RunManifest",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "load_data",
+          "params": [
+            "manifest",
+            "events"
+          ],
+          "returnType": "Any",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "render_dataset",
+          "params": [
+            "dataset",
+            "manifest",
+            "tokenizer"
+          ],
+          "returnType": "Any",
+          "exported": true,
+          "lineCount": 67
+        },
+        {
+          "name": "import_into_ollama",
+          "params": [
+            "manifest",
+            "merged_path",
+            "events"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "run",
+          "params": [
+            "job_id"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 268
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "classes": [
+        {
+          "name": "EventWriter",
+          "methods": [
+            "__init__",
+            "write"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 18
+        }
+      ],
+      "imports": [
+        {
+          "source": "importlib",
+          "specifiers": [
+            "importlib"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "UTC",
+            "datetime"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "cast"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.artifacts",
+          "specifiers": [
+            "write_artifact_manifest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.domain",
+          "specifiers": [
+            "JobStatus",
+            "RunManifest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.evals",
+          "specifiers": [
+            "EvaluationManifest",
+            "run_inspect",
+            "write_evaluation_report"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.jobs",
+          "specifiers": [
+            "get_job",
+            "job_directory",
+            "update_job"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.preflight",
+          "specifiers": [
+            "inspect_dataset",
+            "write_report"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.recipes",
+          "specifiers": [
+            "REWARDS",
+            "load_trusted_reward",
+            "validate_recipe"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.resources",
+          "specifiers": [
+            "full_training_gate"
+          ]
+        }
+      ],
+      "exports": [
+        "EventWriter",
+        "load_manifest",
+        "load_data",
+        "render_dataset",
+        "import_into_ollama",
+        "run",
+        "main"
+      ],
+      "totalLines": 448,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_app.py": {
+      "filePath": "tests/test_app.py",
+      "contentHash": "5427def3f491a344abe3720064765cb9afcffc1d2107811e7421dba5a9f2ba05",
+      "functions": [
+        {
+          "name": "test_system_page_starts_without_exception",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "streamlit.testing.v1",
+          "specifiers": [
+            "AppTest"
+          ]
+        }
+      ],
+      "exports": [
+        "test_system_page_starts_without_exception"
+      ],
+      "totalLines": 9,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_artifacts.py": {
+      "filePath": "tests/test_artifacts.py",
+      "contentHash": "13917b0896eee70361d5a1463fc6a482305da84d741a4b7a6a6313e2e8ea9ed2",
+      "functions": [
+        {
+          "name": "test_artifact_manifest_hashes_outputs",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.artifacts",
+          "specifiers": [
+            "write_artifact_manifest"
+          ]
+        }
+      ],
+      "exports": [
+        "test_artifact_manifest_hashes_outputs"
+      ],
+      "totalLines": 10,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_cli.py": {
+      "filePath": "tests/test_cli.py",
+      "contentHash": "a32431728f63e01d9c29da06f2b28b061383eba92db8eacf7020befb4e1996bc",
+      "functions": [
+        {
+          "name": "test_cli_version_and_doctor",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "MonkeyPatch"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.cli",
+          "specifiers": [
+            "main"
+          ]
+        }
+      ],
+      "exports": [
+        "test_cli_version_and_doctor"
+      ],
+      "totalLines": 12,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_diagnostics.py": {
+      "filePath": "tests/test_diagnostics.py",
+      "contentHash": "83b4a4df0244f92dc7b7b1d9d5df006b30910b6a498caed9e0bcac3abcc58811",
+      "functions": [
+        {
+          "name": "test_diagnostics_redacts_secrets",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "io",
+          "specifiers": [
+            "io"
+          ]
+        },
+        {
+          "source": "zipfile",
+          "specifiers": [
+            "zipfile"
+          ]
+        },
+        {
+          "source": "contextlib",
+          "specifiers": [
+            "closing"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "MonkeyPatch"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.diagnostics",
+          "specifiers": [
+            "build_diagnostics",
+            "redact"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.storage",
+          "specifiers": [
+            "connect"
+          ]
+        }
+      ],
+      "exports": [
+        "test_diagnostics_redacts_secrets"
+      ],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_domain.py": {
+      "filePath": "tests/test_domain.py",
+      "contentHash": "085d5e70ef1c37e5a3b71d00ce14478ebe9cf28a3f4598598ea879584adbdd73",
+      "functions": [
+        {
+          "name": "manifest",
+          "params": [
+            "import_to_ollama",
+            "ollama_model_name",
+            "merged_model"
+          ],
+          "returnType": "RunManifest",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "test_manifest_round_trip",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_ollama_requires_merged_model",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_schema_one_manifest_is_readable_and_new_runs_use_v4",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_path_must_remain_in_workspace",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_cpu_profile_rejects_qlora",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.domain",
+          "specifiers": [
+            "DatasetSpec",
+            "EvaluationSpec",
+            "ExportSpec",
+            "ModelSpec",
+            "RunManifest",
+            "TrainingSpec",
+            "ensure_within",
+            "validate_manifest"
+          ]
+        }
+      ],
+      "exports": [
+        "manifest",
+        "test_manifest_round_trip",
+        "test_ollama_requires_merged_model",
+        "test_schema_one_manifest_is_readable_and_new_runs_use_v4",
+        "test_path_must_remain_in_workspace",
+        "test_cpu_profile_rejects_qlora"
+      ],
+      "totalLines": 66,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_evals.py": {
+      "filePath": "tests/test_evals.py",
+      "contentHash": "8b7fa7f0ece0571f389876a39dbb3b66954224a9870043b0fec51b88e47a65a1",
+      "functions": [
+        {
+          "name": "test_evaluation_reports_and_comparison",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.evals",
+          "specifiers": [
+            "EvaluationManifest",
+            "compare_reports",
+            "write_evaluation_report"
+          ]
+        }
+      ],
+      "exports": [
+        "test_evaluation_reports_and_comparison"
+      ],
+      "totalLines": 18,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_gpu_memory.py": {
+      "filePath": "tests/test_gpu_memory.py",
+      "contentHash": "d6e0f1c90f5886dbee4cd3528b2e886bfdc097817a3babca71aa8ef18edb9ed8",
+      "functions": [
+        {
+          "name": "completed",
+          "params": [
+            "stdout",
+            "returncode"
+          ],
+          "returnType": "SimpleNamespace",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "test_inspects_nvidia_memory_and_processes",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "test_process_protection_policy",
+          "params": [
+            "pid",
+            "name",
+            "username",
+            "expected"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "test_active_studio_worker_is_protected",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "test_inspects_amd_json_processes",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "test_inspects_intel_json_processes",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "test_safe_cleanup_unloads_ollama_and_refreshes_report",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 30
+        },
+        {
+          "name": "test_termination_revalidates_process_identity",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "test_protected_process_cannot_be_terminated",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "replace"
+          ]
+        },
+        {
+          "source": "types",
+          "specifiers": [
+            "SimpleNamespace"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.gpu_memory",
+          "specifiers": [
+            "GpuProcess",
+            "inspect_gpu_memory",
+            "process_protection_reason",
+            "release_reclaimable_memory",
+            "terminate_gpu_process"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.ollama",
+          "specifiers": [
+            "OllamaRunningModel"
+          ]
+        }
+      ],
+      "exports": [
+        "completed",
+        "test_inspects_nvidia_memory_and_processes",
+        "test_process_protection_policy",
+        "test_active_studio_worker_is_protected",
+        "test_inspects_amd_json_processes",
+        "test_inspects_intel_json_processes",
+        "test_safe_cleanup_unloads_ollama_and_refreshes_report",
+        "test_termination_revalidates_process_identity",
+        "test_protected_process_cannot_be_terminated"
+      ],
+      "totalLines": 217,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_hub_references.py": {
+      "filePath": "tests/test_hub_references.py",
+      "contentHash": "c4666eeba6efb7e56df3696f9109d1a9f0671bfe239c8c2069965cb1063e35c1",
+      "functions": [
+        {
+          "name": "test_normalize_hub_reference",
+          "params": [
+            "value",
+            "repo_type",
+            "expected"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "test_normalize_hub_reference_rejects_unsafe_or_mismatched_values",
+          "params": [
+            "value",
+            "repo_type",
+            "message"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_plan_and_download_use_the_hugging_face_cache",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 58
+        },
+        {
+          "name": "test_plan_rejects_download_larger_than_available_cache_disk",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 22
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "types",
+          "specifiers": [
+            "SimpleNamespace"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.hub_references",
+          "specifiers": [
+            "RepoType",
+            "download_hub_repository",
+            "normalize_hub_reference",
+            "plan_hub_download"
+          ]
+        }
+      ],
+      "exports": [
+        "test_normalize_hub_reference",
+        "test_normalize_hub_reference_rejects_unsafe_or_mismatched_values",
+        "test_plan_and_download_use_the_hugging_face_cache",
+        "test_plan_rejects_download_larger_than_available_cache_disk"
+      ],
+      "totalLines": 152,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_jobs.py": {
+      "filePath": "tests/test_jobs.py",
+      "contentHash": "6040b930d2329131a4df9bd0d76baf334e7e72eb1f0818a55c2ca72b57824dba",
+      "functions": [
+        {
+          "name": "test_create_job_persists_manifest_and_sanitized_upload",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "test_resume_creates_v4_child_job",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "test_reconcile_marks_missing_worker_interrupted",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 17
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "MonkeyPatch"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.domain",
+          "specifiers": [
+            "DatasetSpec",
+            "EvaluationSpec",
+            "ExportSpec",
+            "ModelSpec",
+            "RunManifest",
+            "TrainingSpec"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.jobs",
+          "specifiers": [
+            "create_job",
+            "get_job",
+            "reconcile_jobs",
+            "resume_job",
+            "update_job"
+          ]
+        }
+      ],
+      "exports": [
+        "test_create_job_persists_manifest_and_sanitized_upload",
+        "test_resume_creates_v4_child_job",
+        "test_reconcile_marks_missing_worker_interrupted"
+      ],
+      "totalLines": 71,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_lifecycle.py": {
+      "filePath": "tests/test_lifecycle.py",
+      "contentHash": "79a46216eefd22e3b98f91c30797cb463757db202a414905072d94445ab06b35",
+      "functions": [
+        {
+          "name": "_manifest",
+          "params": [],
+          "returnType": "RunManifest",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_registered_worker_requires_ancestry_or_matching_command",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "test_shutdown_marks_active_job_without_pid_interrupted",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "test_shutdown_leaves_completed_and_queued_jobs_untouched",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "test_shutdown_forces_verified_worker_and_marks_it_interrupted",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "test_shutdown_refuses_unverified_worker",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "test_shutdown_stops_other_direct_app_descendants",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "test_schedule_clean_exit_uses_success_status",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "classes": [
+        {
+          "name": "FakeProcess",
+          "methods": [
+            "__init__",
+            "parents",
+            "cmdline",
+            "children",
+            "ppid"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 27
+        }
+      ],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "cast"
+          ]
+        },
+        {
+          "source": "psutil",
+          "specifiers": [
+            "psutil"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.domain",
+          "specifiers": [
+            "DatasetSpec",
+            "EvaluationSpec",
+            "ExportSpec",
+            "ModelSpec",
+            "RunManifest",
+            "TrainingSpec"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.jobs",
+          "specifiers": [
+            "create_job",
+            "get_job",
+            "update_job"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.lifecycle",
+          "specifiers": [
+            "_registered_worker",
+            "schedule_clean_exit",
+            "stop_application_processes"
+          ]
+        }
+      ],
+      "exports": [
+        "FakeProcess",
+        "_manifest",
+        "test_registered_worker_requires_ancestry_or_matching_command",
+        "test_shutdown_marks_active_job_without_pid_interrupted",
+        "test_shutdown_leaves_completed_and_queued_jobs_untouched",
+        "test_shutdown_forces_verified_worker_and_marks_it_interrupted",
+        "test_shutdown_refuses_unverified_worker",
+        "test_shutdown_stops_other_direct_app_descendants",
+        "test_schedule_clean_exit_uses_success_status"
+      ],
+      "totalLines": 204,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_ollama.py": {
+      "filePath": "tests/test_ollama.py",
+      "contentHash": "176984b700d942e247f5e0c4f16d894403b9078d38acaa2d89bfcd83cc95d782",
+      "functions": [
+        {
+          "name": "request_payload",
+          "params": [
+            "request"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "test_lists_installed_and_running_models",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 39
+        },
+        {
+          "name": "test_shows_model_capabilities",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "test_unload_uses_keep_alive_zero_without_deleting_model",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "test_streams_chat_ndjson_and_generation_options",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 36
+        },
+        {
+          "name": "test_reports_connection_and_stream_errors_without_raw_payloads",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "test_rejects_unsafe_ollama_hosts",
+          "params": [
+            "host"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [
+        {
+          "name": "FakeResponse",
+          "methods": [
+            "__init__",
+            "__enter__",
+            "__exit__",
+            "read",
+            "__iter__"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 20
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "collections.abc",
+          "specifiers": [
+            "Iterator"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "cast"
+          ]
+        },
+        {
+          "source": "urllib.error",
+          "specifiers": [
+            "URLError"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "Request"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.ollama",
+          "specifiers": [
+            "OllamaClient",
+            "OllamaError"
+          ]
+        }
+      ],
+      "exports": [
+        "FakeResponse",
+        "request_payload",
+        "test_lists_installed_and_running_models",
+        "test_shows_model_capabilities",
+        "test_unload_uses_keep_alive_zero_without_deleting_model",
+        "test_streams_chat_ndjson_and_generation_options",
+        "test_reports_connection_and_stream_errors_without_raw_payloads",
+        "test_rejects_unsafe_ollama_hosts"
+      ],
+      "totalLines": 184,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_recipes.py": {
+      "filePath": "tests/test_recipes.py",
+      "contentHash": "ac17939fc78b8d0e37fdeea2c3f2b10ca091f66a75902d61fef0c6ef6aefcd9c",
+      "functions": [
+        {
+          "name": "test_dpo_contract_requires_preference_columns",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_builtin_rewards_return_one_score_per_completion",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_trusted_reward_is_copied_hashed_and_probed",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "test_inspect_command_rejects_unknown_tasks",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.evals",
+          "specifiers": [
+            "inspect_command"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.recipes",
+          "specifiers": [
+            "REWARDS",
+            "copy_trusted_reward",
+            "validate_recipe"
+          ]
+        }
+      ],
+      "exports": [
+        "test_dpo_contract_requires_preference_columns",
+        "test_builtin_rewards_return_one_score_per_completion",
+        "test_trusted_reward_is_copied_hashed_and_probed",
+        "test_inspect_command_rejects_unknown_tasks"
+      ],
+      "totalLines": 34,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_resources.py": {
+      "filePath": "tests/test_resources.py",
+      "contentHash": "7ef93ee36b38d7af28427b47f43d49ab1493a8a0c49b63cca8aa39bf90a700ec",
+      "functions": [
+        {
+          "name": "test_full_training_refuses_unsafe_vram",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_small_full_training_fits",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.resources",
+          "specifiers": [
+            "full_training_gate"
+          ]
+        }
+      ],
+      "exports": [
+        "test_full_training_refuses_unsafe_vram",
+        "test_small_full_training_fits"
+      ],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_runtimes.py": {
+      "filePath": "tests/test_runtimes.py",
+      "contentHash": "19d686d14e375c7dbc828e7dedc5d384f2e9d698c716eed47f19867c6142c94e",
+      "functions": [
+        {
+          "name": "report",
+          "params": [
+            "vendor"
+          ],
+          "returnType": "MachineReport",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "test_cuda_ready_with_working_runtime",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "test_amd_rocm_is_unsupported_on_native_windows",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "fine_tuning_studio.runtimes",
+          "specifiers": [
+            "runtime_verdict"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.system_info",
+          "specifiers": [
+            "GPUInfo",
+            "MachineReport"
+          ]
+        }
+      ],
+      "exports": [
+        "report",
+        "test_cuda_ready_with_working_runtime",
+        "test_amd_rocm_is_unsupported_on_native_windows"
+      ],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_storage.py": {
+      "filePath": "tests/test_storage.py",
+      "contentHash": "6d6a9f5b639b8ec5e9529e60ce0414381a216798c77f7777357eed7884fa0bd9",
+      "functions": [
+        {
+          "name": "test_migrate_backup_and_restore",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 13
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "contextlib",
+          "specifiers": [
+            "closing"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.storage",
+          "specifiers": [
+            "SCHEMA_VERSION",
+            "backup",
+            "connect",
+            "integrity_check",
+            "restore"
+          ]
+        }
+      ],
+      "exports": [
+        "test_migrate_backup_and_restore"
+      ],
+      "totalLines": 21,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_system_info.py": {
+      "filePath": "tests/test_system_info.py",
+      "contentHash": "2c8dd371ac6fedcd4c17c331cbd29aee70e5557655bea67832721c58c531d442",
+      "functions": [
+        {
+          "name": "report",
+          "params": [
+            "cuda",
+            "free_vram"
+          ],
+          "returnType": "MachineReport",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "test_qlora_capability_ready",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "test_qlora_capability_reports_cuda_and_memory",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_hugging_face_token_aliases_are_detected",
+          "params": [
+            "monkeypatch",
+            "name"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_empty_hugging_face_token_variables_are_not_detected",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "fine_tuning_studio.system_info",
+          "specifiers": [
+            "GPUInfo",
+            "MachineReport",
+            "_hugging_face_token_present",
+            "qlora_capability"
+          ]
+        }
+      ],
+      "exports": [
+        "report",
+        "test_qlora_capability_ready",
+        "test_qlora_capability_reports_cuda_and_memory",
+        "test_hugging_face_token_aliases_are_detected",
+        "test_empty_hugging_face_token_variables_are_not_detected"
+      ],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

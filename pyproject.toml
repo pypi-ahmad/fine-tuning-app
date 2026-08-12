@@ -1,6 +1,6 @@
 [project]
 name = "fine-tuning-studio"
-version = "1.0.0"
+version = "1.0.1"
 description = "Local-first UI for fine-tuning and exporting AI models"
 readme = "README.md"
 requires-python = ">=3.12.10,<3.15"
