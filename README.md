@@ -26,6 +26,7 @@ user environment and are never displayed or written into the project.
 - Export a LoRA adapter, optionally merge it into the base model, push the adapter to
   the Hugging Face Hub, or import a merged model into Ollama.
 - Stream text chats with models already installed in Ollama through a separate playground.
+- Stop the app and its verified worker process trees from a confirmed global sidebar control.
 
 Version 1.0 adds durable migrations and backups, schema-v4 manifests, bounded preflight,
 evaluation reports, physical GPU selection, probe-gated DDP/FSDP2, a packaged CLI, and
@@ -67,8 +68,10 @@ from `uv.lock`.
 ### 3. Configure Hugging Face access (optional)
 
 Public models and datasets do not require a token. For gated/private resources or Hub
-uploads, create a Hugging Face token and save it as the `HF_TOKEN` user environment
-variable. Never place the token in this repository.
+uploads, create a Hugging Face token and save it as the preferred `HF_TOKEN` user
+environment variable. The legacy `HUGGING_FACE_HUB_TOKEN` name is also accepted for
+compatibility; when both are set, `HF_TOKEN` takes precedence. Never place either token
+in this repository.
 
 Windows PowerShell (reopen the terminal afterward):
 
@@ -142,10 +145,10 @@ fine-tuning-studio version
 
 ## Security
 
-Fine-Tuning Studio reports only whether `HF_TOKEN` exists; it does not show or store the
-token value. Uploaded filenames are sanitized and job paths are constrained to the app
-workspace. Enabling `trust_remote_code` can execute code from a model repository, so use
-it only after reviewing and trusting that repository.
+Fine-Tuning Studio reports only whether `HF_TOKEN` or `HUGGING_FACE_HUB_TOKEN` exists; it
+does not show or store either value. Uploaded filenames are sanitized and job paths are
+constrained to the app workspace. Enabling `trust_remote_code` can execute code from a
+model repository, so use it only after reviewing and trusting that repository.
 
 Optional benchmark execution uses an isolated Inspect AI installation. Custom Python
 reward modules are explicitly trusted, copied and hashed into the job, and execute

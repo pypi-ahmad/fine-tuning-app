@@ -3,8 +3,8 @@
 ## Start the application
 
 1. Install [uv](https://docs.astral.sh/uv/).
-2. Set `HF_TOKEN` in your user environment if gated/private Hugging Face access or Hub
-   uploads are needed.
+2. Set `HF_TOKEN` (preferred) or `HUGGING_FACE_HUB_TOKEN` in your user environment if
+   gated/private Hugging Face access or Hub uploads are needed.
 3. Run `launch.cmd` on Windows or `./launch.sh` on Linux.
 4. Open the Streamlit address shown by the launcher.
 
@@ -55,3 +55,7 @@ requirements, training defaults, and error recovery, see the detailed
 
 Use `fine-tuning-studio doctor --json`, `fine-tuning-studio backup`, and
 `fine-tuning-studio restore PATH`. Stop all jobs before restore.
+
+Use **Stop app** at the bottom of the sidebar to request checkpoint-safe cancellation,
+stop remaining verified Fine-Tuning Studio worker processes, and close the local server.
+This control does not stop Ollama or unrelated local processes.

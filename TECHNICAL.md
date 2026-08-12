@@ -13,6 +13,7 @@ remote training service, hosted database, or telemetry backend is used.
 | System inspection | Detects OS, CPU, memory, disk, GPU processes/VRAM, PyTorch/CUDA, package availability, Hugging Face token presence, and Ollama status. |
 | Job registry | Migrated SQLite database plus immutable manifests, inputs, events, checkpoints, artifacts, and verified backups. |
 | Training worker | Dispatches SFT, CPT, preference, reward, and GRPO recipes and exports results. |
+| Lifecycle control | Cooperatively cancels jobs, verifies app-owned process trees, escalates when necessary, and cleanly exits the local server. |
 | Ollama integration | Keeps explicit merged-model import separate from an installed-model playground using `/api/tags`, `/api/show`, `/api/ps`, and streamed `/api/chat`. |
 
 GPU cleanup uses vendor tools when available: `nvidia-smi`, `amd-smi`, or `xpu-smi`.
@@ -34,6 +35,12 @@ UI configuration
 The worker writes structured events to `events.jsonl` and updates job progress in
 SQLite. The UI shows the most recent 100 events. Only one active training worker is
 permitted at a time.
+
+The global stop control first writes cancellation markers and waits up to ten seconds.
+Remaining worker PIDs must match the current app ancestry or registered worker command
+before their process trees are terminated. If ownership cannot be verified or a process
+survives termination, the UI remains available and reports the error instead of hiding
+an orphaned job. Ollama and unrelated processes remain outside this lifecycle.
 
 ## Data and workspace
 

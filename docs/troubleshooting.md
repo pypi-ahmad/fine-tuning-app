@@ -27,9 +27,9 @@ accumulation. Model merging may require more memory than adapter training.
 
 ## Gated model or dataset fails to load
 
-Accept the resource license on Hugging Face, set `HF_TOKEN` in the user environment,
-confirm the token has read access, and restart the launcher. The UI reports presence,
-not the token value.
+Accept the resource license on Hugging Face, set `HF_TOKEN` (preferred) or
+`HUGGING_FACE_HUB_TOKEN` in the user environment, confirm the token has read access, and
+restart the launcher. The UI reports presence, not the token value.
 
 ## Dataset fails after preview
 
@@ -54,3 +54,10 @@ a merged model and an architecture Ollama supports.
 Jobs live under `FINE_TUNING_STUDIO_HOME` or `~/.fine-tuning-studio`. Back up anything
 important before manually removing job data. Fine-Tuning Studio has no built-in delete
 or reset operation.
+
+## Restarting after Stop app
+
+Run `launch.cmd` on Windows or `./launch.sh` on Linux. Jobs that exited cooperatively
+remain cancelled; jobs that required process termination are marked interrupted and can
+be resumed from an existing checkpoint. If shutdown reports an unverified or surviving
+PID, resolve that process manually before retrying. The stop control never ends Ollama.

@@ -52,6 +52,7 @@ from fine_tuning_studio.jobs import (
     studio_home,
     terminate_job,
 )
+from fine_tuning_studio.lifecycle import schedule_clean_exit, stop_application_processes
 from fine_tuning_studio.ollama import OllamaClient, OllamaError, OllamaModel
 from fine_tuning_studio.runtimes import (
     PROFILES,
@@ -112,6 +113,37 @@ def active_worker_pids() -> set[int]:
         "cancelling",
     }
     return {int(row["pid"]) for row in list_jobs() if row["status"] in active and row.get("pid")}
+
+
+@st.dialog("Stop Fine-Tuning Studio?", icon=":material/power_settings_new:")
+def stop_application_dialog() -> None:
+    st.warning(
+        "This stops the app and its training, evaluation, export, and other child "
+        "processes. Checkpoints and logs are preserved. Ollama and unrelated processes "
+        "remain running."
+    )
+    if not st.button(
+        "Stop app and workers",
+        type="primary",
+        icon=":material/power_settings_new:",
+        width="stretch",
+    ):
+        return
+    with st.status("Stopping Fine-Tuning Studio", expanded=True) as status:
+        report = stop_application_processes()
+        if report.errors:
+            for message in report.errors:
+                st.error(message)
+            status.update(label="Shutdown could not complete safely", state="error")
+            return
+        if report.requested_jobs:
+            st.write(f"Stopped {len(report.requested_jobs)} active job(s).")
+        if report.stopped_pids:
+            st.write(f"Stopped {len(report.stopped_pids)} app-owned process(es).")
+        status.update(label="Shutdown complete", state="complete")
+    st.success("Fine-Tuning Studio is stopping. You can close this browser tab.")
+    schedule_clean_exit()
+    st.stop()
 
 
 def format_bytes(value: int) -> str:
@@ -334,15 +366,20 @@ def preview_upload(upload: Any) -> pa.Table:
 
 def hub_error_message(exc: Exception) -> str:
     if isinstance(exc, GatedRepoError):
-        return "This repository is gated. Accept its terms on Hugging Face and set HF_TOKEN."
+        return (
+            "This repository is gated. Accept its terms on Hugging Face and set "
+            "HF_TOKEN or HUGGING_FACE_HUB_TOKEN."
+        )
     if isinstance(exc, RepositoryNotFoundError):
-        return "Repository not found or inaccessible. Check the ID and your HF_TOKEN access."
+        return (
+            "Repository not found or inaccessible. Check the ID and your Hugging Face token access."
+        )
     if isinstance(exc, RevisionNotFoundError):
         return "Revision not found. Check the branch, tag, or commit in the Revision field."
     if isinstance(exc, HfHubHTTPError):
         return (
             "Hugging Face rejected the request. Check your network, repository access, "
-            "and HF_TOKEN."
+            "and Hugging Face token."
         )
     if isinstance(exc, OSError) and str(exc).startswith("Download requires"):
         return str(exc)
@@ -889,4 +926,14 @@ page = st.navigation(
     ],
     expanded=True,
 )
+with st.sidebar:
+    st.divider()
+    if st.button(
+        "Stop app",
+        key="stop_application",
+        help="Stop Fine-Tuning Studio and its app-owned worker processes.",
+        icon=":material/power_settings_new:",
+        width="stretch",
+    ):
+        stop_application_dialog()
 page.run()

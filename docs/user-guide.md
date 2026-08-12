@@ -3,6 +3,12 @@
 Fine-Tuning Studio presents the workflow as eight pages. Complete them in order for a
 new run.
 
+**Stop app** is always available at the bottom of the sidebar. Its confirmation dialog
+requests safe cancellation for active jobs, waits briefly, stops remaining verified
+Fine-Tuning Studio process trees, and then closes the local server. Checkpoints, logs,
+and job records remain available after restart. Ollama and unrelated processes are not
+stopped.
+
 ## 1. System
 
 The initial scan reports the operating system, CPU threads, available memory, free disk
