@@ -11,6 +11,7 @@ from typing import Any, cast
 from fine_tuning_studio.artifacts import write_artifact_manifest
 from fine_tuning_studio.domain import JobStatus, RunManifest
 from fine_tuning_studio.jobs import get_job, job_directory, update_job
+from fine_tuning_studio.resources import full_training_gate
 
 
 class EventWriter:
@@ -69,6 +70,13 @@ def render_dataset(dataset: Any, manifest: RunManifest, tokenizer: Any) -> Any:
             raise ValueError(f"Missing text column: {spec.text_column}")
         if spec.text_column != "text":
             dataset = dataset.rename_column(spec.text_column, "text")
+        if manifest.training.objective == "continued_pretraining":
+            eos = tokenizer.eos_token or ""
+
+            def append_eos(row: dict[str, Any]) -> dict[str, str]:
+                return {"text": str(row[spec.text_column]) + eos}
+
+            return dataset.map(append_eos)
         return dataset
     if spec.mapping == "prompt_response":
         missing = {spec.prompt_column, spec.response_column} - columns
@@ -198,19 +206,28 @@ def run(job_id: str) -> None:
         device_map="auto",
         dtype=compute_dtype,
     )
+    if manifest.training.method == "full":
+        free_bytes, _ = torch.cuda.mem_get_info() if torch.cuda.is_available() else (0, 0)
+        gate = full_training_gate(
+            model.num_parameters(), free_bytes / 1024**3, directory
+        )
+        if not gate.allowed:
+            raise RuntimeError("Full-training safety gate: " + " ".join(gate.reasons))
     if manifest.training.method == "qlora":
         model = prepare_model_for_kbit_training(
             model,
             use_gradient_checkpointing=manifest.training.gradient_checkpointing,
         )
-    peft_config = LoraConfig(
-        r=manifest.training.lora_rank,
-        lora_alpha=manifest.training.lora_alpha,
-        lora_dropout=manifest.training.lora_dropout,
-        bias="none",
-        task_type="CAUSAL_LM",
-        target_modules="all-linear",
-    )
+    peft_config = None
+    if manifest.training.method != "full":
+        peft_config = LoraConfig(
+            r=manifest.training.lora_rank,
+            lora_alpha=manifest.training.lora_alpha,
+            lora_dropout=manifest.training.lora_dropout,
+            bias="none",
+            task_type="CAUSAL_LM",
+            target_modules="all-linear",
+        )
     args = SFTConfig(
         output_dir=str(directory / "checkpoints"),
         num_train_epochs=manifest.training.epochs,
@@ -220,7 +237,8 @@ def run(job_id: str) -> None:
         per_device_eval_batch_size=manifest.training.batch_size,
         gradient_accumulation_steps=manifest.training.gradient_accumulation_steps,
         gradient_checkpointing=manifest.training.gradient_checkpointing,
-        packing=manifest.training.packing,
+        packing=manifest.training.packing
+        or manifest.training.objective == "continued_pretraining",
         eval_packing=False,
         bf16=compute_dtype == torch.bfloat16,
         fp16=compute_dtype == torch.float16,
@@ -242,6 +260,18 @@ def run(job_id: str) -> None:
         peft_config=peft_config,
         callbacks=[ProgressCallback()],
     )
+    if manifest.training.method == "full":
+        events.write("preparing", "Running one-microbatch memory probe", 0.18)
+        sample = split["train"][0]["text"]
+        probe = tokenizer(
+            sample,
+            return_tensors="pt",
+            truncation=True,
+            max_length=manifest.training.max_sequence_length,
+        ).to(model.device)
+        loss = model(**probe, labels=probe["input_ids"]).loss
+        loss.backward()
+        model.zero_grad(set_to_none=True)
     metrics: dict[str, Any] = {}
     if manifest.evaluation.before:
         update_job(
@@ -272,14 +302,14 @@ def run(job_id: str) -> None:
             limit=manifest.evaluation.benchmark_limit,
         )
     update_job(job_id, status=JobStatus.EXPORTING, stage="Saving adapter", progress=0.88)
-    adapter_path = artifacts / "adapter"
-    trainer.save_model(str(adapter_path))
-    tokenizer.save_pretrained(adapter_path)
+    output_path = artifacts / ("full-model" if manifest.training.method == "full" else "adapter")
+    trainer.save_model(str(output_path))
+    tokenizer.save_pretrained(output_path)
     (artifacts / "metrics.json").write_text(
         json.dumps(metrics, indent=2, default=str), encoding="utf-8"
     )
-    merged_path: Path | None = None
-    if manifest.export.merged_model:
+    merged_path: Path | None = output_path if manifest.training.method == "full" else None
+    if manifest.export.merged_model and manifest.training.method != "full":
         events.write("exporting", "Merging adapter into base model", 0.92)
         merged_path = artifacts / "merged-model"
         peft_model = cast(Any, trainer.model)

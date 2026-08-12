@@ -334,8 +334,9 @@ def review_page() -> None:
     merged = st.toggle("Create merged model", value=False)
     import_ollama = st.toggle("Import merged model into Ollama", value=False)
     export = {
-        "adapter": True,
-        "merged_model": merged or import_ollama,
+        "adapter": st.session_state.training.get("method") != "full",
+        "merged_model": import_ollama
+        or (merged and st.session_state.training.get("method") != "full"),
         "push_to_hub": st.toggle("Push adapter to Hugging Face Hub", value=False),
         "hub_repo_id": "",
         "hub_private": True,

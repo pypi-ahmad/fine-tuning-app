@@ -161,7 +161,11 @@ def validate_manifest(manifest: RunManifest) -> list[str]:
         errors.append("Enter a Hugging Face repository ID before enabling Hub upload.")
     if manifest.export.import_to_ollama and not manifest.export.ollama_model_name.strip():
         errors.append("Enter an Ollama model name before enabling Ollama import.")
-    if manifest.export.import_to_ollama and not manifest.export.merged_model:
+    if (
+        manifest.export.import_to_ollama
+        and manifest.training.method != "full"
+        and not manifest.export.merged_model
+    ):
         errors.append("Ollama import requires merged-model export for adapter jobs.")
     return errors
 
