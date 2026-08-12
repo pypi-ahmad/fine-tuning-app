@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, cast
 
+from fine_tuning_studio.artifacts import write_artifact_manifest
 from fine_tuning_studio.domain import JobStatus, RunManifest
 from fine_tuning_studio.jobs import get_job, job_directory, update_job
 
@@ -180,13 +181,15 @@ def run(job_id: str) -> None:
         shuffle=True,
     )
     compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
-    quantization = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_use_double_quant=True,
-        bnb_4bit_compute_dtype=compute_dtype,
-    )
-    events.write("preparing", "Loading quantized base model", 0.12)
+    quantization = None
+    if manifest.training.method == "qlora":
+        quantization = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=compute_dtype,
+        )
+    events.write("preparing", f"Loading base model for {manifest.training.method}", 0.12)
     model = AutoModelForCausalLM.from_pretrained(
         model_ref,
         revision=revision,
@@ -195,10 +198,11 @@ def run(job_id: str) -> None:
         device_map="auto",
         dtype=compute_dtype,
     )
-    model = prepare_model_for_kbit_training(
-        model,
-        use_gradient_checkpointing=manifest.training.gradient_checkpointing,
-    )
+    if manifest.training.method == "qlora":
+        model = prepare_model_for_kbit_training(
+            model,
+            use_gradient_checkpointing=manifest.training.gradient_checkpointing,
+        )
     peft_config = LoraConfig(
         r=manifest.training.lora_rank,
         lora_alpha=manifest.training.lora_alpha,
@@ -290,6 +294,7 @@ def run(job_id: str) -> None:
         )
     if manifest.export.import_to_ollama and merged_path:
         import_into_ollama(manifest, merged_path, events)
+    write_artifact_manifest(artifacts)
     update_job(job_id, status=JobStatus.COMPLETED, stage="Completed", progress=1.0)
     events.write("completed", "Training and export completed", 1.0)
 

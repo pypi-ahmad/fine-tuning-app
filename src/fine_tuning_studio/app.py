@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import os
 import urllib.error
@@ -222,10 +223,22 @@ def training_page() -> None:
     st.markdown('<div class="fts-kicker">04 · Configure</div>', unsafe_allow_html=True)
     st.title("Set the training run")
     c1, c2, c3 = st.columns(3)
-    c1.selectbox("Objective", ["SFT"], disabled=True)
-    c2.selectbox("Method", ["QLoRA"], disabled=True)
-    c3.selectbox("Backend", ["Transformers + PEFT + TRL"], disabled=True)
-    training: dict[str, Any] = {}
+    objective = c1.selectbox(
+        "Objective", ["sft", "continued_pretraining", "dpo", "kto", "reward", "orpo", "grpo"],
+        format_func=lambda value: value.replace("_", " ").upper(),
+    )
+    method = c2.selectbox("Method", ["qlora", "lora", "full"], format_func=str.upper)
+    backends = ["transformers"]
+    if importlib.util.find_spec("unsloth") and objective == "sft":
+        backends.append("unsloth")
+    backend = c3.selectbox(
+        "Backend",
+        backends,
+        format_func=lambda value: (
+            "Unsloth" if value == "unsloth" else "Transformers + PEFT + TRL"
+        ),
+    )
+    training: dict[str, Any] = {"objective": objective, "method": method, "backend": backend}
     c1, c2 = st.columns(2)
     training["epochs"] = c1.number_input("Epochs", 0.1, 100.0, 1.0, 0.5)
     training["learning_rate"] = c2.number_input("Learning rate", 1e-7, 1.0, 2e-4, format="%.7f")

@@ -41,7 +41,15 @@ def test_manifest_round_trip() -> None:
 
 def test_ollama_requires_merged_model() -> None:
     errors = validate_manifest(manifest(import_to_ollama=True, ollama_model_name="demo"))
-    assert "Ollama import requires merged-model export for QLoRA jobs." in errors
+    assert "Ollama import requires merged-model export for adapter jobs." in errors
+
+
+def test_schema_one_manifest_is_readable_and_upgrades_on_new_runs() -> None:
+    raw = manifest().to_dict()
+    raw["schema_version"] = 1
+    raw.pop("provenance")
+    assert RunManifest.from_dict(raw).schema_version == 1
+    assert manifest().schema_version == 2
 
 
 def test_path_must_remain_in_workspace(tmp_path: Path) -> None:

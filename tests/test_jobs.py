@@ -11,7 +11,7 @@ from fine_tuning_studio.domain import (
     RunManifest,
     TrainingSpec,
 )
-from fine_tuning_studio.jobs import create_job, get_job
+from fine_tuning_studio.jobs import create_job, get_job, resume_job
 
 
 def test_create_job_persists_manifest_and_sanitized_upload(
@@ -31,3 +31,21 @@ def test_create_job_persists_manifest_and_sanitized_upload(
     job = get_job(manifest.id)
     assert job is not None
     assert job["status"] == "queued"
+
+
+def test_resume_creates_v2_child_job(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setenv("FINE_TUNING_STUDIO_HOME", str(tmp_path))
+    parent = RunManifest(
+        dataset=DatasetSpec(source="hub", location="org/data"),
+        model=ModelSpec(source="hub", location="org/model"),
+        training=TrainingSpec(),
+        evaluation=EvaluationSpec(),
+        export=ExportSpec(),
+    )
+    create_job(parent)
+    checkpoint = tmp_path / "jobs" / parent.id / "checkpoints" / "checkpoint-1"
+    checkpoint.mkdir(parents=True)
+    child = resume_job(parent.id, checkpoint)
+    assert child.parent_job_id == parent.id
+    assert child.schema_version == 2
+    assert child.training.resume_checkpoint == str(checkpoint.resolve())

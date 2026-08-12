@@ -63,6 +63,20 @@ class TrainingSpec:
     save_steps: int = 100
     logging_steps: int = 10
     resume_checkpoint: str | None = None
+    precision: str = "auto"
+    runtime_profile: str = "current"
+    experimental_acknowledged: bool = False
+    reward_module: str | None = None
+    reward_functions: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class ProvenanceSpec:
+    dataset_fingerprint: str = ""
+    model_revision: str = ""
+    package_versions: dict[str, str] = field(default_factory=dict)
+    recipe_version: str = "1"
+    runtime_version: str = ""
 
 
 @dataclass(frozen=True)
@@ -92,9 +106,10 @@ class RunManifest:
     evaluation: EvaluationSpec
     export: ExportSpec
     id: str = field(default_factory=lambda: str(uuid4()))
-    schema_version: int = 1
+    schema_version: int = 2
     created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     parent_job_id: str | None = None
+    provenance: ProvenanceSpec = field(default_factory=ProvenanceSpec)
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -111,6 +126,7 @@ class RunManifest:
             training=TrainingSpec(**value["training"]),
             evaluation=EvaluationSpec(**value["evaluation"]),
             export=ExportSpec(**value["export"]),
+            provenance=ProvenanceSpec(**value.get("provenance", {})),
         )
 
 
@@ -124,14 +140,24 @@ def validate_manifest(manifest: RunManifest) -> list[str]:
         errors.append("Validation fraction must be greater than 0 and less than 0.5.")
     if manifest.training.max_sequence_length < 64:
         errors.append("Maximum sequence length must be at least 64 tokens.")
-    if manifest.training.method != "qlora" or manifest.training.objective != "sft":
-        errors.append("V0.1 supports QLoRA supervised fine-tuning only.")
+    objectives = {"sft", "continued_pretraining", "dpo", "kto", "reward", "orpo", "grpo"}
+    methods = {"lora", "qlora", "full"}
+    if manifest.training.objective not in objectives:
+        errors.append(f"Unsupported objective: {manifest.training.objective}.")
+    if manifest.training.method not in methods:
+        errors.append(f"Unsupported method: {manifest.training.method}.")
+    if manifest.training.objective != "sft" and manifest.training.backend == "unsloth":
+        errors.append("Unsloth is currently available for SFT jobs only.")
+    if manifest.training.objective == "grpo" and manifest.training.method == "full":
+        errors.append("GRPO supports LoRA or QLoRA only.")
+    if manifest.training.method == "full" and manifest.export.adapter:
+        errors.append("Full fine-tuning does not produce a LoRA adapter.")
     if manifest.export.push_to_hub and not manifest.export.hub_repo_id.strip():
         errors.append("Enter a Hugging Face repository ID before enabling Hub upload.")
     if manifest.export.import_to_ollama and not manifest.export.ollama_model_name.strip():
         errors.append("Enter an Ollama model name before enabling Ollama import.")
     if manifest.export.import_to_ollama and not manifest.export.merged_model:
-        errors.append("Ollama import requires merged-model export for QLoRA jobs.")
+        errors.append("Ollama import requires merged-model export for adapter jobs.")
     return errors
 
 

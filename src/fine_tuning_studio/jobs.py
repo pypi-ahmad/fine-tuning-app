@@ -5,9 +5,11 @@ import os
 import sqlite3
 import subprocess
 import sys
+from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from fine_tuning_studio.domain import JobStatus, RunManifest, ensure_within
 
@@ -71,6 +73,31 @@ def create_job(
             (manifest.id, JobStatus.QUEUED, "Queued", now, now, str(manifest_path)),
         )
     return manifest_path
+
+
+def resume_job(parent_job_id: str, checkpoint: Path) -> RunManifest:
+    parent = get_job(parent_job_id)
+    if not parent:
+        raise ValueError(f"Unknown parent job: {parent_job_id}")
+    parent_manifest = RunManifest.from_dict(
+        json.loads(Path(parent["manifest_path"]).read_text(encoding="utf-8"))
+    )
+    checkpoint = checkpoint.resolve()
+    checkpoints_root = (job_directory(parent_job_id) / "checkpoints").resolve()
+    if checkpoint != checkpoints_root and checkpoints_root not in checkpoint.parents:
+        raise ValueError("Resume checkpoint must belong to the parent job.")
+    if not checkpoint.is_dir():
+        raise ValueError("Resume checkpoint does not exist.")
+    child = replace(
+        parent_manifest,
+        id=str(uuid4()),
+        schema_version=2,
+        created_at=datetime.now(UTC).isoformat(),
+        parent_job_id=parent_job_id,
+        training=replace(parent_manifest.training, resume_checkpoint=str(checkpoint)),
+    )
+    create_job(child)
+    return child
 
 
 def update_job(job_id: str, **fields: Any) -> None:
