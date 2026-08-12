@@ -11,6 +11,8 @@ build/
 .codegraph/
 .code-review-graph/
 graphify-out/
+.ua/.trash-*/
+.ua/tmp/
 .env
 .env.*
 !.env.example
