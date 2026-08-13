@@ -16,9 +16,10 @@ user environment and are never displayed or written into the project.
 - Load datasets and models from a Hugging Face ID or repository URL, with validation,
   cache-aware downloads, or upload JSON, JSONL, CSV, and Parquet datasets.
 - Map plain text, prompt/response, or chat-message datasets into training text.
-- Run SFT or continued pretraining with LoRA, QLoRA, or guarded full fine-tuning.
-- Run DPO, KTO, reward-model, and GRPO recipes; ORPO is visible but blocked while the
-  installed TRL release does not provide an ORPO trainer.
+- Combine multiple Hub or uploaded datasets with independent mappings and one global split.
+- Run SFT, reward, PPO, DPO, KTO, ORPO, or SimPO with LoRA, QLoRA, OFT, or QOFT.
+- Keep continued pretraining, GRPO, and guarded full fine-tuning workflows.
+- Run preference and reinforcement-learning recipes through capability-gated controls.
 - Use Transformers/PEFT/TRL or compatible installed Unsloth builds for SFT.
 - Select native Windows/Linux CUDA, ROCm, or XPU runtime profiles. ROCm and XPU remain
   experimental until their on-machine smoke test passes.

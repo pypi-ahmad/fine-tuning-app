@@ -2,9 +2,25 @@
 
 ## Supported methods
 
-Version 0.5 supports SFT and continued pretraining with LoRA, QLoRA, or guarded full
-tuning. DPO, KTO, reward modeling, and GRPO use their objective-specific dataset
-contracts. ORPO remains visible but blocked because TRL 1.9 has no ORPO trainer.
+| Approach | LoRA | QLoRA | OFT | QOFT |
+| --- | :---: | :---: | :---: | :---: |
+| Supervised Fine-Tuning | ✅ | ✅ | ✅ | ✅ |
+| Reward Modeling | ✅ | ✅ | ✅ | ✅ |
+| PPO Training | ✅ | ✅ | ✅ | ✅ |
+| DPO Training | ✅ | ✅ | ✅ | ✅ |
+| KTO Training | ✅ | ✅ | ✅ | ✅ |
+| ORPO Training | ✅ | ✅ | ✅ | ✅ |
+| SimPO Training | ✅ | ✅ | ✅ | ✅ |
+
+The dataset page accepts multiple Hub datasets and local uploads. Each source has its own
+split, mapping, and template. Sources are normalized, concatenated, shuffled, and divided
+once using the global validation fraction and seed. Rows are not weighted or deduplicated.
+
+PPO requires a scalar reward-model ID or local path. Its TRL trainer is experimental and
+does not support checkpoint resume.
+
+Continued pretraining supports LoRA, QLoRA, and guarded full tuning. GRPO supports LoRA
+and QLoRA. Each objective uses its own dataset contract.
 
 The worker uses bfloat16 when the GPU supports it and float16 otherwise.
 
@@ -46,6 +62,6 @@ loading, evaluation, or a long training step.
 
 ## Limits
 
-- ORPO with the installed TRL release
-- PPO, multi-GPU, FSDP, DeepSpeed, CPU offload, Apple Silicon, or CPU training
+- PPO checkpoint resume
+- DeepSpeed, CPU offload, Apple Silicon, or CPU training
 - vLLM or tool environments for GRPO

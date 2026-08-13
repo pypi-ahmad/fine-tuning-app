@@ -20,6 +20,7 @@ from huggingface_hub.errors import (
 
 from fine_tuning_studio.diagnostics import build_diagnostics
 from fine_tuning_studio.domain import (
+    DatasetSourceSpec,
     DatasetSpec,
     EvaluationSpec,
     ExportSpec,
@@ -54,6 +55,7 @@ from fine_tuning_studio.jobs import (
 )
 from fine_tuning_studio.lifecycle import schedule_clean_exit, stop_application_processes
 from fine_tuning_studio.ollama import OllamaClient, OllamaError, OllamaModel
+from fine_tuning_studio.recipes import RECIPES, supported_methods
 from fine_tuning_studio.runtimes import (
     PROFILES,
     profile_python,
@@ -64,14 +66,36 @@ from fine_tuning_studio.system_info import MachineReport, qlora_capability, scan
 
 st.set_page_config(page_title="Fine-Tuning Studio", page_icon="🧪", layout="wide")
 
+APPROACHES = (
+    ("sft", "Supervised Fine-Tuning"),
+    ("continued_pretraining", "Continued Pre-Training"),
+    ("reward", "Reward Modeling"),
+    ("ppo", "PPO Training"),
+    ("dpo", "DPO Training"),
+    ("kto", "KTO Training"),
+    ("orpo", "ORPO Training"),
+    ("simpo", "SimPO Training"),
+    ("grpo", "GRPO Training"),
+)
+APPROACH_LABELS = dict(APPROACHES)
+METHOD_LABELS = {
+    "lora": "LoRA",
+    "qlora": "QLoRA",
+    "oft": "OFT",
+    "qoft": "QOFT",
+    "full": "Full",
+}
+
 
 def initialize_state() -> None:
     defaults: dict[str, Any] = {
         "machine_report": None,
-        "dataset": {},
+        "datasets": [{}],
+        "dataset_uploads": {},
+        "dataset_validation_fraction": 0.1,
+        "dataset_seed": 42,
         "model": {},
         "training": {},
-        "upload": None,
         "gpu_memory_report": None,
         "ollama_models": None,
         "ollama_model_details": {},
@@ -95,7 +119,8 @@ def compatibility_rail() -> None:
     supported = verdict.state == "ready" or profile_python(studio_home(), selected).exists()
     labels = [
         f"Machine {'ready' if supported else 'attention'}",
-        f"Dataset {'ready' if st.session_state.dataset.get('location') else 'pending'}",
+        "Dataset "
+        + ("ready" if all(row.get("location") for row in st.session_state.datasets) else "pending"),
         f"Model {'ready' if st.session_state.model.get('location') else 'pending'}",
         "Transformers backend",
     ]
@@ -386,9 +411,11 @@ def hub_error_message(exc: Exception) -> str:
     return f"Download failed ({type(exc).__name__}). Check your network and try again."
 
 
-def render_hub_download(repo_id: str, repo_type: RepoType, revision: str) -> bool:
+def render_hub_download(
+    repo_id: str, repo_type: RepoType, revision: str, key_suffix: str = ""
+) -> bool:
     label = f"Validate & download {repo_type}"
-    if not st.button(label, disabled=not repo_id, key=f"download_{repo_type}"):
+    if not st.button(label, disabled=not repo_id, key=f"download_{repo_type}_{key_suffix}"):
         return False
     status = st.status(f"Validating {repo_id}…", expanded=True)
     try:
@@ -415,66 +442,90 @@ def render_hub_download(repo_id: str, repo_type: RepoType, revision: str) -> boo
 def dataset_page() -> None:
     st.caption("02 · Prepare")
     st.title("Shape the training material")
-    source = st.selectbox("Dataset source", ["Hugging Face", "Local upload"])
-    data: dict[str, Any] = {"source": "hub" if source == "Hugging Face" else "local"}
-    if source == "Hugging Face":
-        reference = st.text_input(
-            "Dataset ID or Hugging Face URL",
-            value=st.session_state.dataset.get("location", ""),
-            placeholder="org/dataset or https://huggingface.co/datasets/org/dataset",
-        )
-        try:
-            data["location"] = normalize_hub_reference(reference, "dataset")
-        except ValueError as exc:
-            data["location"] = ""
-            st.error(str(exc))
-        if reference and data["location"] and reference.strip() != data["location"]:
-            st.caption(f"Resolved dataset ID: `{data['location']}`")
-        c1, c2 = st.columns(2)
-        data["revision"] = c1.text_input("Revision", value="main")
-        data["split"] = c2.text_input("Split", value="train")
-        render_hub_download(data["location"], "dataset", data["revision"])
-    else:
-        upload = st.file_uploader("Upload data", type=["jsonl", "json", "csv", "parquet"])
-        if upload:
-            st.session_state.upload = upload
-            data["location"] = upload.name
-            data["format"] = Path(upload.name).suffix.lstrip(".")
-            try:
-                preview = preview_upload(upload)
-                st.dataframe(preview.slice(0, 100), width="stretch")
-                st.caption(f"{preview.num_rows:,} rows · {preview.num_columns} columns")
-            except (ValueError, pa.ArrowException) as exc:
-                st.error(str(exc))
-        else:
-            data["location"] = st.session_state.dataset.get("location", "")
-    mapping = st.selectbox(
-        "Data shape",
-        ["text", "prompt_response", "messages", "preference", "kto", "grpo"],
-        format_func=lambda value: value.replace("_", " / ").title(),
+    if st.button("Add dataset", icon=":material/add:"):
+        st.session_state.datasets.append({})
+        st.rerun()
+    rows: list[dict[str, Any]] = []
+    for index, previous in enumerate(st.session_state.datasets):
+        with st.container(border=True):
+            header, action = st.columns([5, 1])
+            header.subheader(f"Dataset {index + 1}")
+            if action.button(
+                "Remove",
+                key=f"remove_dataset_{index}",
+                disabled=len(st.session_state.datasets) == 1,
+            ):
+                st.session_state.datasets.pop(index)
+                st.session_state.dataset_uploads = {}
+                st.rerun()
+            label = st.selectbox(
+                "Dataset source",
+                ["Hugging Face", "Local upload"],
+                index=1 if previous.get("source") == "local" else 0,
+                key=f"dataset_source_{index}",
+            )
+            data: dict[str, Any] = {"source": "hub" if label == "Hugging Face" else "local"}
+            if data["source"] == "hub":
+                reference = st.text_input(
+                    "Dataset ID or Hugging Face URL",
+                    value=previous.get("location", ""),
+                    key=f"dataset_location_{index}",
+                )
+                try:
+                    data["location"] = normalize_hub_reference(reference, "dataset")
+                except ValueError as exc:
+                    data["location"] = ""
+                    st.error(str(exc))
+                c1, c2 = st.columns(2)
+                data["revision"] = c1.text_input(
+                    "Revision", "main", key=f"dataset_revision_{index}"
+                )
+                data["split"] = c2.text_input("Split", "train", key=f"dataset_split_{index}")
+                render_hub_download(data["location"], "dataset", data["revision"], str(index))
+            else:
+                upload = st.file_uploader(
+                    "Upload data",
+                    type=["jsonl", "json", "csv", "parquet"],
+                    key=f"dataset_upload_{index}",
+                )
+                if upload:
+                    st.session_state.dataset_uploads[index] = upload
+                    data["location"] = upload.name
+                    data["format"] = Path(upload.name).suffix.lstrip(".")
+                    try:
+                        preview = preview_upload(upload)
+                        st.dataframe(preview.slice(0, 100), width="stretch")
+                    except (ValueError, pa.ArrowException) as exc:
+                        st.error(str(exc))
+                else:
+                    data["location"] = previous.get("location", "")
+            mapping = st.selectbox(
+                "Data shape",
+                ["text", "prompt_response", "messages", "preference", "kto", "grpo"],
+                key=f"dataset_mapping_{index}",
+            )
+            data["mapping"] = mapping
+            data["text_column"] = st.text_input(
+                "Text or messages column", "text", key=f"dataset_text_column_{index}"
+            )
+            c1, c2 = st.columns(2)
+            data["prompt_column"] = c1.text_input(
+                "Prompt column", "prompt", key=f"dataset_prompt_column_{index}"
+            )
+            data["response_column"] = c2.text_input(
+                "Response column", "response", key=f"dataset_response_column_{index}"
+            )
+            data["chat_template"] = st.selectbox(
+                "Chat template",
+                ["tokenizer", "chatml", "alpaca", "plain"],
+                key=f"dataset_chat_template_{index}",
+            )
+            rows.append(data)
+    st.session_state.datasets = rows
+    st.session_state.dataset_validation_fraction = st.slider(
+        "Global validation fraction", 0.05, 0.4, 0.1, 0.05
     )
-    data["mapping"] = mapping
-    if mapping == "text":
-        data["text_column"] = st.text_input("Text column", value="text")
-    elif mapping == "prompt_response":
-        c1, c2 = st.columns(2)
-        data["prompt_column"] = c1.text_input("Prompt column", value="prompt")
-        data["response_column"] = c2.text_input("Response column", value="response")
-    elif mapping == "messages":
-        data["text_column"] = st.text_input("Messages column", value="messages")
-    else:
-        contracts = {
-            "preference": "prompt, chosen, rejected",
-            "kto": "prompt, completion, label (boolean)",
-            "grpo": "prompt, with optional ground_truth",
-        }
-        st.info(f"Required canonical columns: {contracts[mapping]}")
-    data["chat_template"] = st.selectbox(
-        "Chat template", ["tokenizer", "chatml", "alpaca", "plain"]
-    )
-    data["validation_fraction"] = st.slider("Validation fraction", 0.05, 0.4, 0.1, 0.05)
-    data["seed"] = int(st.number_input("Split seed", min_value=0, value=42))
-    st.session_state.dataset = data
+    st.session_state.dataset_seed = int(st.number_input("Global split seed", 0, value=42))
 
 
 def model_page() -> None:
@@ -534,15 +585,36 @@ def model_page() -> None:
 def training_page() -> None:
     st.caption("04 · Configure")
     st.title("Set the training run")
+    st.subheader("Supported training approaches")
+    st.table(
+        [
+            {
+                "Approach": APPROACH_LABELS[objective],
+                **{
+                    METHOD_LABELS[method]: "✅" if method in RECIPES[objective].methods else "—"
+                    for method in ("lora", "qlora", "oft", "qoft")
+                },
+            }
+            for objective in ("sft", "reward", "ppo", "dpo", "kto", "orpo", "simpo")
+        ]
+    )
     c1, c2, c3 = st.columns(3)
     objective = c1.selectbox(
-        "Objective",
-        ["sft", "continued_pretraining", "dpo", "kto", "reward", "orpo", "grpo"],
-        format_func=lambda value: value.replace("_", " ").upper(),
+        "Approach",
+        [objective for objective, _ in APPROACHES],
+        format_func=APPROACH_LABELS.__getitem__,
+        key="training_approach",
+        persist_state="session",
     )
-    method = c2.selectbox("Method", ["qlora", "lora", "full"], format_func=str.upper)
+    method = c2.selectbox(
+        "Method",
+        supported_methods(objective),
+        format_func=METHOD_LABELS.__getitem__,
+        key=f"training_method_{objective}",
+        persist_state="session",
+    )
     backends = ["transformers"]
-    if importlib.util.find_spec("unsloth") and objective == "sft" and method != "full":
+    if importlib.util.find_spec("unsloth") and objective == "sft" and method in {"lora", "qlora"}:
         backends.append("unsloth")
     backend = c3.selectbox(
         "Backend",
@@ -611,6 +683,32 @@ def training_page() -> None:
         training["lora_rank"] = c1.selectbox("LoRA rank", [4, 8, 16, 32, 64], index=2)
         training["lora_alpha"] = c2.number_input("LoRA alpha", 1, 256, 32)
         training["lora_dropout"] = c1.number_input("LoRA dropout", 0.0, 0.5, 0.05, 0.01)
+        if method in {"oft", "qoft"}:
+            training["oft_block_size"] = c1.number_input("OFT block size", 1, 256, 32)
+            training["oft_module_dropout"] = c2.number_input(
+                "OFT module dropout", 0.0, 0.99, 0.0, 0.01
+            )
+        if objective in {"dpo", "orpo", "simpo"}:
+            training["preference_beta"] = c1.number_input(
+                "Preference beta", 0.001, 10.0, 0.1, 0.01
+            )
+        if objective == "simpo":
+            training["simpo_gamma"] = c2.number_input("SimPO gamma", 0.0, 10.0, 0.5, 0.1)
+        if objective == "ppo":
+            st.warning("PPO uses TRL's experimental trainer. Checkpoint resume is unavailable.")
+            training["ppo_reward_model"] = st.text_input(
+                "Scalar reward model ID or local path"
+            )
+            training["ppo_reward_model_revision"] = st.text_input(
+                "Reward model revision", "main"
+            )
+            training["ppo_epochs"] = c1.number_input("PPO epochs", 1, 20, 4)
+            training["ppo_response_length"] = c2.number_input(
+                "PPO response length", 1, 4096, 53
+            )
+            training["ppo_kl_coefficient"] = c1.number_input(
+                "PPO KL coefficient", 0.0, 10.0, 0.05, 0.01
+            )
         training["packing"] = c2.toggle("Sequence packing", value=False)
         training["gradient_checkpointing"] = c1.toggle("Gradient checkpointing", value=True)
         training["save_steps"] = c1.number_input("Checkpoint interval", 1, 10000, 100)
@@ -638,7 +736,11 @@ def training_page() -> None:
 
 def build_manifest(evaluation: dict[str, Any], export: dict[str, Any]) -> RunManifest:
     return RunManifest(
-        dataset=DatasetSpec(**st.session_state.dataset),
+        dataset=DatasetSpec(
+            sources=[DatasetSourceSpec(**row) for row in st.session_state.datasets],
+            validation_fraction=st.session_state.dataset_validation_fraction,
+            seed=st.session_state.dataset_seed,
+        ),
         model=ModelSpec(**st.session_state.model),
         training=TrainingSpec(**st.session_state.training),
         evaluation=EvaluationSpec(**evaluation),
@@ -702,8 +804,13 @@ def review_page() -> None:
         with cleanup:
             render_gpu_cleanup("review")
     if st.button("Start training", type="primary", disabled=bool(errors) or not supported):
-        upload = st.session_state.upload if manifest.dataset.source == "local" else None
-        create_job(manifest, getattr(upload, "name", None), upload.getvalue() if upload else None)
+        uploads = {
+            index: (upload.name, upload.getvalue())
+            for index, upload in st.session_state.dataset_uploads.items()
+            if index < len(manifest.dataset.sources)
+            and manifest.dataset.sources[index].source == "local"
+        }
+        create_job(manifest, uploads)
         launch_job(manifest.id)
         st.success(f"Job {manifest.id} started.")
 
