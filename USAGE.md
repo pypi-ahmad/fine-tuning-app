@@ -19,9 +19,10 @@ Use `OLLAMA_HOST` to point to a non-default Ollama API and
 
 1. Open **System**, choose a runtime profile, resolve its capability warnings, and use
    **Release reclaimable VRAM** if another cache or Ollama model is occupying the GPU.
-2. In **Dataset**, enter a Hugging Face dataset ID or repository URL, or upload JSON,
-   JSONL, CSV, or Parquet. For Hub data, select **Validate & download dataset** to cache
-   the selected revision, then configure the mapping and validation split.
+2. In **Dataset**, add one or more Hugging Face dataset IDs or repository URLs, or
+   upload JSON, JSONL, CSV, or Parquet. Each source has its own mapping. For Hub data,
+   select **Validate & download dataset** to cache the selected revision, then configure
+   mappings and the global validation split.
 3. In **Model**, enter a Hugging Face model ID or repository URL, or a local model
    directory. Select **Validate & download model** to cache Hub files. Review model code
    before enabling **Allow model repository code**.

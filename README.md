@@ -29,9 +29,10 @@ user environment and are never displayed or written into the project.
 - Stream text chats with models already installed in Ollama through a separate playground.
 - Stop the app and its verified worker process trees from a confirmed global sidebar control.
 
-Version 1.0 adds durable migrations and backups, schema-v4 manifests, bounded preflight,
-evaluation reports, physical GPU selection, probe-gated DDP/FSDP2, a packaged CLI, and
-attested GitHub release artifacts.
+Version 1.1 adds multi-dataset runs and PPO, ORPO, SimPO, OFT, and QOFT training
+choices in the UI. Version 1.0 added durable migrations and backups, schema-v4
+manifests, bounded preflight, evaluation reports, physical GPU selection, probe-gated
+DDP/FSDP2, a packaged CLI, and attested GitHub release artifacts.
 
 ## Requirements
 

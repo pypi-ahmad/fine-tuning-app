@@ -7,6 +7,16 @@ this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-08-13
+
+### Added
+
+- Combine multiple Hub or uploaded datasets in one run, each with its own split,
+  mapping, and template, then concatenate, shuffle, and apply one global validation
+  split.
+- Add PPO, ORPO, and SimPO recipes, plus OFT and QOFT adapters, and expose those
+  choices in the training UI.
+
 ## [1.0.1] - 2026-08-12
 
 ### Added
