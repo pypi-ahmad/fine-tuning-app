@@ -6,6 +6,7 @@ import signal
 import sqlite3
 import subprocess
 import sys
+from collections.abc import Mapping
 from contextlib import closing, suppress
 from dataclasses import replace
 from datetime import UTC, datetime
@@ -37,17 +38,27 @@ def job_directory(job_id: str) -> Path:
 
 
 def create_job(
-    manifest: RunManifest, upload_name: str | None = None, upload: bytes | None = None
+    manifest: RunManifest,
+    uploads: Mapping[int, tuple[str, bytes]] | None = None,
 ) -> Path:
     directory = job_directory(manifest.id)
-    if upload_name and upload is not None:
+    staged_sources = list(manifest.dataset.sources)
+    for index, (upload_name, upload) in (uploads or {}).items():
+        if index < 0 or index >= len(staged_sources):
+            raise ValueError(f"Unknown dataset upload index: {index}")
+        if staged_sources[index].source != "local":
+            raise ValueError(f"Dataset {index + 1} is not a local upload.")
         safe_name = Path(upload_name).name
-        input_path = ensure_within(directory, directory / "inputs" / safe_name)
-        input_path.parent.mkdir(exist_ok=True)
+        input_path = ensure_within(
+            directory, directory / "inputs" / f"dataset-{index + 1}" / safe_name
+        )
+        input_path.parent.mkdir(parents=True, exist_ok=True)
         input_path.write_bytes(upload)
-        raw = manifest.to_dict()
-        raw["dataset"]["location"] = str(input_path)
-        manifest = RunManifest.from_dict(raw)
+        staged_sources[index] = replace(staged_sources[index], location=str(input_path))
+    manifest = replace(
+        manifest,
+        dataset=replace(manifest.dataset, sources=staged_sources),
+    )
     if manifest.training.reward_module:
         from fine_tuning_studio.recipes import copy_trusted_reward
 
@@ -82,6 +93,8 @@ def resume_job(parent_job_id: str, checkpoint: Path) -> RunManifest:
     parent_manifest = RunManifest.from_dict(
         json.loads(Path(parent["manifest_path"]).read_text(encoding="utf-8"))
     )
+    if parent_manifest.training.objective == "ppo":
+        raise ValueError("PPO checkpoint resume is unavailable with the experimental trainer.")
     checkpoint = checkpoint.resolve()
     checkpoints_root = (job_directory(parent_job_id) / "checkpoints").resolve()
     if checkpoint != checkpoints_root and checkpoints_root not in checkpoint.parents:
@@ -91,7 +104,7 @@ def resume_job(parent_job_id: str, checkpoint: Path) -> RunManifest:
     child = replace(
         parent_manifest,
         id=str(uuid4()),
-        schema_version=4,
+        schema_version=5,
         created_at=datetime.now(UTC).isoformat(),
         parent_job_id=parent_job_id,
         training=replace(parent_manifest.training, resume_checkpoint=str(checkpoint)),

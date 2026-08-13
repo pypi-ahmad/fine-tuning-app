@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 
 from fine_tuning_studio.domain import (
+    DatasetSourceSpec,
     DatasetSpec,
     EvaluationSpec,
     ExportSpec,
@@ -26,7 +27,7 @@ def manifest(
         merged_model=merged_model,
     )
     return RunManifest(
-        dataset=DatasetSpec(source="hub", location="org/data"),
+        dataset=DatasetSpec(sources=[DatasetSourceSpec(source="hub", location="org/data")]),
         model=ModelSpec(source="hub", location="org/model"),
         training=TrainingSpec(),
         evaluation=EvaluationSpec(),
@@ -44,12 +45,12 @@ def test_ollama_requires_merged_model() -> None:
     assert "Ollama import requires merged-model export for adapter jobs." in errors
 
 
-def test_schema_one_manifest_is_readable_and_new_runs_use_v4() -> None:
+def test_schema_one_manifest_is_readable_and_new_runs_use_v5() -> None:
     raw = manifest().to_dict()
     raw["schema_version"] = 1
     raw.pop("provenance")
     assert RunManifest.from_dict(raw).schema_version == 1
-    assert manifest().schema_version == 4
+    assert manifest().schema_version == 5
 
 
 def test_path_must_remain_in_workspace(tmp_path: Path) -> None:

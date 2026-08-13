@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from fine_tuning_studio.domain import DatasetSpec, ModelSpec
+from fine_tuning_studio.domain import DatasetSourceSpec, ModelSpec
 
 
 @dataclass(frozen=True)
@@ -16,6 +16,15 @@ class DatasetReport:
     null_counts: dict[str, int]
     fingerprint: str
     approximate_tokens: int
+    errors: list[str]
+
+
+@dataclass(frozen=True)
+class DatasetCollectionReport:
+    sources: list[DatasetReport]
+    rows: int
+    approximate_tokens: int
+    fingerprint: str
     errors: list[str]
 
 
@@ -31,7 +40,7 @@ class ModelReport:
     estimated_training_vram_gb: float | None
 
 
-def _required_columns(spec: DatasetSpec) -> set[str]:
+def _required_columns(spec: DatasetSourceSpec) -> set[str]:
     canonical = {
         "preference": {"prompt", "chosen", "rejected"},
         "kto": {"prompt", "completion", "label"},
@@ -44,7 +53,9 @@ def _required_columns(spec: DatasetSpec) -> set[str]:
     return {spec.text_column}
 
 
-def inspect_dataset(dataset: Any, spec: DatasetSpec, sample_limit: int = 1_000) -> DatasetReport:
+def inspect_dataset(
+    dataset: Any, spec: DatasetSourceSpec, sample_limit: int = 1_000
+) -> DatasetReport:
     columns = list(dataset.column_names)
     missing = _required_columns(spec) - set(columns)
     errors = [f"Missing column: {name}" for name in sorted(missing)]
@@ -99,7 +110,7 @@ def inspect_model(spec: ModelSpec, method: str = "qlora") -> ModelReport:
     )
 
 
-def write_report(path: Path, report: DatasetReport | ModelReport) -> None:
+def write_report(path: Path, report: DatasetCollectionReport | DatasetReport | ModelReport) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(asdict(report), indent=2), encoding="utf-8")
     temporary.replace(path)

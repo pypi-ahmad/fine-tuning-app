@@ -23,7 +23,7 @@ class JobStatus(StrEnum):
 
 
 @dataclass(frozen=True)
-class DatasetSpec:
+class DatasetSourceSpec:
     source: str
     location: str
     revision: str = "main"
@@ -34,6 +34,11 @@ class DatasetSpec:
     prompt_column: str = "prompt"
     response_column: str = "response"
     chat_template: str = "tokenizer"
+
+
+@dataclass(frozen=True)
+class DatasetSpec:
+    sources: list[DatasetSourceSpec] = field(default_factory=list)
     validation_fraction: float = 0.1
     seed: int = 42
 
@@ -76,6 +81,15 @@ class TrainingSpec:
     world_size: int = 1
     fsdp_cpu_offload: bool = False
     custom_code_acknowledged: bool = False
+    oft_block_size: int = 32
+    oft_module_dropout: float = 0.0
+    preference_beta: float = 0.1
+    simpo_gamma: float = 0.5
+    ppo_reward_model: str = ""
+    ppo_reward_model_revision: str = "main"
+    ppo_epochs: int = 4
+    ppo_response_length: int = 53
+    ppo_kl_coefficient: float = 0.05
 
 
 @dataclass(frozen=True)
@@ -114,7 +128,7 @@ class RunManifest:
     evaluation: EvaluationSpec
     export: ExportSpec
     id: str = field(default_factory=lambda: str(uuid4()))
-    schema_version: int = 4
+    schema_version: int = 5
     created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     parent_job_id: str | None = None
     provenance: ProvenanceSpec = field(default_factory=ProvenanceSpec)
@@ -125,14 +139,29 @@ class RunManifest:
     @classmethod
     def from_dict(cls, value: dict[str, Any]) -> RunManifest:
         schema = int(value.get("schema_version", 1))
-        if schema > 4:
+        if schema > 5:
             raise ValueError(f"Manifest schema {schema} requires a newer Fine-Tuning Studio.")
+        dataset_value = dict(value["dataset"])
+        if "sources" in dataset_value:
+            dataset = DatasetSpec(
+                sources=[DatasetSourceSpec(**source) for source in dataset_value["sources"]],
+                validation_fraction=dataset_value.get("validation_fraction", 0.1),
+                seed=dataset_value.get("seed", 42),
+            )
+        else:
+            validation_fraction = dataset_value.pop("validation_fraction", 0.1)
+            seed = dataset_value.pop("seed", 42)
+            dataset = DatasetSpec(
+                sources=[DatasetSourceSpec(**dataset_value)],
+                validation_fraction=validation_fraction,
+                seed=seed,
+            )
         return cls(
             id=value["id"],
             schema_version=schema,
             created_at=value["created_at"],
             parent_job_id=value.get("parent_job_id"),
-            dataset=DatasetSpec(**value["dataset"]),
+            dataset=dataset,
             model=ModelSpec(**value["model"]),
             training=TrainingSpec(**value["training"]),
             evaluation=EvaluationSpec(**value["evaluation"]),
@@ -143,22 +172,36 @@ class RunManifest:
 
 def validate_manifest(manifest: RunManifest) -> list[str]:
     errors: list[str] = []
-    if not manifest.dataset.location.strip():
-        errors.append("Choose a dataset.")
+    if not manifest.dataset.sources:
+        errors.append("Add at least one dataset.")
+    for index, source in enumerate(manifest.dataset.sources, start=1):
+        if not source.location.strip():
+            errors.append(f"Choose dataset {index}.")
     if not manifest.model.location.strip():
         errors.append("Choose a model.")
     if not 0 < manifest.dataset.validation_fraction < 0.5:
         errors.append("Validation fraction must be greater than 0 and less than 0.5.")
     if manifest.training.max_sequence_length < 64:
         errors.append("Maximum sequence length must be at least 64 tokens.")
-    objectives = {"sft", "continued_pretraining", "dpo", "kto", "reward", "orpo", "grpo"}
-    methods = {"lora", "qlora", "full"}
+    objectives = {
+        "sft",
+        "continued_pretraining",
+        "dpo",
+        "kto",
+        "reward",
+        "ppo",
+        "orpo",
+        "simpo",
+        "grpo",
+    }
+    methods = {"lora", "qlora", "oft", "qoft", "full"}
     if manifest.training.objective not in objectives:
         errors.append(f"Unsupported objective: {manifest.training.objective}.")
     if manifest.training.method not in methods:
         errors.append(f"Unsupported method: {manifest.training.method}.")
-    if manifest.training.method == "qlora" and manifest.training.runtime_profile == "cpu":
-        errors.append("QLoRA requires a supported GPU runtime; choose LoRA for CPU training.")
+    if manifest.training.method in {"qlora", "qoft"} and manifest.training.runtime_profile == "cpu":
+        name = {"qlora": "QLoRA", "qoft": "QOFT"}[manifest.training.method]
+        errors.append(f"{name} requires a supported GPU runtime.")
     if manifest.training.distributed_strategy not in {"single", "auto", "ddp", "fsdp2"}:
         errors.append("Distributed strategy must be single, auto, DDP, or FSDP2.")
     if manifest.training.world_size < 1:
@@ -174,6 +217,8 @@ def validate_manifest(manifest: RunManifest) -> list[str]:
         errors.append("Unsloth is limited to single-GPU training.")
     if manifest.training.objective != "sft" and manifest.training.backend == "unsloth":
         errors.append("Unsloth is currently available for SFT jobs only.")
+    if manifest.training.method in {"oft", "qoft"} and manifest.training.backend == "unsloth":
+        errors.append("Unsloth does not support OFT or QOFT in Fine-Tuning Studio.")
     if manifest.model.trust_remote_code and not manifest.model.trust_remote_code_acknowledged:
         errors.append("Confirm that model repository code will execute locally.")
     if manifest.training.reward_module and not manifest.training.custom_code_acknowledged:
@@ -186,8 +231,12 @@ def validate_manifest(manifest: RunManifest) -> list[str]:
             f"{manifest.training.objective.upper()} does not support "
             f"{manifest.training.method.upper()}."
         )
-    if manifest.training.objective == "orpo":
-        errors.append("ORPO is experimental and unavailable in the installed TRL release.")
+    if manifest.training.objective == "ppo" and not manifest.training.ppo_reward_model.strip():
+        errors.append("PPO requires a scalar reward model ID or local path.")
+    if manifest.training.oft_block_size < 1:
+        errors.append("OFT block size must be at least one.")
+    if not 0 <= manifest.training.oft_module_dropout < 1:
+        errors.append("OFT module dropout must be at least zero and less than one.")
     if manifest.training.method == "full" and manifest.export.adapter:
         errors.append("Full fine-tuning does not produce a LoRA adapter.")
     if (

@@ -7,6 +7,7 @@ import psutil
 import pytest
 
 from fine_tuning_studio.domain import (
+    DatasetSourceSpec,
     DatasetSpec,
     EvaluationSpec,
     ExportSpec,
@@ -53,7 +54,7 @@ class FakeProcess:
 
 def _manifest() -> RunManifest:
     return RunManifest(
-        dataset=DatasetSpec(source="hub", location="org/data"),
+        dataset=DatasetSpec(sources=[DatasetSourceSpec(source="hub", location="org/data")]),
         model=ModelSpec(source="hub", location="org/model"),
         training=TrainingSpec(),
         evaluation=EvaluationSpec(),
