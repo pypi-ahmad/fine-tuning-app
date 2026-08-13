@@ -2,8 +2,9 @@
 
 ## Adapter export
 
-Every successful job saves the PEFT adapter and tokenizer under
-`artifacts/adapter/`. Evaluation output is stored in `artifacts/metrics.json`.
+Every successful adapter job saves the PEFT adapter (LoRA, QLoRA, OFT, or QOFT) and
+tokenizer under `artifacts/adapter/`. Evaluation output is stored in
+`artifacts/metrics.json`. Full fine-tuning writes a full model instead of an adapter.
 
 Cancelled training saves the current adapter under `artifacts/adapter-cancelled/`.
 

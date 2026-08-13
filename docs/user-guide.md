@@ -26,14 +26,16 @@ selected.
 
 ## 2. Dataset
 
-Choose a Hugging Face dataset ID or repository URL and revision/split, or upload a JSON,
-JSONL, CSV, or Parquet file. **Validate & download dataset** places Hub files in the
-shared Hugging Face cache. Select the column mapping and chat template described in
+Add one or more sources with **Add dataset**. Each source is a Hugging Face dataset ID
+or repository URL plus revision/split, or a JSON, JSONL, CSV, or Parquet upload.
+**Validate & download dataset** places Hub files in the shared Hugging Face cache.
+Configure that source's data shape and chat template as described in
 [Datasets](datasets.md). Local files are copied into the job workspace when the run is
 created.
 
-The worker requires at least two rows. It creates a shuffled train/validation split
-using the configured fraction and seed.
+Set the global validation fraction and seed once for the combined collection. The
+worker requires at least two rows in each source, concatenates the prepared sources,
+then creates one shuffled train/validation split.
 
 ## 3. Model
 
@@ -46,9 +48,14 @@ and you have reviewed the repository.
 
 ## 4. Training
 
+Choose the approach and method from the supported matrix. Unsloth appears only for
+SFT with LoRA or QLoRA. PPO requires a scalar reward-model ID or local path and cannot
+resume from a checkpoint.
+
 Configure epochs, learning rate, sequence length, batch size, gradient accumulation,
-LoRA parameters, packing, gradient checkpointing, and logging/checkpoint intervals.
-See [Training](training.md) for defaults and behavior.
+adapter parameters, packing, gradient checkpointing, and logging/checkpoint intervals.
+OFT/QOFT expose block size and module dropout. DPO, ORPO, and SimPO expose preference
+beta; SimPO also exposes gamma. See [Training](training.md) for defaults and behavior.
 
 ## 5. Review and run
 

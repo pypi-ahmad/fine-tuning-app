@@ -15,7 +15,7 @@ user environment and are never displayed or written into the project.
   terminate an eligible user-owned GPU process after typed confirmation.
 - Load datasets and models from a Hugging Face ID or repository URL, with validation,
   cache-aware downloads, or upload JSON, JSONL, CSV, and Parquet datasets.
-- Map plain text, prompt/response, or chat-message datasets into training text.
+- Map text, prompt/response, messages, preference, KTO, or GRPO columns per source.
 - Combine multiple Hub or uploaded datasets with independent mappings and one global split.
 - Run SFT, reward, PPO, DPO, KTO, ORPO, or SimPO with LoRA, QLoRA, OFT, or QOFT.
 - Keep continued pretraining, GRPO, and guarded full fine-tuning workflows.
@@ -24,13 +24,13 @@ user environment and are never displayed or written into the project.
 - Select native Windows/Linux CUDA, ROCm, or XPU runtime profiles. ROCm and XPU remain
   experimental until their on-machine smoke test passes.
 - Track jobs, checkpoints, progress, logs, cancellation, and evaluation metrics.
-- Export a LoRA adapter, optionally merge it into the base model, push the adapter to
-  the Hugging Face Hub, or import a merged model into Ollama.
+- Export a LoRA, OFT, or QOFT adapter, optionally merge it into the base model, push
+  the adapter to the Hugging Face Hub, or import a merged model into Ollama.
 - Stream text chats with models already installed in Ollama through a separate playground.
 - Stop the app and its verified worker process trees from a confirmed global sidebar control.
 
-Version 1.1 adds multi-dataset runs and PPO, ORPO, SimPO, OFT, and QOFT training
-choices in the UI. Version 1.0 added durable migrations and backups, schema-v4
+Version 1.1 adds multi-dataset schema-v5 manifests and PPO, ORPO, SimPO, OFT, and QOFT
+training choices in the UI. Version 1.0 added durable migrations and backups, schema-v4
 manifests, bounded preflight, evaluation reports, physical GPU selection, probe-gated
 DDP/FSDP2, a packaged CLI, and attested GitHub release artifacts.
 

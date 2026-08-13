@@ -12,7 +12,7 @@ remote training service, hosted database, or telemetry backend is used.
 | Domain model | Dataclasses for dataset, model, training, evaluation, export, run manifest, validation, and job states. |
 | System inspection | Detects OS, CPU, memory, disk, GPU processes/VRAM, PyTorch/CUDA, package availability, Hugging Face token presence, and Ollama status. |
 | Job registry | Migrated SQLite database plus immutable manifests, inputs, events, checkpoints, artifacts, and verified backups. |
-| Training worker | Dispatches SFT, CPT, preference, reward, and GRPO recipes and exports results. |
+| Training worker | Dispatches SFT, CPT, preference, reward, PPO, ORPO, SimPO, and GRPO recipes and exports results. |
 | Lifecycle control | Cooperatively cancels jobs, verifies app-owned process trees, escalates when necessary, and cleanly exits the local server. |
 | Ollama integration | Keeps explicit merged-model import separate from an installed-model playground using `/api/tags`, `/api/show`, `/api/ps`, and streamed `/api/chat`. |
 
@@ -51,20 +51,25 @@ plus manifest backup is made before an upgrade.
 Each job may contain a manifest, sanitized local uploads, cancellation marker,
 checkpoints, event log, adapter, merged model, tokenizer, and metrics.
 
-The worker accepts Hugging Face datasets or local JSON, JSONL, CSV, and Parquet files.
-It converts the configured `text`, prompt/response, or messages mapping to a `text`
-field and creates a seeded train/validation split.
+The worker accepts one or more Hugging Face datasets or local JSON, JSONL, CSV, and
+Parquet files. Each source is mapped independently. Text, prompt/response, and messages
+shapes become a `text` field; preference, KTO, PPO, and GRPO shapes keep their recipe
+columns. Prepared sources are concatenated, then a seeded train/validation split is
+applied once. Schema-v5 manifests store `dataset.sources`; older single-source
+manifests still load.
 
 ## Training and exports
 
-V1.0 supports LoRA, NF4 QLoRA, and safety-gated full training. Recipes define dataset
-contracts and trainer dispatch. Managed CUDA, ROCm, and XPU interpreters are separate
-from the lightweight UI process; SQLite is only a status projection, while immutable
-manifests, JSONL events, checkpoints, and hashed artifacts form the durable job record.
+V1.1 supports LoRA, NF4 QLoRA, OFT, QOFT, and safety-gated full training. Recipes define
+dataset contracts and trainer dispatch, including PPO through TRL's experimental trainer
+and ORPO/SimPO through TRL DPO loss settings. Managed CUDA, ROCm, and XPU interpreters
+are separate from the lightweight UI process; SQLite is only a status projection, while
+immutable manifests, JSONL events, checkpoints, and hashed artifacts form the durable
+job record.
 
-Successful jobs always export an adapter and tokenizer. A merged model is optional;
-Ollama import requires it. Hub upload pushes the adapter through the authenticated
-Hugging Face client.
+Successful adapter jobs export a PEFT adapter and tokenizer. Full tuning exports a
+full model. A merged model is optional; Ollama import requires it. Hub upload pushes
+the adapter through the authenticated Hugging Face client.
 
 ## Constraints
 
@@ -72,7 +77,8 @@ Hugging Face client.
   on-machine probes pass. Native Windows ROCm is not claimed; use a supported Linux or
   optional WSL2 environment.
 - Full training is single-accelerator only and refuses unsafe memory or disk estimates.
-- ORPO remains blocked because the installed TRL release has no ORPO trainer.
+- PPO cannot resume from a checkpoint. Unsloth is limited to single-GPU SFT with LoRA
+  or QLoRA and does not support OFT or QOFT.
 - Custom reward modules are trusted local Python and are not sandboxed.
 - Cancellation writes a cooperative marker and signals the complete worker process tree.
 - Ollama is post-training inference/export integration, never a training backend.

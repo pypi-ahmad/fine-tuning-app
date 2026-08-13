@@ -26,8 +26,9 @@ Use `OLLAMA_HOST` to point to a non-default Ollama API and
 3. In **Model**, enter a Hugging Face model ID or repository URL, or a local model
    directory. Select **Validate & download model** to cache Hub files. Review model code
    before enabling **Allow model repository code**.
-4. In **Training**, set epochs, learning rate, sequence length, and optional advanced
-   recipe, strategy, runtime, and optional advanced parameters.
+4. In **Training**, choose the approach and method (LoRA, QLoRA, OFT, QOFT, or full
+   where supported). Set epochs, learning rate, sequence length, runtime, and any
+   recipe-specific options such as a PPO reward model.
 5. In **Review & run**, choose evaluation and exports, review the generated manifest,
    optionally refresh/release GPU memory immediately before launch, then start training.
 6. In **Monitor**, follow status/events or request cancellation.
@@ -46,11 +47,11 @@ Use `OLLAMA_HOST` to point to a non-default Ollama API and
 
 ## Important limits
 
-V1.0 supports stable single-GPU CUDA plus probe-gated ROCm/XPU and distributed beta
-profiles. Native Windows ROCm is not claimed; WSL2 is optional for supported AMD
-hardware. Ollama is an inference/export target, not a training backend. For dataset
-requirements, training defaults, and error recovery, see the detailed
-[documentation](README.md#documentation).
+V1.1 supports multi-dataset runs and the documented recipe/adapter matrix on stable
+single-GPU CUDA, plus probe-gated ROCm/XPU and distributed beta profiles. Native
+Windows ROCm is not claimed; WSL2 is optional for supported AMD hardware. Ollama is an
+inference/export target, not a training backend. For dataset requirements, training
+defaults, and error recovery, see the detailed [documentation](README.md#documentation).
 
 ## Maintenance
 

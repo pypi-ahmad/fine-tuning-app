@@ -33,15 +33,20 @@ restart the launcher. The UI reports presence, not the token value.
 
 ## Dataset fails after preview
 
-Confirm the file has at least two rows and the configured text, prompt/response, or
-messages columns exist. For messages data, each row should contain a list of role/content
-objects.
+Confirm each source has at least two rows and the columns required by its data shape
+exist. Preference jobs need `prompt`, `chosen`, and `rejected`; KTO needs `prompt`,
+`completion`, and a boolean `label`; PPO and GRPO need `prompt`. For messages data,
+each row should contain a list of role/content objects.
+
+If several sources are combined, they must produce the same prepared columns and value
+types after mapping. A mismatch fails during worker preflight, not in the upload
+preview.
 
 ## A job appears stuck
 
 Inspect the Monitor page events and free disk/GPU memory. Cancellation takes effect at
 the next trainer logging callback and may wait for model loading, evaluation, or the
-current training step.
+current training step. PPO jobs cannot be resumed from a checkpoint.
 
 ## Ollama is unavailable
 

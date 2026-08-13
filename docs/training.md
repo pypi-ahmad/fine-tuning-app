@@ -19,8 +19,17 @@ once using the global validation fraction and seed. Rows are not weighted or ded
 PPO requires a scalar reward-model ID or local path. Its TRL trainer is experimental and
 does not support checkpoint resume.
 
-Continued pretraining supports LoRA, QLoRA, and guarded full tuning. GRPO supports LoRA
-and QLoRA. Each objective uses its own dataset contract.
+Continued pretraining supports LoRA, QLoRA, and guarded full tuning. Reward modeling also
+supports guarded full tuning. GRPO supports LoRA and QLoRA. Unsloth is limited to
+single-GPU SFT with LoRA or QLoRA and does not support OFT or QOFT.
+
+| Approach | Required columns |
+| --- | --- |
+| Supervised Fine-Tuning / Continued Pre-Training | `text`, or prompt/response or messages mapped to `text` |
+| Reward Modeling | `chosen`, `rejected` |
+| PPO / GRPO | `prompt` |
+| DPO / ORPO / SimPO | `prompt`, `chosen`, `rejected` |
+| KTO | `prompt`, `completion`, boolean `label` |
 
 The worker uses bfloat16 when the GPU supports it and float16 otherwise.
 
@@ -36,6 +45,13 @@ The worker uses bfloat16 when the GPU supports it and float16 otherwise.
 | LoRA rank | 16 |
 | LoRA alpha | 32 |
 | LoRA dropout | 0.05 |
+| OFT block size | 32 |
+| OFT module dropout | 0.0 |
+| Preference beta | 0.1 |
+| SimPO gamma | 0.5 |
+| PPO epochs | 4 |
+| PPO response length | 53 |
+| PPO KL coefficient | 0.05 |
 | Sequence packing | Off |
 | Gradient checkpointing | On |
 | Checkpoint interval | 100 steps |

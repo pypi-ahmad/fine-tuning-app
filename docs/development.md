@@ -16,7 +16,7 @@ in `pyproject.toml` and locked in `uv.lock`.
 - `domain.py`: immutable specifications, job states, and validation.
 - `system_info.py`: machine, accelerator, package, and integration inspection.
 - `jobs.py`: SQLite job registry, workspace management, worker launch, cancellation.
-- `worker.py`: dataset preparation, QLoRA training, evaluation, and export.
+- `worker.py`: multi-dataset preparation, recipe dispatch, evaluation, and export.
 - `tests/`: domain, job, system-inspection, and Streamlit smoke tests.
 
 ## Verification
