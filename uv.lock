@@ -603,7 +603,7 @@ requires-dist = [
     { name = "streamlit", specifier = ">=1.59.1,<2" },
     { name = "torch", index = "https://download.pytorch.org/whl/cu130" },
     { name = "transformers" },
-    { name = "trl" },
+    { name = "trl", specifier = "==1.9.2" },
 ]
 
 [package.metadata.requires-dev]

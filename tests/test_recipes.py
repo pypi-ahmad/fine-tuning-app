@@ -3,7 +3,22 @@ from pathlib import Path
 import pytest
 
 from fine_tuning_studio.evals import inspect_command
-from fine_tuning_studio.recipes import REWARDS, copy_trusted_reward, validate_recipe
+from fine_tuning_studio.recipes import (
+    REWARDS,
+    copy_trusted_reward,
+    supported_methods,
+    validate_recipe,
+)
+
+
+def test_requested_approaches_support_all_adapter_methods() -> None:
+    for objective in ("sft", "reward", "ppo", "dpo", "kto", "orpo", "simpo"):
+        assert supported_methods(objective)[:4] == ("qlora", "lora", "qoft", "oft")
+
+
+def test_method_dropdown_excludes_unsupported_combinations() -> None:
+    assert supported_methods("continued_pretraining") == ("qlora", "lora", "full")
+    assert supported_methods("grpo") == ("qlora", "lora")
 
 
 def test_dpo_contract_requires_preference_columns() -> None:

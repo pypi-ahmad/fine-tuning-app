@@ -22,15 +22,24 @@ class Recipe:
 RECIPES = {
     recipe.id: recipe
     for recipe in (
-        Recipe("sft", ("text",), ("lora", "qlora", "full")),
+        Recipe("sft", ("text",), ("lora", "qlora", "oft", "qoft", "full")),
         Recipe("continued_pretraining", ("text",), ("lora", "qlora", "full")),
-        Recipe("dpo", ("prompt", "chosen", "rejected"), ("lora", "qlora")),
-        Recipe("kto", ("prompt", "completion", "label"), ("lora", "qlora")),
-        Recipe("reward", ("chosen", "rejected"), ("lora", "qlora", "full")),
-        Recipe("orpo", ("prompt", "chosen", "rejected"), ("lora", "qlora"), "experimental"),
+        Recipe("dpo", ("prompt", "chosen", "rejected"), ("lora", "qlora", "oft", "qoft")),
+        Recipe("kto", ("prompt", "completion", "label"), ("lora", "qlora", "oft", "qoft")),
+        Recipe("reward", ("chosen", "rejected"), ("lora", "qlora", "oft", "qoft", "full")),
+        Recipe("ppo", ("prompt",), ("lora", "qlora", "oft", "qoft"), "experimental"),
+        Recipe("orpo", ("prompt", "chosen", "rejected"), ("lora", "qlora", "oft", "qoft")),
+        Recipe("simpo", ("prompt", "chosen", "rejected"), ("lora", "qlora", "oft", "qoft")),
         Recipe("grpo", ("prompt",), ("lora", "qlora"), "experimental"),
     )
 }
+
+METHOD_ORDER = ("qlora", "lora", "qoft", "oft", "full")
+
+
+def supported_methods(objective: str) -> tuple[str, ...]:
+    methods = RECIPES[objective].methods
+    return tuple(method for method in METHOD_ORDER if method in methods)
 
 
 def validate_recipe(objective: str, method: str, columns: set[str]) -> list[str]:
@@ -40,8 +49,6 @@ def validate_recipe(objective: str, method: str, columns: set[str]) -> list[str]
     ]
     if method not in recipe.methods:
         errors.append(f"{objective.upper()} does not support {method.upper()}.")
-    if objective == "orpo":
-        errors.append("ORPO is experimental and unavailable in the installed TRL release.")
     return errors
 
 

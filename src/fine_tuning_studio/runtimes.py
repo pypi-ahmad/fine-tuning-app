@@ -70,8 +70,8 @@ def runtime_verdict(report: MachineReport, profile: str, method: str = "qlora") 
     state = "ready" if available else "install-required"
     if definition.status == "experimental":
         reasons.append("This runtime is experimental until validated on this machine.")
-    if method == "qlora" and report.packages.get("bitsandbytes") is None:
-        reasons.append("QLoRA requires bitsandbytes in the selected runtime.")
+    if method in {"qlora", "qoft"} and report.packages.get("bitsandbytes") is None:
+        reasons.append(f"{method.upper()} requires bitsandbytes in the selected runtime.")
     return RuntimeVerdict(profile, state, reasons)
 
 

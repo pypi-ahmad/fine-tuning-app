@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import importlib
 import json
 import shutil
@@ -10,11 +11,11 @@ from pathlib import Path
 from typing import Any, cast
 
 from fine_tuning_studio.artifacts import write_artifact_manifest
-from fine_tuning_studio.domain import JobStatus, RunManifest
+from fine_tuning_studio.domain import DatasetSourceSpec, JobStatus, RunManifest
 from fine_tuning_studio.evals import EvaluationManifest, run_inspect, write_evaluation_report
 from fine_tuning_studio.jobs import get_job, job_directory, update_job
-from fine_tuning_studio.preflight import inspect_dataset, write_report
-from fine_tuning_studio.recipes import REWARDS, load_trusted_reward, validate_recipe
+from fine_tuning_studio.preflight import DatasetCollectionReport, inspect_dataset, write_report
+from fine_tuning_studio.recipes import RECIPES, REWARDS, load_trusted_reward, validate_recipe
 from fine_tuning_studio.resources import full_training_gate
 
 
@@ -46,11 +47,19 @@ def load_manifest(job_id: str) -> RunManifest:
     return RunManifest.from_dict(value)
 
 
-def load_data(manifest: RunManifest, events: EventWriter) -> Any:
+def load_data(
+    spec: DatasetSourceSpec,
+    events: EventWriter,
+    index: int = 0,
+    total: int = 1,
+) -> Any:
     from datasets import load_dataset
 
-    spec = manifest.dataset
-    events.write("preparing", "Loading dataset", 0.05)
+    events.write(
+        "preparing",
+        f"Loading dataset {index + 1} of {total}",
+        0.03 + ((index + 1) / total) * 0.07,
+    )
     if spec.source == "hub":
         dataset = load_dataset(spec.location, revision=spec.revision, split=spec.split)
     else:
@@ -66,31 +75,38 @@ def load_data(manifest: RunManifest, events: EventWriter) -> Any:
     return dataset
 
 
-def render_dataset(dataset: Any, manifest: RunManifest, tokenizer: Any) -> Any:
-    spec = manifest.dataset
+def render_dataset(
+    dataset: Any,
+    spec: DatasetSourceSpec,
+    objective: str,
+    method: str,
+    tokenizer: Any,
+) -> Any:
     columns = set(dataset.column_names)
-    if manifest.training.objective in {"dpo", "kto", "reward", "orpo", "grpo"}:
-        errors = validate_recipe(manifest.training.objective, manifest.training.method, columns)
+    if objective in {"dpo", "kto", "reward", "ppo", "orpo", "simpo", "grpo"}:
+        errors = validate_recipe(objective, method, columns)
         if errors:
             raise ValueError(" ".join(errors))
-        if manifest.training.objective == "kto" and not all(
+        if objective == "kto" and not all(
             isinstance(value, bool) for value in dataset["label"]
         ):
             raise ValueError("KTO label values must be booleans.")
-        return dataset
+        if objective == "grpo":
+            return dataset
+        return dataset.select_columns(list(RECIPES[objective].required_columns))
     if spec.mapping == "text":
         if spec.text_column not in columns:
             raise ValueError(f"Missing text column: {spec.text_column}")
         if spec.text_column != "text":
             dataset = dataset.rename_column(spec.text_column, "text")
-        if manifest.training.objective == "continued_pretraining":
+        if objective == "continued_pretraining":
             eos = tokenizer.eos_token or ""
 
             def append_eos(row: dict[str, Any]) -> dict[str, str]:
-                return {"text": str(row[spec.text_column]) + eos}
+                return {"text": str(row["text"]) + eos}
 
-            return dataset.map(append_eos)
-        return dataset
+            dataset = dataset.map(append_eos)
+        return dataset.select_columns(["text"])
     if spec.mapping == "prompt_response":
         missing = {spec.prompt_column, spec.response_column} - columns
         if missing:
@@ -110,7 +126,7 @@ def render_dataset(dataset: Any, manifest: RunManifest, tokenizer: Any) -> Any:
                 text = f"{prompt}\n{response}"
             return {"text": text}
 
-        return dataset.map(combine)
+        return dataset.map(combine).select_columns(["text"])
     if spec.text_column not in columns:
         raise ValueError(f"Missing messages column: {spec.text_column}")
 
@@ -132,7 +148,57 @@ def render_dataset(dataset: Any, manifest: RunManifest, tokenizer: Any) -> Any:
                 parts.append(f"{role.title()}: {content}")
         return {"text": "\n".join(parts)}
 
-    return dataset.map(render_messages)
+    return dataset.map(render_messages).select_columns(["text"])
+
+
+def prepare_datasets(
+    manifest: RunManifest,
+    tokenizer: Any,
+    events: EventWriter,
+    directory: Path,
+) -> Any:
+    from datasets import concatenate_datasets
+
+    reports = []
+    prepared = []
+    errors: list[str] = []
+    sources = manifest.dataset.sources
+    for index, source in enumerate(sources):
+        raw = load_data(source, events, index, len(sources))
+        report = inspect_dataset(raw, source)
+        reports.append(report)
+        errors.extend(f"Dataset {index + 1}: {message}" for message in report.errors)
+        if report.errors:
+            continue
+        try:
+            prepared.append(
+                render_dataset(
+                    raw,
+                    source,
+                    manifest.training.objective,
+                    manifest.training.method,
+                    tokenizer,
+                )
+            )
+        except (KeyError, TypeError, ValueError) as exc:
+            errors.append(f"Dataset {index + 1}: {exc}")
+    fingerprint = hashlib.sha256(
+        "".join(report.fingerprint for report in reports).encode()
+    ).hexdigest()
+    collection_report = DatasetCollectionReport(
+        sources=reports,
+        rows=sum(report.rows for report in reports),
+        approximate_tokens=sum(report.approximate_tokens for report in reports),
+        fingerprint=fingerprint,
+        errors=errors,
+    )
+    write_report(directory / "dataset-preflight.json", collection_report)
+    if errors:
+        raise ValueError("Dataset preflight failed: " + " ".join(errors))
+    try:
+        return concatenate_datasets(prepared)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"Datasets have incompatible columns or value types: {exc}") from exc
 
 
 def import_into_ollama(manifest: RunManifest, merged_path: Path, events: EventWriter) -> None:
@@ -154,7 +220,7 @@ def import_into_ollama(manifest: RunManifest, merged_path: Path, events: EventWr
 
 def run(job_id: str) -> None:
     import torch
-    from peft import LoraConfig, prepare_model_for_kbit_training
+    from peft import LoraConfig, OFTConfig, prepare_model_for_kbit_training
     from transformers import (
         AutoModelForCausalLM,
         AutoModelForSequenceClassification,
@@ -196,12 +262,7 @@ def run(job_id: str) -> None:
     tokenizer = cast(Any, tokenizer)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-    raw_dataset = load_data(manifest, events)
-    dataset_report = inspect_dataset(raw_dataset, manifest.dataset)
-    write_report(directory / "dataset-preflight.json", dataset_report)
-    if dataset_report.errors:
-        raise ValueError("Dataset preflight failed: " + " ".join(dataset_report.errors))
-    dataset = render_dataset(raw_dataset, manifest, tokenizer)
+    dataset = prepare_datasets(manifest, tokenizer, events, directory)
     split = dataset.train_test_split(
         test_size=manifest.dataset.validation_fraction,
         seed=manifest.dataset.seed,
@@ -214,7 +275,7 @@ def run(job_id: str) -> None:
     else:
         compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
     quantization = None
-    if manifest.training.method == "qlora":
+    if manifest.training.method in {"qlora", "qoft"}:
         quantization = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
@@ -257,21 +318,31 @@ def run(job_id: str) -> None:
         gate = full_training_gate(model.num_parameters(), free_bytes / 1024**3, directory)
         if not gate.allowed:
             raise RuntimeError("Full-training safety gate: " + " ".join(gate.reasons))
-    if manifest.training.method == "qlora" and manifest.training.backend != "unsloth":
+    if manifest.training.method in {"qlora", "qoft"} and manifest.training.backend != "unsloth":
         model = prepare_model_for_kbit_training(
             model,
             use_gradient_checkpointing=manifest.training.gradient_checkpointing,
         )
     peft_config = None
     if manifest.training.method != "full" and manifest.training.backend != "unsloth":
-        peft_config = LoraConfig(
-            r=manifest.training.lora_rank,
-            lora_alpha=manifest.training.lora_alpha,
-            lora_dropout=manifest.training.lora_dropout,
-            bias="none",
-            task_type="CAUSAL_LM",
-            target_modules="all-linear",
-        )
+        task_type = "SEQ_CLS" if manifest.training.objective == "reward" else "CAUSAL_LM"
+        if manifest.training.method in {"oft", "qoft"}:
+            peft_config = OFTConfig(
+                oft_block_size=manifest.training.oft_block_size,
+                module_dropout=manifest.training.oft_module_dropout,
+                bias="none",
+                task_type=task_type,
+                target_modules="all-linear",
+            )
+        else:
+            peft_config = LoraConfig(
+                r=manifest.training.lora_rank,
+                lora_alpha=manifest.training.lora_alpha,
+                lora_dropout=manifest.training.lora_dropout,
+                bias="none",
+                task_type=task_type,
+                target_modules="all-linear",
+            )
     common_args: dict[str, Any] = dict(
         output_dir=str(directory / "checkpoints"),
         num_train_epochs=manifest.training.epochs,
@@ -308,10 +379,25 @@ def run(job_id: str) -> None:
             dataset_text_field="text",
         )
         trainer = SFTTrainer(args=args, **trainer_kwargs)
-    elif objective == "dpo":
+    elif objective in {"dpo", "orpo", "simpo"}:
         from trl import DPOConfig, DPOTrainer
 
-        trainer = DPOTrainer(args=DPOConfig(**common_args), **trainer_kwargs)
+        loss_type = ["sigmoid"]
+        loss_weights = None
+        if objective == "orpo":
+            loss_type = ["sft", "sigmoid_norm"]
+            loss_weights = [1.0, manifest.training.preference_beta]
+        elif objective == "simpo":
+            loss_type = ["sigmoid_norm"]
+        trainer = DPOTrainer(
+            args=DPOConfig(
+                **common_args,
+                beta=manifest.training.preference_beta,
+                loss_type=loss_type,
+                loss_weights=loss_weights,
+            ),
+            **trainer_kwargs,
+        )
     elif objective == "kto":
         from trl import KTOConfig, KTOTrainer
 
@@ -330,8 +416,66 @@ def run(job_id: str) -> None:
         trainer = GRPOTrainer(
             args=GRPOConfig(**common_args), reward_funcs=reward_functions, **trainer_kwargs
         )
+    elif objective == "ppo":
+        from peft import PeftConfig, PeftModel
+        from trl.experimental.ppo import PPOConfig, PPOTrainer
+
+        reward_ref = manifest.training.ppo_reward_model
+        reward_revision = manifest.training.ppo_reward_model_revision
+        try:
+            reward_adapter = PeftConfig.from_pretrained(reward_ref, revision=reward_revision)
+        except (OSError, ValueError):
+            reward_model = AutoModelForSequenceClassification.from_pretrained(
+                reward_ref,
+                revision=reward_revision,
+                num_labels=1,
+                dtype=compute_dtype,
+            )
+        else:
+            reward_base = AutoModelForSequenceClassification.from_pretrained(
+                reward_adapter.base_model_name_or_path,
+                num_labels=1,
+                dtype=compute_dtype,
+            )
+            reward_model = PeftModel.from_pretrained(
+                reward_base, reward_ref, revision=reward_revision
+            ).merge_and_unload()
+        value_model = AutoModelForSequenceClassification.from_pretrained(
+            model_ref,
+            revision=revision,
+            num_labels=1,
+            dtype=compute_dtype,
+        )
+
+        def tokenize_prompt(row: dict[str, Any]) -> dict[str, Any]:
+            return tokenizer(
+                row["prompt"],
+                truncation=True,
+                max_length=manifest.training.max_sequence_length,
+            )
+
+        ppo_train = split["train"].map(tokenize_prompt, remove_columns=split["train"].column_names)
+        ppo_eval = split["test"].map(tokenize_prompt, remove_columns=split["test"].column_names)
+        trainer = PPOTrainer(
+            args=PPOConfig(
+                **{key: value for key, value in common_args.items() if key != "max_length"},
+                total_episodes=max(1, int(len(ppo_train) * manifest.training.epochs)),
+                num_ppo_epochs=manifest.training.ppo_epochs,
+                response_length=manifest.training.ppo_response_length,
+                kl_coef=manifest.training.ppo_kl_coefficient,
+            ),
+            processing_class=tokenizer,
+            model=model,
+            ref_model=None,
+            reward_model=reward_model,
+            value_model=value_model,
+            train_dataset=ppo_train,
+            eval_dataset=ppo_eval,
+            peft_config=peft_config,
+            callbacks=[ProgressCallback()],
+        )
     else:
-        raise ValueError("ORPO is not provided by the installed TRL release.")
+        raise ValueError(f"Unsupported objective: {objective}")
     if manifest.training.method == "full":
         events.write("preparing", "Running one-microbatch memory probe", 0.18)
         sample = split["train"][0]["text"]
@@ -351,7 +495,10 @@ def run(job_id: str) -> None:
         )
         metrics["before"] = trainer.evaluate(metric_key_prefix="before")
     update_job(job_id, status=JobStatus.TRAINING, stage="Training", progress=0.25)
-    trainer.train(resume_from_checkpoint=manifest.training.resume_checkpoint)
+    if objective == "ppo":
+        trainer.train()
+    else:
+        cast(Any, trainer).train(resume_from_checkpoint=manifest.training.resume_checkpoint)
     if cancel_path.exists():
         trainer.save_model(str(artifacts / "adapter-cancelled"))
         update_job(job_id, status=JobStatus.CANCELLED, stage="Cancelled", progress=1.0, exit_code=0)
@@ -406,6 +553,8 @@ def run(job_id: str) -> None:
         events.write("exporting", "Merging adapter into base model", 0.92)
         merged_path = artifacts / "merged-model"
         peft_model = cast(Any, trainer.model)
+        if objective == "ppo":
+            peft_model = peft_model.policy
         merged = peft_model.merge_and_unload()
         merged.save_pretrained(merged_path, safe_serialization=True)
         tokenizer.save_pretrained(merged_path)
