@@ -159,3 +159,5 @@ unsandboxed.
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE).
+
+<p align="center">Made with ❤️ by Ahmad Mujtaba</p>
