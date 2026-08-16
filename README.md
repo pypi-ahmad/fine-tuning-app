@@ -7,6 +7,16 @@ models, and testing exported models with Ollama.
 The training process runs on your machine. Hugging Face credentials are read from the
 user environment and are never displayed or written into the project.
 
+Free, open-source, and community-driven — clone it, run it on your own hardware with
+your own credentials, and use it however you like. Bug reports, feature ideas, and
+pull requests are genuinely welcome; see [Contributing & Community](#community-and-project-policies)
+below.
+
+> [!IMPORTANT]
+> Everything runs locally on your own machine and your own GPU. You are responsible for
+> the datasets and models you process, and for any Hugging Face Hub upload/download you
+> choose to perform. See [DISCLAIMER.md](DISCLAIMER.md) before training on anything sensitive.
+
 ## Current capabilities
 
 - Detect the operating system, CPU, memory, disk, GPUs, CUDA runtime, Python packages,
@@ -140,10 +150,22 @@ fine-tuning-studio version
 
 ## Community and project policies
 
+Fine-Tuning Studio is free, open-source, and welcomes contributions of all sizes — bug
+reports, feature suggestions, documentation fixes, and code.
+
 - [Contributing](CONTRIBUTING.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security](SECURITY.md)
+- [Support](SUPPORT.md)
+- [Disclaimer](DISCLAIMER.md)
 - [Changelog](CHANGELOG.md)
+- [Issues](https://github.com/pypi-ahmad/fine-tuning-app/issues) — bug reports and feature requests
+
+> [!NOTE]
+> This project does not want or accept donations, sponsorships, or any other financial
+> support, and never will. It's free to use and free to modify. If you'd like to give
+> back, the most valuable thing you can do is contribute code, tests, docs, or a
+> well-written bug report.
 
 ## Security
 
@@ -156,6 +178,19 @@ Optional benchmark execution uses an isolated Inspect AI installation. Custom Py
 reward modules are explicitly trusted, copied and hashed into the job, and execute
 unsandboxed.
 
+## Disclaimer
+
+- **You run this on your own machine, with your own hardware and credentials.** There
+  is no hosted version and no account system.
+- **You are responsible for the datasets and models you process with it**, including
+  having the rights to use them and complying with any license, privacy, or contractual
+  terms that apply — especially before pushing anything to the Hugging Face Hub.
+- **`trust_remote_code` and custom reward modules execute unreviewed code.** Only enable
+  them for repositories and modules you trust.
+- **No warranty, no liability**, per the [MIT License](LICENSE) — use it at your own risk.
+
+See [DISCLAIMER.md](DISCLAIMER.md) for the full version.
+
 ## License
 
-Apache License 2.0. See [LICENSE](LICENSE).
+MIT License. See [LICENSE](LICENSE).
