@@ -4,7 +4,7 @@ version = "1.1.0"
 description = "Local-first UI for fine-tuning and exporting AI models"
 readme = "README.md"
 requires-python = ">=3.12.10,<3.15"
-license = "Apache-2.0"
+license = "MIT"
 dependencies = [
   "accelerate",
   "bitsandbytes",
