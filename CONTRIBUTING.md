@@ -54,4 +54,11 @@ paths must be capability-gated, documented, and validated on the claimed platfor
 ## Contributor agreement
 
 By submitting a contribution, you agree that it is licensed under the repository's
-[Apache License 2.0](LICENSE), unless you explicitly state otherwise before submission.
+[MIT License](LICENSE), unless you explicitly state otherwise before submission.
+
+## No financial contributions
+
+This project does not want or accept donations, sponsorships, or any other financial
+support, and never will. Fine-Tuning Studio is free and community-driven, and it stays
+that way. The most valuable way to give back is a well-written bug report, a focused
+pull request, or a documentation fix.
