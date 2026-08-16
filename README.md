@@ -7,6 +7,8 @@ models, and testing exported models with Ollama.
 The training process runs on your machine. Hugging Face credentials are read from the
 user environment and are never displayed or written into the project.
 
+Repository: [github.com/pypi-ahmad/fine-tuning-app](https://github.com/pypi-ahmad/fine-tuning-app)
+
 Free, open-source, and community-driven — clone it, run it on your own hardware with
 your own credentials, and use it however you like. Bug reports, feature ideas, and
 pull requests are genuinely welcome; see [Contributing & Community](#community-and-project-policies)
@@ -16,6 +18,17 @@ below.
 > Everything runs locally on your own machine and your own GPU. You are responsible for
 > the datasets and models you process, and for any Hugging Face Hub upload/download you
 > choose to perform. See [DISCLAIMER.md](DISCLAIMER.md) before training on anything sensitive.
+
+## Contents
+
+- [Current capabilities](#current-capabilities)
+- [Requirements](#requirements)
+- [Install and run locally](#install-and-run-locally)
+- [Documentation](#documentation)
+- [Community and project policies](#community-and-project-policies)
+- [Security](#security)
+- [Disclaimer](#disclaimer)
+- [License](#license)
 
 ## Current capabilities
 
