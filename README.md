@@ -194,3 +194,5 @@ See [DISCLAIMER.md](DISCLAIMER.md) for the full version.
 ## License
 
 MIT License. See [LICENSE](LICENSE).
+
+<p align="center">Made with ❤️ by Ahmad Mujtaba</p>
