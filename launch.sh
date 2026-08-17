@@ -6,6 +6,19 @@ if ! command -v uv >/dev/null 2>&1; then
   read -r -p "Press Enter to close..." _
   exit 1
 fi
+
+if [ ! -d ".venv" ]; then
+  echo "First-time setup: creating the virtual environment and installing dependencies."
+  echo "This can take several minutes, mostly for the PyTorch/CUDA download."
+  echo
+  if ! uv sync --locked; then
+    echo
+    echo "Setup failed. See the output above for details."
+    read -r -p "Press Enter to close..." _
+    exit 1
+  fi
+fi
+
 uv run --locked fine-tuning-studio run
 status=$?
 if [ "$status" -ne 0 ]; then
