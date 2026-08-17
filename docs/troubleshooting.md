@@ -3,8 +3,9 @@
 ## Training button is disabled
 
 Open **System** and read every capability warning. CUDA requires compatible NVIDIA
-hardware; experimental ROCm/XPU profiles require compatible AMD/Intel hardware and an
-on-machine smoke test. Also verify that the recipe, dataset, model, and strategy agree.
+hardware; the beta ROCm profile and experimental XPU profile require compatible AMD/Intel
+hardware and an on-machine smoke test. Also verify that the recipe, dataset, model, and
+strategy agree.
 
 ## CUDA is unavailable
 

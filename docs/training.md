@@ -2,15 +2,17 @@
 
 ## Supported methods
 
-| Approach | LoRA | QLoRA | OFT | QOFT |
-| --- | :---: | :---: | :---: | :---: |
-| Supervised Fine-Tuning | ✅ | ✅ | ✅ | ✅ |
-| Reward Modeling | ✅ | ✅ | ✅ | ✅ |
-| PPO Training | ✅ | ✅ | ✅ | ✅ |
-| DPO Training | ✅ | ✅ | ✅ | ✅ |
-| KTO Training | ✅ | ✅ | ✅ | ✅ |
-| ORPO Training | ✅ | ✅ | ✅ | ✅ |
-| SimPO Training | ✅ | ✅ | ✅ | ✅ |
+| Approach | LoRA | QLoRA | OFT | QOFT | Full |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Supervised Fine-Tuning | ✅ | ✅ | ✅ | ✅ | Guarded |
+| Continued Pretraining | ✅ | ✅ | — | — | Guarded |
+| Reward Modeling | ✅ | ✅ | ✅ | ✅ | Guarded |
+| PPO Training | ✅ | ✅ | ✅ | ✅ | — |
+| DPO Training | ✅ | ✅ | ✅ | ✅ | — |
+| KTO Training | ✅ | ✅ | ✅ | ✅ | — |
+| ORPO Training | ✅ | ✅ | ✅ | ✅ | — |
+| SimPO Training | ✅ | ✅ | ✅ | ✅ | — |
+| GRPO Training | ✅ | ✅ | — | — | — |
 
 The dataset page accepts multiple Hub datasets and local uploads. Each source has its own
 split, mapping, and template. Sources are normalized, concatenated, shuffled, and divided

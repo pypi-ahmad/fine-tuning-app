@@ -35,13 +35,15 @@ model credentials, user datasets, generated checkpoints, or job artifacts in com
 Run the checks used by CI before opening a pull request:
 
 ```powershell
-uv run ruff format --check .
 uv run ruff check .
-uv run ty check src tests
+uv run ty check
 uv run pytest -q
 uv lock --check
-uv audit --frozen
+uv run pip-audit --local --progress-spinner off
 ```
+
+`uv run ruff format --check .` is not part of CI but is worth running locally before
+committing.
 
 CI runs this suite on Windows and Ubuntu with Python 3.12.10, 3.13, and 3.14.
 

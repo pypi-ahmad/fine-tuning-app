@@ -24,13 +24,15 @@ in `pyproject.toml` and locked in `uv.lock`.
 Run the same checks used by CI:
 
 ```powershell
-uv run ruff format --check .
 uv run ruff check .
-uv run ty check src tests
+uv run ty check
 uv run pytest -q
 uv lock --check
-uv audit --frozen
+uv run pip-audit --local --progress-spinner off
 ```
+
+`uv run ruff format --check .` is not run in CI but is a good idea to run locally before
+committing, since it catches formatting drift `ruff check` alone does not.
 
 CI runs these checks on Windows and Ubuntu with Python 3.13 and 3.14.
 

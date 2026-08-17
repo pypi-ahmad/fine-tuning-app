@@ -13,9 +13,8 @@ A short description of the change and why it's needed. Link the issue it address
 ## How was this tested?
 
 - Commands run locally (see [CONTRIBUTING.md](../CONTRIBUTING.md#pull-requests)):
-  - [ ] `uv run ruff format --check .`
   - [ ] `uv run ruff check .`
-  - [ ] `uv run ty check src tests`
+  - [ ] `uv run ty check`
   - [ ] `uv run pytest -q`
   - [ ] `uv lock --check`
 - OS/GPU/runtime profile exercised, if relevant:
