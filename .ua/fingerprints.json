@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "gitCommitHash": "5067f24f7bab43c646bd2437699a3963870c5dea",
-  "generatedAt": "2026-08-12T16:24:11.472Z",
+  "gitCommitHash": "0930d5abefdce97ce1488db4c99f39c04a6e9411",
+  "generatedAt": "2026-08-13T14:59:20.002Z",
   "files": {
     ".github/dependabot.yml": {
       "filePath": ".github/dependabot.yml",
@@ -55,7 +55,7 @@
     },
     ".ua/.understandignore": {
       "filePath": ".ua/.understandignore",
-      "contentHash": "a1ec5b1a129bc141555d7c3c1c30e1c35c9457e5404ffd54afac03e40ad49a39",
+      "contentHash": "12b3f435204837a0d1721f3884e4bd766c5fd37007a62d2abbf5098335162be9",
       "functions": [],
       "classes": [],
       "imports": [],
@@ -65,7 +65,7 @@
     },
     ".ua/config.json": {
       "filePath": ".ua/config.json",
-      "contentHash": "08d37f20ea0af2233ae24f094723759f952381ecb6dd7f2aaa05ef96e95eae6b",
+      "contentHash": "8b872a34689f66b2cf598b9de6815aabe320504f432521d0e1e4c1c8d4b6258b",
       "functions": [],
       "classes": [],
       "imports": [],
@@ -75,12 +75,12 @@
     },
     "CHANGELOG.md": {
       "filePath": "CHANGELOG.md",
-      "contentHash": "f157e413f3fdd6a9e6968f011656961d06cb0c590dacfe0be861e306eac8a0f1",
+      "contentHash": "3d9624d5c913e1d225bc4420a87d11417e17f7dce5ad7e1b6fa379f62440ce56",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 88,
+      "totalLines": 106,
       "hasStructuralAnalysis": true
     },
     "CODE_OF_CONDUCT.md": {
@@ -115,12 +115,12 @@
     },
     "README.md": {
       "filePath": "README.md",
-      "contentHash": "7820153b9ae31e2cb78f2b636d730908164b0bb69067e5b348469b147358b918",
+      "contentHash": "c4017d00c6ae875bb0941426a158cd93c02537c3383fc3e411ca6b7c66871df5",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 160,
+      "totalLines": 162,
       "hasStructuralAnalysis": true
     },
     "SECURITY.md": {
@@ -135,22 +135,22 @@
     },
     "TECHNICAL.md": {
       "filePath": "TECHNICAL.md",
-      "contentHash": "f9f1d81bd8be28b4649238398db997d976ce0b75005fb2b51d339df929a633a4",
+      "contentHash": "a885cdac01defede312f1184649628411dfd99127bccdc4547a04086d778ef87",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 79,
+      "totalLines": 85,
       "hasStructuralAnalysis": true
     },
     "USAGE.md": {
       "filePath": "USAGE.md",
-      "contentHash": "7c739c9781071d13aa2ec5f152dccbdc47045f2a8f22ec22983f87bb19899cbd",
+      "contentHash": "f694eb1230848cdd9c9e5e2273a9d65d5a16514ac04ca22ea69b7a6426e5f98a",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 62,
+      "totalLines": 64,
       "hasStructuralAnalysis": true
     },
     "docs/configuration.md": {
@@ -165,17 +165,17 @@
     },
     "docs/datasets.md": {
       "filePath": "docs/datasets.md",
-      "contentHash": "e3e391dcf7ce941d5dd962e9d13b2f07f1814eb44e3c639803a00c10e6da58ae",
+      "contentHash": "ee16948be67f5775ab1fa2e2f85dfa21dfffabd30ae272c34210e9fc5314e3e6",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 48,
+      "totalLines": 77,
       "hasStructuralAnalysis": true
     },
     "docs/development.md": {
       "filePath": "docs/development.md",
-      "contentHash": "054e17ef8e4ae0b2ba5d687b02a561047ef6cd21d6d13cc36f0d0135358988ac",
+      "contentHash": "e339d0ca4d10a574d6288c74aa0e21af30fc20a70313f2cc2135eb236386d631",
       "functions": [],
       "classes": [],
       "imports": [],
@@ -185,17 +185,17 @@
     },
     "docs/export-and-ollama.md": {
       "filePath": "docs/export-and-ollama.md",
-      "contentHash": "951d1ea218bb14f5f18cfd7cc4018b61382c38f0e2b47ba47ba81efc6fe91f0d",
+      "contentHash": "d27cb8f1c49c4032e8add56540e5108ad8cc9a3060cca5d1aa6b42eeec6ad349",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 45,
+      "totalLines": 46,
       "hasStructuralAnalysis": true
     },
     "docs/handbook.html": {
       "filePath": "docs/handbook.html",
-      "contentHash": "471a1c202aa31714814ac342b30730e3eef456b82e856305cbdcdac043c78761",
+      "contentHash": "06449c6fbff234738be55c9b2020b809dcc3cc757dbe2c0814e6fc404282e9ca",
       "functions": [],
       "classes": [],
       "imports": [],
@@ -205,32 +205,32 @@
     },
     "docs/training.md": {
       "filePath": "docs/training.md",
-      "contentHash": "00ec8a2125ad5d23837e4ee7df8bcc4885eec8620e73ee44a18dc8ab117672fe",
+      "contentHash": "896a8a87ce6068e55d563ab3d92bf4d72fd9b8c4478abb0edcf5dc0ba748bccd",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 52,
+      "totalLines": 84,
       "hasStructuralAnalysis": true
     },
     "docs/troubleshooting.md": {
       "filePath": "docs/troubleshooting.md",
-      "contentHash": "a4554d72f824462205842c8b6518ddd075758dd0554a5c7fd72603c6256b9efd",
+      "contentHash": "15a81e2b253a28b22c110e20ea5983ca27724caf13e6953781443589f4980c31",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 64,
+      "totalLines": 69,
       "hasStructuralAnalysis": true
     },
     "docs/user-guide.md": {
       "filePath": "docs/user-guide.md",
-      "contentHash": "acc9f53ada645d43b4cb3516e8b0f47013271f21008bfb39961ee3c357faa955",
+      "contentHash": "bbc37f5862308a03c0abc3c95d1b3e7e36bbcb0379ab68f27bd886c1dfba69b6",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 77,
+      "totalLines": 84,
       "hasStructuralAnalysis": true
     },
     "launch.cmd": {
@@ -255,7 +255,7 @@
     },
     "pyproject.toml": {
       "filePath": "pyproject.toml",
-      "contentHash": "03e3a0fe03377a430a754f67b19920ad5ad9440d95733b8eb5c8e1393b6dd616",
+      "contentHash": "bc4de35f8439f70a4c975de38f63f00893333e6a211da6abae2fe250f35f68de",
       "functions": [],
       "classes": [],
       "imports": [],
@@ -265,7 +265,7 @@
     },
     "src/fine_tuning_studio/__init__.py": {
       "filePath": "src/fine_tuning_studio/__init__.py",
-      "contentHash": "1ce9a730f12b1637b525f2fbddf76295cf63491e209f7174e72b0baee764f01d",
+      "contentHash": "5e3300d36e0a345db4b093bed8cd045b4860080c76bf957fc898c0838985f365",
       "functions": [],
       "classes": [],
       "imports": [],
@@ -275,14 +275,14 @@
     },
     "src/fine_tuning_studio/app.py": {
       "filePath": "src/fine_tuning_studio/app.py",
-      "contentHash": "8be46d5827e1b2d3ea18790f2c4192d2359f4fa882f4b213e152ad84d39da70d",
+      "contentHash": "4b88e32c6d32bf768d1bc9df575ee7b963e4827f582f4c864806019a75ef2cd9",
       "functions": [
         {
           "name": "initialize_state",
           "params": [],
           "returnType": "None",
           "exported": true,
-          "lineCount": 16
+          "lineCount": 18
         },
         {
           "name": "machine_report",
@@ -296,7 +296,7 @@
           "params": [],
           "returnType": "None",
           "exported": true,
-          "lineCount": 12
+          "lineCount": 13
         },
         {
           "name": "active_worker_pids",
@@ -378,18 +378,19 @@
           "params": [
             "repo_id",
             "repo_type",
-            "revision"
+            "revision",
+            "key_suffix"
           ],
           "returnType": "bool",
           "exported": true,
-          "lineCount": 24
+          "lineCount": 26
         },
         {
           "name": "dataset_page",
           "params": [],
           "returnType": "None",
           "exported": true,
-          "lineCount": 63
+          "lineCount": 87
         },
         {
           "name": "model_page",
@@ -403,7 +404,7 @@
           "params": [],
           "returnType": "None",
           "exported": true,
-          "lineCount": 103
+          "lineCount": 150
         },
         {
           "name": "build_manifest",
@@ -413,14 +414,14 @@
           ],
           "returnType": "RunManifest",
           "exported": true,
-          "lineCount": 8
+          "lineCount": 12
         },
         {
           "name": "review_page",
           "params": [],
           "returnType": "None",
           "exported": true,
-          "lineCount": 60
+          "lineCount": 65
         },
         {
           "name": "monitor_page",
@@ -533,6 +534,7 @@
         {
           "source": "fine_tuning_studio.domain",
           "specifiers": [
+            "DatasetSourceSpec",
             "DatasetSpec",
             "EvaluationSpec",
             "ExportSpec",
@@ -591,6 +593,13 @@
           ]
         },
         {
+          "source": "fine_tuning_studio.recipes",
+          "specifiers": [
+            "RECIPES",
+            "supported_methods"
+          ]
+        },
+        {
           "source": "fine_tuning_studio.runtimes",
           "specifiers": [
             "PROFILES",
@@ -632,7 +641,7 @@
         "render_ollama_metrics",
         "ollama_playground_page"
       ],
-      "totalLines": 940,
+      "totalLines": 1047,
       "hasStructuralAnalysis": true
     },
     "src/fine_tuning_studio/artifacts.py": {
@@ -897,7 +906,7 @@
     },
     "src/fine_tuning_studio/domain.py": {
       "filePath": "src/fine_tuning_studio/domain.py",
-      "contentHash": "485803dc10b3c80c3f15fef258ffc655e8d2c60e1916127007ae0ee80580568b",
+      "contentHash": "d2ed22207b04545f644e257d7e3f88e10e2d9b17bccb2f5be97a88b95b86c6bc",
       "functions": [
         {
           "name": "validate_manifest",
@@ -906,7 +915,7 @@
           ],
           "returnType": "list[str]",
           "exported": true,
-          "lineCount": 65
+          "lineCount": 85
         },
         {
           "name": "ensure_within",
@@ -928,7 +937,7 @@
           "lineCount": 12
         },
         {
-          "name": "DatasetSpec",
+          "name": "DatasetSourceSpec",
           "methods": [],
           "properties": [
             "source",
@@ -940,12 +949,21 @@
             "text_column",
             "prompt_column",
             "response_column",
-            "chat_template",
+            "chat_template"
+          ],
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "DatasetSpec",
+          "methods": [],
+          "properties": [
+            "sources",
             "validation_fraction",
             "seed"
           ],
           "exported": true,
-          "lineCount": 13
+          "lineCount": 4
         },
         {
           "name": "ModelSpec",
@@ -990,10 +1008,19 @@
             "distributed_strategy",
             "world_size",
             "fsdp_cpu_offload",
-            "custom_code_acknowledged"
+            "custom_code_acknowledged",
+            "oft_block_size",
+            "oft_module_dropout",
+            "preference_beta",
+            "simpo_gamma",
+            "ppo_reward_model",
+            "ppo_reward_model_revision",
+            "ppo_epochs",
+            "ppo_response_length",
+            "ppo_kl_coefficient"
           ],
           "exported": true,
-          "lineCount": 28
+          "lineCount": 37
         },
         {
           "name": "ProvenanceSpec",
@@ -1054,7 +1081,7 @@
             "provenance"
           ],
           "exported": true,
-          "lineCount": 32
+          "lineCount": 47
         }
       ],
       "imports": [
@@ -1100,6 +1127,7 @@
       ],
       "exports": [
         "JobStatus",
+        "DatasetSourceSpec",
         "DatasetSpec",
         "ModelSpec",
         "TrainingSpec",
@@ -1110,7 +1138,7 @@
         "validate_manifest",
         "ensure_within"
       ],
-      "totalLines": 217,
+      "totalLines": 266,
       "hasStructuralAnalysis": true
     },
     "src/fine_tuning_studio/evals.py": {
@@ -1704,7 +1732,7 @@
     },
     "src/fine_tuning_studio/jobs.py": {
       "filePath": "src/fine_tuning_studio/jobs.py",
-      "contentHash": "2a9b73cb908661c0581a66ce1975ae232a21b75f263071afbe5d432ff08d195e",
+      "contentHash": "8952d150e2622a189e17126619566dc5e93d106d24f3a5ca454ea0335bf62e4f",
       "functions": [
         {
           "name": "studio_home",
@@ -1733,12 +1761,11 @@
           "name": "create_job",
           "params": [
             "manifest",
-            "upload_name",
-            "upload"
+            "uploads"
           ],
           "returnType": "Path",
           "exported": true,
-          "lineCount": 37
+          "lineCount": 47
         },
         {
           "name": "resume_job",
@@ -1748,7 +1775,7 @@
           ],
           "returnType": "RunManifest",
           "exported": true,
-          "lineCount": 23
+          "lineCount": 25
         },
         {
           "name": "update_job",
@@ -1861,6 +1888,12 @@
           ]
         },
         {
+          "source": "collections.abc",
+          "specifiers": [
+            "Mapping"
+          ]
+        },
+        {
           "source": "contextlib",
           "specifiers": [
             "closing",
@@ -1928,7 +1961,7 @@
         "terminate_job",
         "reconcile_jobs"
       ],
-      "totalLines": 275,
+      "totalLines": 288,
       "hasStructuralAnalysis": true
     },
     "src/fine_tuning_studio/lifecycle.py": {
@@ -2197,7 +2230,7 @@
     },
     "src/fine_tuning_studio/preflight.py": {
       "filePath": "src/fine_tuning_studio/preflight.py",
-      "contentHash": "5bfb285851458021146bc697197b001ddda3ab0c1d0abef21939786eb628a334",
+      "contentHash": "cb591a556d50d5f8a0091f30e786b9ad58c6e36c9ee1ad5e5fafd08d402aa977",
       "functions": [
         {
           "name": "_required_columns",
@@ -2217,7 +2250,7 @@
           ],
           "returnType": "DatasetReport",
           "exported": true,
-          "lineCount": 26
+          "lineCount": 28
         },
         {
           "name": "inspect_model",
@@ -2254,6 +2287,19 @@
           ],
           "exported": true,
           "lineCount": 7
+        },
+        {
+          "name": "DatasetCollectionReport",
+          "methods": [],
+          "properties": [
+            "sources",
+            "rows",
+            "approximate_tokens",
+            "fingerprint",
+            "errors"
+          ],
+          "exported": true,
+          "lineCount": 6
         },
         {
           "name": "ModelReport",
@@ -2307,26 +2353,36 @@
         {
           "source": "fine_tuning_studio.domain",
           "specifiers": [
-            "DatasetSpec",
+            "DatasetSourceSpec",
             "ModelSpec"
           ]
         }
       ],
       "exports": [
         "DatasetReport",
+        "DatasetCollectionReport",
         "ModelReport",
         "_required_columns",
         "inspect_dataset",
         "inspect_model",
         "write_report"
       ],
-      "totalLines": 106,
+      "totalLines": 117,
       "hasStructuralAnalysis": true
     },
     "src/fine_tuning_studio/recipes.py": {
       "filePath": "src/fine_tuning_studio/recipes.py",
-      "contentHash": "de385d7f48bb44010ee3d603692e1b727f8ac2d0c5902597d046051cbb655efa",
+      "contentHash": "9249b319f29a56b09d6cb1c3b92ae43547d6792a08ad21cd2d0e4dc6c23d8aa6",
       "functions": [
+        {
+          "name": "supported_methods",
+          "params": [
+            "objective"
+          ],
+          "returnType": "tuple[str, ...]",
+          "exported": true,
+          "lineCount": 3
+        },
         {
           "name": "validate_recipe",
           "params": [
@@ -2336,7 +2392,7 @@
           ],
           "returnType": "list[str]",
           "exported": true,
-          "lineCount": 10
+          "lineCount": 8
         },
         {
           "name": "exact_reward",
@@ -2469,6 +2525,7 @@
       ],
       "exports": [
         "Recipe",
+        "supported_methods",
         "validate_recipe",
         "exact_reward",
         "numeric_reward",
@@ -2477,7 +2534,7 @@
         "copy_trusted_reward",
         "load_trusted_reward"
       ],
-      "totalLines": 113,
+      "totalLines": 120,
       "hasStructuralAnalysis": true
     },
     "src/fine_tuning_studio/resources.py": {
@@ -2540,7 +2597,7 @@
     },
     "src/fine_tuning_studio/runtimes.py": {
       "filePath": "src/fine_tuning_studio/runtimes.py",
-      "contentHash": "4aed9750f1fd688d2cd0c84de3bf9994642e7e1af63b4b3e0b496d50ad6fe039",
+      "contentHash": "7d44c951888913d4f3516e829daad5f3460a0d4cfc4e42cb54c5e1ae99e46d58",
       "functions": [
         {
           "name": "profile_directory",
@@ -3029,7 +3086,7 @@
     },
     "src/fine_tuning_studio/worker.py": {
       "filePath": "src/fine_tuning_studio/worker.py",
-      "contentHash": "6e7bd27f6bb7768b6f45d45434a16ccb35c296e586efed546ba699994354359a",
+      "contentHash": "83c59a22c058b7d88e76f769b27778ab0bc86b82e746a5485ffcf77642f65712",
       "functions": [
         {
           "name": "load_manifest",
@@ -3043,23 +3100,39 @@
         {
           "name": "load_data",
           "params": [
-            "manifest",
-            "events"
+            "spec",
+            "events",
+            "index",
+            "total"
           ],
           "returnType": "Any",
           "exported": true,
-          "lineCount": 18
+          "lineCount": 26
         },
         {
           "name": "render_dataset",
           "params": [
             "dataset",
-            "manifest",
+            "spec",
+            "objective",
+            "method",
             "tokenizer"
           ],
           "returnType": "Any",
           "exported": true,
-          "lineCount": 67
+          "lineCount": 74
+        },
+        {
+          "name": "prepare_datasets",
+          "params": [
+            "manifest",
+            "tokenizer",
+            "events",
+            "directory"
+          ],
+          "returnType": "Any",
+          "exported": true,
+          "lineCount": 48
         },
         {
           "name": "import_into_ollama",
@@ -3079,7 +3152,7 @@
           ],
           "returnType": "None",
           "exported": true,
-          "lineCount": 268
+          "lineCount": 351
         },
         {
           "name": "main",
@@ -3102,6 +3175,12 @@
         }
       ],
       "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
         {
           "source": "importlib",
           "specifiers": [
@@ -3161,6 +3240,7 @@
         {
           "source": "fine_tuning_studio.domain",
           "specifiers": [
+            "DatasetSourceSpec",
             "JobStatus",
             "RunManifest"
           ]
@@ -3184,6 +3264,7 @@
         {
           "source": "fine_tuning_studio.preflight",
           "specifiers": [
+            "DatasetCollectionReport",
             "inspect_dataset",
             "write_report"
           ]
@@ -3191,6 +3272,7 @@
         {
           "source": "fine_tuning_studio.recipes",
           "specifiers": [
+            "RECIPES",
             "REWARDS",
             "load_trusted_reward",
             "validate_recipe"
@@ -3208,11 +3290,12 @@
         "load_manifest",
         "load_data",
         "render_dataset",
+        "prepare_datasets",
         "import_into_ollama",
         "run",
         "main"
       ],
-      "totalLines": 448,
+      "totalLines": 597,
       "hasStructuralAnalysis": true
     },
     "tests/test_app.py": {
@@ -3394,7 +3477,7 @@
     },
     "tests/test_domain.py": {
       "filePath": "tests/test_domain.py",
-      "contentHash": "085d5e70ef1c37e5a3b71d00ce14478ebe9cf28a3f4598598ea879584adbdd73",
+      "contentHash": "0e548b08a4ff6b58864a1533c1bc32fa6123662f4bcab7d66ce1886c701c8730",
       "functions": [
         {
           "name": "manifest",
@@ -3422,7 +3505,7 @@
           "lineCount": 3
         },
         {
-          "name": "test_schema_one_manifest_is_readable_and_new_runs_use_v4",
+          "name": "test_schema_one_manifest_is_readable_and_new_runs_use_v5",
           "params": [],
           "returnType": "None",
           "exported": true,
@@ -3462,6 +3545,7 @@
         {
           "source": "fine_tuning_studio.domain",
           "specifiers": [
+            "DatasetSourceSpec",
             "DatasetSpec",
             "EvaluationSpec",
             "ExportSpec",
@@ -3477,11 +3561,11 @@
         "manifest",
         "test_manifest_round_trip",
         "test_ollama_requires_merged_model",
-        "test_schema_one_manifest_is_readable_and_new_runs_use_v4",
+        "test_schema_one_manifest_is_readable_and_new_runs_use_v5",
         "test_path_must_remain_in_workspace",
         "test_cpu_profile_rejects_qlora"
       ],
-      "totalLines": 66,
+      "totalLines": 67,
       "hasStructuralAnalysis": true
     },
     "tests/test_evals.py": {
@@ -3757,7 +3841,7 @@
     },
     "tests/test_jobs.py": {
       "filePath": "tests/test_jobs.py",
-      "contentHash": "6040b930d2329131a4df9bd0d76baf334e7e72eb1f0818a55c2ca72b57824dba",
+      "contentHash": "6b7b7349af1d389955a89f75efcb92c48c283a04ec130ddb9df3bba5b33c0b9e",
       "functions": [
         {
           "name": "test_create_job_persists_manifest_and_sanitized_upload",
@@ -3770,7 +3854,17 @@
           "lineCount": 17
         },
         {
-          "name": "test_resume_creates_v4_child_job",
+          "name": "test_create_job_stages_multiple_local_datasets",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "test_resume_creates_v5_child_job",
           "params": [
             "tmp_path",
             "monkeypatch"
@@ -3813,6 +3907,7 @@
         {
           "source": "fine_tuning_studio.domain",
           "specifiers": [
+            "DatasetSourceSpec",
             "DatasetSpec",
             "EvaluationSpec",
             "ExportSpec",
@@ -3834,15 +3929,16 @@
       ],
       "exports": [
         "test_create_job_persists_manifest_and_sanitized_upload",
-        "test_resume_creates_v4_child_job",
+        "test_create_job_stages_multiple_local_datasets",
+        "test_resume_creates_v5_child_job",
         "test_reconcile_marks_missing_worker_interrupted"
       ],
-      "totalLines": 71,
+      "totalLines": 97,
       "hasStructuralAnalysis": true
     },
     "tests/test_lifecycle.py": {
       "filePath": "tests/test_lifecycle.py",
-      "contentHash": "79a46216eefd22e3b98f91c30797cb463757db202a414905072d94445ab06b35",
+      "contentHash": "7b8006cea7817d21e07a3573012c7ece3154e17d435e9263b8bbc04f01581bec",
       "functions": [
         {
           "name": "_manifest",
@@ -3960,6 +4056,7 @@
         {
           "source": "fine_tuning_studio.domain",
           "specifiers": [
+            "DatasetSourceSpec",
             "DatasetSpec",
             "EvaluationSpec",
             "ExportSpec",
@@ -3996,7 +4093,7 @@
         "test_shutdown_stops_other_direct_app_descendants",
         "test_schedule_clean_exit_uses_success_status"
       ],
-      "totalLines": 204,
+      "totalLines": 205,
       "hasStructuralAnalysis": true
     },
     "tests/test_ollama.py": {
@@ -4143,8 +4240,22 @@
     },
     "tests/test_recipes.py": {
       "filePath": "tests/test_recipes.py",
-      "contentHash": "ac17939fc78b8d0e37fdeea2c3f2b10ca091f66a75902d61fef0c6ef6aefcd9c",
+      "contentHash": "a8a63478903dbf731984da7aaf65be158b976e5d232fecc7e62ed20b46e7bbaa",
       "functions": [
+        {
+          "name": "test_requested_approaches_support_all_adapter_methods",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_method_dropdown_excludes_unsupported_combinations",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        },
         {
           "name": "test_dpo_contract_requires_preference_columns",
           "params": [],
@@ -4203,17 +4314,20 @@
           "specifiers": [
             "REWARDS",
             "copy_trusted_reward",
+            "supported_methods",
             "validate_recipe"
           ]
         }
       ],
       "exports": [
+        "test_requested_approaches_support_all_adapter_methods",
+        "test_method_dropdown_excludes_unsupported_combinations",
         "test_dpo_contract_requires_preference_columns",
         "test_builtin_rewards_return_one_score_per_completion",
         "test_trusted_reward_is_copied_hashed_and_probed",
         "test_inspect_command_rejects_unknown_tasks"
       ],
-      "totalLines": 34,
+      "totalLines": 49,
       "hasStructuralAnalysis": true
     },
     "tests/test_resources.py": {
