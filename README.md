@@ -9,7 +9,7 @@ user environment and are never displayed or written into the project.
 
 Repository: [github.com/pypi-ahmad/fine-tuning-app](https://github.com/pypi-ahmad/fine-tuning-app)
 
-Free, open-source, and community-driven — clone it, run it on your own hardware with
+Free, open-source, and community-driven: clone it, run it on your own hardware with
 your own credentials, and use it however you like. Bug reports, feature ideas, and
 pull requests are genuinely welcome; see [Contributing & Community](#community-and-project-policies)
 below.
@@ -163,7 +163,7 @@ fine-tuning-studio version
 
 ## Community and project policies
 
-Fine-Tuning Studio is free, open-source, and welcomes contributions of all sizes — bug
+Fine-Tuning Studio is free, open-source, and welcomes contributions of all sizes: bug
 reports, feature suggestions, documentation fixes, and code.
 
 - [Contributing](CONTRIBUTING.md)
@@ -172,7 +172,7 @@ reports, feature suggestions, documentation fixes, and code.
 - [Support](SUPPORT.md)
 - [Disclaimer](DISCLAIMER.md)
 - [Changelog](CHANGELOG.md)
-- [Issues](https://github.com/pypi-ahmad/fine-tuning-app/issues) — bug reports and feature requests
+- [Issues](https://github.com/pypi-ahmad/fine-tuning-app/issues) (bug reports and feature requests)
 
 > [!NOTE]
 > This project does not want or accept donations, sponsorships, or any other financial
