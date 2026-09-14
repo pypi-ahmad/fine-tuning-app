@@ -1,3 +1,10 @@
+"""Minimal HTTP client for a local Ollama daemon (list/show/ps/unload/chat).
+
+Used by the Ollama playground page and by gpu_memory.py to unload idle
+models when freeing VRAM. All errors from the daemon or the network are
+normalized to OllamaError so callers have one exception type to handle.
+"""
+
 from __future__ import annotations
 
 import json
@@ -50,6 +57,9 @@ class OllamaClient:
     ) -> None:
         self.host = _normalize_host(host or os.environ.get("OLLAMA_HOST", "127.0.0.1:11434"))
         self.timeout = timeout
+        # Short timeout for metadata calls (should fail fast if Ollama is down);
+        # long timeout for chat streaming, since a slow model can legitimately take
+        # minutes to finish a response.
         self.stream_timeout = stream_timeout
 
     def list_models(self) -> list[OllamaModel]:
@@ -115,6 +125,8 @@ class OllamaClient:
             },
         )
         try:
+            # Ollama's streaming API is newline-delimited JSON: one JSON object per
+            # line, not a single JSON document, so each line is decoded separately.
             with urllib.request.urlopen(request, timeout=self.stream_timeout) as response:
                 for raw_line in response:
                     if not raw_line.strip():
@@ -161,6 +173,9 @@ class OllamaClient:
 
 
 def _normalize_host(host: str) -> str:
+    # `host` may come from the OLLAMA_HOST environment variable, which this process
+    # does not fully control; restrict it to a bare http(s) origin so a malformed
+    # or malicious value can't smuggle a path, query, or credentials into requests.
     value = host.strip().rstrip("/")
     if "://" not in value:
         value = f"http://{value}"

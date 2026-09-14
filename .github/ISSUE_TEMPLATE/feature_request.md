@@ -6,7 +6,7 @@ labels: enhancement
 assignees: ''
 ---
 
-Thanks for the suggestion! Check the [CHANGELOG.md](../../CHANGELOG.md) first in case it's already planned — feel free to open this anyway if you want to add detail or a different angle.
+Thanks for the suggestion! Check the [CHANGELOG.md](../../CHANGELOG.md) first in case it's already planned, but feel free to open this anyway if you want to add detail or a different angle.
 
 ## What problem does this solve?
 

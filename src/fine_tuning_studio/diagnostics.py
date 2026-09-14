@@ -1,3 +1,12 @@
+"""Builds the "sanitized diagnostics" zip a user downloads to share for support.
+
+The output is meant to leave the machine and be read by someone else, so
+redaction here is the trust boundary: job logs may contain arbitrary
+command output, and `redact` is a best-effort textual scrub, not a
+guarantee — it only catches the token/password/secret/authorization
+keyword patterns matched by SECRET, not every possible credential shape.
+"""
+
 from __future__ import annotations
 
 import io
@@ -34,6 +43,8 @@ def build_diagnostics(home: Path) -> bytes:
             for name in ("stdout.log", "stderr.log", "events.jsonl"):
                 path = directory / name
                 if path.is_file():
+                    # Tail only: the last 200 lines are almost always enough to see a
+                    # failure, and keeps the bundle small for jobs with long logs.
                     lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
                     text = "\n".join(lines[-200:])
                     archive.writestr(f"logs/{job['id']}/{name}", redact(text))

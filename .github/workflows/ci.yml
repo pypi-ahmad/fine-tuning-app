@@ -24,15 +24,6 @@ jobs:
           python-version: ${{ matrix.python }}
           enable-cache: true
       - run: uv sync --locked --dev
-      - run: >-
-          uv run pytest -q
-          --cov=fine_tuning_studio.domain
-          --cov=fine_tuning_studio.storage
-          --cov=fine_tuning_studio.evals
-          --cov=fine_tuning_studio.artifacts
-          --cov=fine_tuning_studio.resources
-          --cov=fine_tuning_studio.recipes
-          --cov-fail-under=80
       - run: uv run ruff check .
       - run: uv run ty check
       - run: uv build

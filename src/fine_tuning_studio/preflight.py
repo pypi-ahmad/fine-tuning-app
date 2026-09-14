@@ -1,3 +1,12 @@
+"""Dataset and model inspection run before a job is created or launched.
+
+`inspect_dataset` is the schema/quality check the UI and worker.py both run
+(worker.py re-runs it per source so the on-disk dataset-preflight.json
+reflects exactly what training used, not what the UI saw earlier).
+`inspect_model` hits the Hub for metadata to estimate training memory. See
+resources.py for the stricter gate applied specifically to full fine-tuning.
+"""
+
 from __future__ import annotations
 
 import hashlib
@@ -62,6 +71,9 @@ def inspect_dataset(
     nulls = {name: 0 for name in columns}
     characters = 0
     digest = hashlib.sha256()
+    # Null counts, character totals, and (if dataset._fingerprint is absent) the
+    # digest below are all computed from only the first sample_limit rows, not the
+    # full dataset, to keep preflight fast on large datasets.
     sample = dataset.select(range(min(len(dataset), sample_limit)))
     for row in sample:
         encoded = json.dumps(row, sort_keys=True, default=str).encode()
@@ -77,7 +89,11 @@ def inspect_dataset(
         rows=len(dataset),
         columns=columns,
         null_counts=nulls,
+        # `_fingerprint` is a private Hugging Face `datasets` attribute; fall back to
+        # our own hash of the sampled rows when a dataset doesn't expose one.
         fingerprint=getattr(dataset, "_fingerprint", None) or digest.hexdigest(),
+        # Chars-per-token ~4 is a coarse English-text approximation, not real
+        # tokenization; good enough for a rough sizing estimate, not for billing.
         approximate_tokens=max(1, characters // 4),
         errors=errors,
     )
@@ -96,6 +112,9 @@ def inspect_model(spec: ModelSpec, method: str = "qlora") -> ModelReport:
     weight_bytes = sum(sibling.size or 0 for sibling in (info.siblings or []))
     parameters = getattr(info, "safetensors", None)
     parameter_count = sum(parameters.parameters.values()) if parameters else None
+    # Bytes-per-parameter multipliers approximate each method's total training
+    # footprint (weights + adapter + optimizer state where applicable); keep these
+    # in rough agreement with the 12.0 default used by resources.full_training_gate.
     multiplier = {"qlora": 0.7, "lora": 2.2, "full": 12.0}.get(method, 2.2)
     estimate = round(parameter_count * multiplier / 1024**3, 2) if parameter_count else None
     return ModelReport(

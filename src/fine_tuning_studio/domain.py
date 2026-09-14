@@ -1,3 +1,13 @@
+"""The core data model: job status, the spec dataclasses that make up a
+RunManifest, its on-disk (de)serialization, launch-time validation, and the
+path-containment guard used wherever a job-relative path is built from
+untrusted input (job IDs, uploaded filenames).
+
+A RunManifest is written to manifest.json by jobs.create_job and is the
+single source of truth worker.py reads to run a job — see jobs.py next for
+how it's persisted and launched.
+"""
+
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
@@ -149,6 +159,9 @@ class RunManifest:
                 seed=dataset_value.get("seed", 42),
             )
         else:
+            # Older on-disk manifests (pre-multi-dataset support) stored a single
+            # DatasetSourceSpec's fields directly under "dataset" instead of a
+            # "sources" list; wrap it so old manifest.json files on disk still load.
             validation_fraction = dataset_value.pop("validation_fraction", 0.1)
             seed = dataset_value.pop("seed", 42)
             dataset = DatasetSpec(
@@ -171,6 +184,10 @@ class RunManifest:
 
 
 def validate_manifest(manifest: RunManifest) -> list[str]:
+    # The authoritative pre-launch gate: mirrors and cross-checks constraints defined
+    # elsewhere (recipes.RECIPES for objective/method support, runtimes.PROFILES for
+    # runtime feasibility). Adding a new recipe or runtime restriction there without
+    # a matching check here would let an invalid job start.
     errors: list[str] = []
     if not manifest.dataset.sources:
         errors.append("Add at least one dataset.")
@@ -258,6 +275,10 @@ def validate_manifest(manifest: RunManifest) -> list[str]:
 
 
 def ensure_within(root: Path, candidate: Path) -> Path:
+    # Path-traversal guard for the studio-home tree: `candidate` is typically built
+    # from untrusted input (a job ID, an uploaded filename, a checkpoint directory
+    # name), so resolving both and checking containment catches "../"-style escapes
+    # that plain string prefix checks would miss.
     resolved_root = root.resolve()
     resolved_candidate = candidate.resolve()
     if resolved_candidate != resolved_root and resolved_root not in resolved_candidate.parents:

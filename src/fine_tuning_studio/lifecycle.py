@@ -1,3 +1,11 @@
+"""Coordinated shutdown of the app and the worker process trees it launched.
+
+Backs the "Stop app" button/dialog in app.py: signals active jobs to cancel,
+gives them a grace period to exit on their own, and only then verifies and
+kills whatever is left. See gpu_memory.py for the separate, narrower
+same-machine process-termination logic used for arbitrary GPU processes.
+"""
+
 from __future__ import annotations
 
 import os
@@ -39,6 +47,10 @@ def _process_is_running(pid: int) -> bool:
 
 
 def _registered_worker(process: psutil.Process, job_id: str, application_pid: int) -> bool:
+    # A stored PID can be stale (the OS may have reused it for an unrelated
+    # process) by the time this runs, so it must be re-verified as "actually ours"
+    # before termination: either it descends from this app process, or its command
+    # line names both this job's ID and the worker/accelerate-launch module.
     try:
         if any(parent.pid == application_pid for parent in process.parents()):
             return True
@@ -55,6 +67,9 @@ def _terminate_tree(process: psutil.Process, timeout: float) -> tuple[set[int], 
         descendants = process.children(recursive=True)
     except psutil.Error as exc:
         raise RuntimeError(f"cannot inspect PID {process.pid}: {type(exc).__name__}") from exc
+    # Terminate children before the parent (reversed) so nothing gets orphaned and
+    # re-parented to init/a supervisor mid-shutdown; graceful terminate() first, then
+    # kill() only for whatever is still alive after `timeout`.
     targets = [*reversed(descendants), process]
     for target in targets:
         try:
@@ -102,6 +117,9 @@ def stop_application_processes(
             )
             interrupted.add(job_id)
 
+    # Cooperative-cancellation window: workers poll for the cancel.requested sentinel
+    # file (see jobs.request_cancel) and may exit on their own; only PIDs still
+    # running once the deadline passes get force-terminated below.
     deadline = time.monotonic() + max(0.0, grace_period)
     while pending and time.monotonic() < deadline:
         for job_id, pid in list(pending.items()):

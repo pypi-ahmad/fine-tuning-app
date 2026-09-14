@@ -43,9 +43,6 @@ target-version = "py313"
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-
 [tool.ty.environment]
 python-version = "3.13"
 

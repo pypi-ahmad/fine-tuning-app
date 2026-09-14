@@ -1,3 +1,11 @@
+"""Console-script entry point (``fine-tuning-studio``).
+
+Wires the ``run``/``doctor``/``backup``/``restore``/``version`` subcommands to
+the storage, job, and system-scan modules. ``run`` just launches the actual
+Streamlit UI in app.py as a subprocess; read jobs.py next for how a launched
+job is tracked.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -46,6 +54,9 @@ def _doctor_text(result: Mapping[str, object]) -> str:
 def run_app() -> int:
     entry = Path(__file__).with_name("app.py")
     environment = os.environ.copy()
+    # Loopback-only by default: this app can trigger local code execution (trusted
+    # reward modules, `trust_remote_code` models) and must not be exposed on the
+    # network without the operator explicitly overriding these env vars.
     environment.setdefault("STREAMLIT_SERVER_ADDRESS", "127.0.0.1")
     environment.setdefault("STREAMLIT_SERVER_PORT", "8503")
     environment.setdefault("STREAMLIT_BROWSER_GATHER_USAGE_STATS", "false")
@@ -72,6 +83,9 @@ def main(argv: list[str] | None = None) -> int:
         print(backup(studio_home()))
         return 0
     if args.command == "restore":
+        # Restoring swaps studio.db out from under any running worker; refuse while a
+        # job is mid-flight rather than risk the job's row (or its manifest path)
+        # pointing at data that no longer matches the live database.
         if any(job["status"] in {"preparing", "training", "exporting"} for job in list_jobs()):
             parser.error("Stop active jobs before restoring a backup.")
         print(f"Safety backup: {restore(studio_home(), args.path)}")

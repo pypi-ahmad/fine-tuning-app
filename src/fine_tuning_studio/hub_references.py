@@ -1,3 +1,12 @@
+"""Parses and validates user-entered Hugging Face Hub references before any
+network call is made with them, then plans/executes a download.
+
+`normalize_hub_reference` is the trust boundary: everything downstream
+(snapshot_download, disk-space checks) assumes it has already rejected
+anything that isn't a plain "owner/name" repo ID. See preflight.py, which
+separately queries the Hub for model metadata once a reference is chosen.
+"""
+
 from __future__ import annotations
 
 import shutil
@@ -34,6 +43,9 @@ def normalize_hub_reference(value: str, expected_type: RepoType) -> str:
     if "://" not in reference:
         return _validated_repo_id(reference)
 
+    # From here on `reference` is untrusted, user-typed text presumed to be a URL:
+    # every check below narrows it before any part of it is used, and the function
+    # must raise (never fall through) on anything it doesn't fully recognize.
     parsed = urlsplit(reference)
     if parsed.scheme.lower() != "https":
         raise ValueError("Hugging Face URLs must use HTTPS.")
@@ -61,6 +73,10 @@ def normalize_hub_reference(value: str, expected_type: RepoType) -> str:
     if actual_type != expected_type:
         raise ValueError(f"This is a Hugging Face {actual_type} URL, not a {expected_type} URL.")
 
+    # A repo ID is 1 segment (canonical, org-less) or 2 (org/name); anything after
+    # that is a Hub subpage like /org/model/blob/main/file.bin. Distinguish the two
+    # by checking whether the segment right after a 1- or 2-part ID is a known
+    # subpage keyword, rather than assuming a fixed segment count.
     if len(segments) >= 4 and segments[2] in _SUBPAGE_ROUTES:
         route_index = 2
     elif len(segments) >= 3 and segments[1] in _SUBPAGE_ROUTES:
@@ -83,6 +99,9 @@ def plan_hub_download(repo_id: str, repo_type: RepoType, revision: str = "main")
     )
     files = result
     download_bytes = sum(file.file_size for file in files if file.will_download)
+    # The Hub cache directory may not exist yet on a fresh machine; disk_usage needs
+    # a real path, so walk up to the nearest existing ancestor to get a usable
+    # (if slightly optimistic, since parent volumes can differ) free-space figure.
     available = shutil.disk_usage(_existing_cache_parent()).free
     if download_bytes > available:
         raise OSError(

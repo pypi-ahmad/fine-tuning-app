@@ -1,3 +1,12 @@
+"""Training-recipe registry, built-in GRPO rewards, and user reward-module loading.
+
+RECIPES is the authoritative list of which columns and methods each training
+objective supports; domain.validate_manifest cross-checks against it, so the
+two must be kept in sync when a recipe changes. The trusted-reward functions
+below execute arbitrary user-supplied Python with full process privileges —
+see their docstrings for the trust model.
+"""
+
 from __future__ import annotations
 
 import hashlib
@@ -89,6 +98,11 @@ REWARDS: dict[str, Callable[..., list[float]]] = {
 
 
 def copy_trusted_reward(source: Path, job_directory: Path) -> tuple[Path, str]:
+    # "Trusted" reflects a user acknowledgment gate in the UI
+    # (TrainingSpec.custom_code_acknowledged), not sandboxing: this loads and
+    # executes the module below with the same privileges as the app itself. Copying
+    # it into the job directory (and recording its sha256) is for provenance and to
+    # freeze the file the job actually ran, not for isolation.
     source = source.resolve()
     if source.suffix != ".py" or not source.is_file():
         raise ValueError("Trusted reward module must be a Python file.")
@@ -111,6 +125,10 @@ def copy_trusted_reward(source: Path, job_directory: Path) -> tuple[Path, str]:
 
 
 def load_trusted_reward(path: Path) -> Callable[..., list[float]]:
+    # Called from worker.py at training time, on the copy frozen by
+    # copy_trusted_reward above. Unlike that function, this does not re-validate the
+    # module's `reward` signature or probe it — GRPOTrainer is expected to fail
+    # loudly if the callable's contract is wrong.
     spec = importlib.util.spec_from_file_location("fts_job_reward", path)
     if not spec or not spec.loader:
         raise ValueError("Could not load trusted reward module.")
