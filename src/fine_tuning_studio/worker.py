@@ -1,3 +1,14 @@
+"""The training subprocess: `python -m fine_tuning_studio.worker JOB_ID`.
+
+Launched by jobs.launch_job (directly, or via `accelerate launch` for
+multi-GPU) with no interactive supervision, so `main` below is the last
+line of defense — any exception must still leave the job row and event log
+in a readable failed state rather than just crashing silently. Reads its
+configuration from the job's manifest.json (see domain.py) and reports
+progress through EventWriter and jobs.update_job as it moves through
+dataset preparation, training, evaluation, and export.
+"""
+
 from __future__ import annotations
 
 import hashlib
@@ -25,6 +36,9 @@ class EventWriter:
         self.path = job_directory(job_id) / "events.jsonl"
 
     def write(self, stage: str, message: str, progress: float | None = None, **data: Any) -> None:
+        # events.jsonl is an append-only newline-delimited JSON log (one event per
+        # line) read by the Monitor page; the DB row only ever holds the latest
+        # stage/progress, so the log is the sole record of history through a job.
         event = {
             "time": datetime.now(UTC).isoformat(),
             "stage": stage,
@@ -82,6 +96,11 @@ def render_dataset(
     method: str,
     tokenizer: Any,
 ) -> Any:
+    # Converts whatever shape the source dataset is in (spec.mapping: text,
+    # prompt_response, messages, or one of the preference/kto/grpo column sets) into
+    # the fixed column names each TRL trainer expects (e.g. "text" for SFTTrainer,
+    # "prompt"/"chosen"/"rejected" for DPOTrainer) — see recipes.RECIPES for the
+    # required_columns each objective is checked against.
     columns = set(dataset.column_names)
     if objective in {"dpo", "kto", "reward", "ppo", "orpo", "simpo", "grpo"}:
         errors = validate_recipe(objective, method, columns)
@@ -230,9 +249,16 @@ def run(job_id: str) -> None:
     )
     from trl import SFTConfig, SFTTrainer
 
+    # Progress values threaded through this function (0.02, 0.12, 0.25, 0.82, ...)
+    # are a hand-tuned timeline across preparing/training/evaluating/exporting, not
+    # measured durations; they only need to move forward and roughly track where the
+    # run actually is for the Monitor page's progress bar.
     manifest = load_manifest(job_id)
     events = EventWriter(job_id)
     directory = job_directory(job_id)
+    # `cancel.requested` is how jobs.request_cancel (running in the UI process) tells
+    # this subprocess to stop: a plain sentinel file polled here and in the training
+    # callback below, since there's no direct IPC channel between the two processes.
     cancel_path = directory / "cancel.requested"
     artifacts = directory / "artifacts"
     artifacts.mkdir(exist_ok=True)
@@ -268,6 +294,9 @@ def run(job_id: str) -> None:
         seed=manifest.dataset.seed,
         shuffle=True,
     )
+    # CPU has no half-precision matmul path worth using, so it always trains in
+    # fp32; XPU is assumed bf16-capable outright; everything else (CUDA/ROCm) probes
+    # actual hardware support and falls back to fp16 on older GPUs.
     if manifest.training.runtime_profile == "cpu":
         compute_dtype = torch.float32
     elif manifest.training.runtime_profile == "xpu":
@@ -314,6 +343,10 @@ def run(job_id: str) -> None:
             dtype=compute_dtype,
         )
     if manifest.training.method == "full":
+        # Free-memory probe only covers CUDA/ROCm (ROCm torch builds expose the same
+        # torch.cuda API). On an XPU runtime, torch.cuda.is_available() is False, so
+        # free_bytes is always 0 here and full_training_gate below will treat any
+        # nonzero parameter estimate as exceeding 85% of 0 free VRAM and refuse.
         free_bytes, _ = torch.cuda.mem_get_info() if torch.cuda.is_available() else (0, 0)
         gate = full_training_gate(model.num_parameters(), free_bytes / 1024**3, directory)
         if not gate.allowed:
@@ -422,6 +455,10 @@ def run(job_id: str) -> None:
 
         reward_ref = manifest.training.ppo_reward_model
         reward_revision = manifest.training.ppo_reward_model_revision
+        # `reward_ref` may point at either a full sequence-classification checkpoint
+        # or a PEFT adapter trained on top of one; PeftConfig.from_pretrained is used
+        # as the detection probe since there's no cheaper way to tell them apart
+        # up front, and it raises on a plain (non-adapter) checkpoint.
         try:
             reward_adapter = PeftConfig.from_pretrained(reward_ref, revision=reward_revision)
         except (OSError, ValueError):
@@ -477,6 +514,10 @@ def run(job_id: str) -> None:
     else:
         raise ValueError(f"Unsupported objective: {objective}")
     if manifest.training.method == "full":
+        # Full fine-tuning has the least VRAM headroom of any supported method
+        # (resources.full_training_gate above is only an estimate); force one real
+        # forward+backward pass here so an OOM surfaces immediately instead of
+        # partway through the first training epoch.
         events.write("preparing", "Running one-microbatch memory probe", 0.18)
         sample = split["train"][0]["text"]
         probe = tokenizer(
@@ -500,6 +541,9 @@ def run(job_id: str) -> None:
     else:
         cast(Any, trainer).train(resume_from_checkpoint=manifest.training.resume_checkpoint)
     if cancel_path.exists():
+        # ProgressCallback.on_log already asked the trainer to stop; this saves
+        # whatever was trained so far under a distinct name so a cancelled run still
+        # leaves a usable checkpoint instead of nothing.
         trainer.save_model(str(artifacts / "adapter-cancelled"))
         update_job(job_id, status=JobStatus.CANCELLED, stage="Cancelled", progress=1.0, exit_code=0)
         events.write("cancelled", "Cancelled safely; adapter checkpoint saved", 1.0)
@@ -578,6 +622,10 @@ def main() -> int:
     job_id = sys.argv[1]
     try:
         run(job_id)
+    # Deliberately broad: this subprocess has no interactive supervisor, so any
+    # unhandled exception (OOM, a bad manifest, a trainer bug) must still be
+    # recorded as a FAILED job with a readable message rather than just exiting with
+    # a traceback the UI never sees.
     except Exception as exc:
         EventWriter(job_id).write("failed", f"{type(exc).__name__}: {exc}", 1.0)
         update_job(

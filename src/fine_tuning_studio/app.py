@@ -1,3 +1,16 @@
+"""The Streamlit UI: a wizard (System -> Dataset -> Model -> Training ->
+Review & run -> Monitor -> Export -> Ollama playground) over the backend
+modules, launched by cli.run_app.
+
+Streamlit re-executes this entire module top-to-bottom on every user
+interaction; `st.session_state` (seeded once in initialize_state) is the
+only state that survives between those reruns, so anything expensive
+(machine_report, gpu_memory_report, the Ollama chat history) is cached
+there rather than recomputed on the widget in this file that triggered
+the rerun. See jobs.py for what actually happens when "Start training" is
+pressed on review_page.
+"""
+
 from __future__ import annotations
 
 import importlib.util
@@ -88,6 +101,9 @@ METHOD_LABELS = {
 
 
 def initialize_state() -> None:
+    # Only sets keys that aren't already present, so this can safely run on every
+    # script rerun without clobbering state a widget just set earlier in the same
+    # rerun or in a previous one.
     defaults: dict[str, Any] = {
         "machine_report": None,
         "datasets": [{}],
@@ -108,6 +124,9 @@ def initialize_state() -> None:
 
 
 def machine_report() -> MachineReport:
+    # Cached in session_state because this function is called from several pages on
+    # every rerun (every widget interaction); scan_machine() shells out to several
+    # vendor CLIs and would otherwise re-run on each keystroke.
     if st.session_state.machine_report is None:
         st.session_state.machine_report = scan_machine()
     return st.session_state.machine_report
@@ -167,6 +186,9 @@ def stop_application_dialog() -> None:
             st.write(f"Stopped {len(report.stopped_pids)} app-owned process(es).")
         status.update(label="Shutdown complete", state="complete")
     st.success("Fine-Tuning Studio is stopping. You can close this browser tab.")
+    # The process exits itself shortly after this response is sent (lifecycle.
+    # schedule_clean_exit uses a background timer) rather than exiting inline here,
+    # so the success message above actually reaches the browser first.
     schedule_clean_exit()
     st.stop()
 
@@ -278,6 +300,10 @@ def render_gpu_cleanup(key_prefix: str) -> None:
     if confirmation != "TERMINATE":
         st.error("Type TERMINATE exactly before ending another process.")
         return
+    # Re-fetch and re-filter eligible processes right before acting (rather than
+    # reusing `report`/`candidates` from above): the earlier snapshot can be stale by
+    # the time the confirmation is submitted, and terminate_gpu_process below does
+    # its own identity check on top of this.
     fresh_report = inspect_gpu_memory(studio_worker_pids=active_worker_pids())
     fresh_candidates = {
         process.pid: process
@@ -558,6 +584,9 @@ def model_page() -> None:
             help="This can execute code from the selected repository.",
         )
         if model["trust_remote_code"]:
+            # The typed-confirmation gate, not the toggle above, is what
+            # domain.validate_manifest actually checks (trust_remote_code_acknowledged)
+            # before allowing a job with trust_remote_code=True to launch.
             st.warning("Enable this only after reviewing the model repository.")
             confirmation = st.text_input("Type I UNDERSTAND to enable repository code")
             model["trust_remote_code_acknowledged"] = confirmation == "I UNDERSTAND"
@@ -717,6 +746,10 @@ def training_page() -> None:
             training["reward_functions"] = st.multiselect(
                 "Built-in rewards", ["exact", "numeric", "regex", "length"], default=["length"]
             )
+            # See recipes.copy_trusted_reward: this "trusted" module is executed with
+            # full process privileges, not sandboxed, so custom_code_acknowledged is
+            # load-bearing in domain.validate_manifest the same way
+            # trust_remote_code_acknowledged is for models.
             st.warning("Custom Python rewards execute unsandboxed. Use only code you trust.")
             reward_path = st.text_input("Trusted local reward module (optional)")
             training["reward_module"] = reward_path or None
@@ -1011,6 +1044,8 @@ def ollama_playground_page() -> None:
 
 
 initialize_state()
+# jobs_reconciled makes this run once per browser session rather than on every
+# rerun (every widget interaction re-executes this module from the top).
 if "jobs_reconciled" not in st.session_state:
     try:
         reconcile_jobs()

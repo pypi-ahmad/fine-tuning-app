@@ -1,3 +1,12 @@
+"""Accelerator runtime profiles (cpu/cuda/rocm/xpu): readiness checks and
+provisioning of isolated per-profile virtual environments via uv.
+
+Each profile gets its own venv under studio_home()/runtimes/<profile>,
+separate from the app's own environment, because CUDA/ROCm/XPU builds of
+torch are mutually exclusive. jobs.launch_job picks up profile_python() to
+run the worker under the selected profile's interpreter.
+"""
+
 from __future__ import annotations
 
 import json
@@ -20,6 +29,9 @@ class RuntimeProfile:
     status: str
     torch_index: str
     notes: str
+    # These versions are independent of the app's own torch pin in pyproject.toml
+    # (used for the "current" runtime_profile); keep the two in sync manually when
+    # bumping either one.
     torch_version: str = "2.13.0"
     python_minimum: str = "3.12.10"
 
@@ -108,6 +120,9 @@ def provision_profile(root: Path, profile: str) -> Path:
     subprocess.run(
         ["uv", "venv", str(python.parent.parent), "--python", sys.executable], check=True
     )
+    # Pinned independently of pyproject.toml's dependency list, since a managed
+    # runtime is a separate installation the app's own environment doesn't manage;
+    # bump both places together when upgrading a library here.
     packages = [
         "transformers==5.15.0",
         "datasets==5.0.1",

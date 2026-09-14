@@ -1,3 +1,10 @@
+"""The jobs SQLite database: connection setup, schema migration, backup, and restore.
+
+studio.db (under studio_home(), see jobs.py) is the single source of truth
+for job status; per-job manifest.json files hold the larger configuration.
+Next: jobs.py, which is the only module that reads/writes job rows.
+"""
+
 from __future__ import annotations
 
 import hashlib
@@ -8,12 +15,17 @@ from contextlib import closing
 from datetime import UTC, datetime
 from pathlib import Path
 
+# Bump this and add a new entry to the `migrations` dict in migrate() below when the
+# schema changes; never edit or renumber an existing entry, since already-migrated
+# databases have that version permanently recorded in schema_migrations.
 SCHEMA_VERSION = 3
 
 
 def connect(home: Path) -> sqlite3.Connection:
     home.mkdir(parents=True, exist_ok=True)
     database = home / "studio.db"
+    # Take a safety backup before an irreversible schema migration runs, so a bad
+    # migration (or an interrupted one) can be recovered from manually.
     if database.exists() and _schema_version(database) < SCHEMA_VERSION:
         backup(home, "pre-migration")
     connection = sqlite3.connect(database, timeout=30)
@@ -38,6 +50,9 @@ def _schema_version(database: Path) -> int:
                 ).fetchone()[0]
             )
     except sqlite3.DatabaseError:
+        # Treat an unreadable file as "already current" rather than 0: returning 0
+        # here would make connect() run every migration's ALTER TABLE against a
+        # corrupt file, which is more likely to make things worse than leave it be.
         return SCHEMA_VERSION
 
 
@@ -61,6 +76,9 @@ def migrate(connection: sqlite3.Connection) -> None:
         2: "ALTER TABLE jobs ADD COLUMN kind TEXT NOT NULL DEFAULT 'training'",
         3: "ALTER TABLE jobs ADD COLUMN exit_code INTEGER",
     }
+    # Each version applies in its own transaction and records itself immediately, so
+    # a crash partway through leaves schema_migrations accurately reflecting what
+    # was actually applied (safe to resume from `current + 1` on the next connect).
     for version in range(current + 1, SCHEMA_VERSION + 1):
         with connection:
             connection.execute(migrations[version])
@@ -78,6 +96,8 @@ def backup(home: Path, label: str = "manual") -> Path:
     source = sqlite3.connect(home / "studio.db")
     destination = sqlite3.connect(target / "studio.db")
     try:
+        # sqlite3's online backup API, not a file copy: safe to run against a live
+        # database that another connection (e.g. a running job) may be writing to.
         source.backup(destination)
     finally:
         destination.close()
@@ -106,6 +126,8 @@ def restore(home: Path, source: Path) -> Path:
     source = source.resolve()
     if not (source / "studio.db").is_file() or not (source / "backup.json").is_file():
         raise ValueError("Backup must contain studio.db and backup.json.")
+    # Always take a fresh backup of the current state before overwriting it, so a
+    # restore is itself undoable.
     safety = backup(home, "pre-restore")
     restored = sqlite3.connect(source / "studio.db")
     destination = sqlite3.connect(home / "studio.db")

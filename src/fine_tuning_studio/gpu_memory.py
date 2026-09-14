@@ -1,3 +1,13 @@
+"""Cross-vendor GPU memory/process inspection, cache release, and safe
+process termination for the "GPU memory cleanup" UI section.
+
+This is the one place in the app that can end an arbitrary process chosen
+by the user, so process_protection_reason (an allowlist of reasons NOT to
+allow termination) and the identity re-check in terminate_gpu_process are
+the safety-critical parts of this file. amd-smi/xpu-smi JSON field names are
+probed under several aliases because they vary across driver versions.
+"""
+
 from __future__ import annotations
 
 import csv
@@ -154,6 +164,11 @@ def process_protection_reason(
     ancestor_pids: set[int],
     studio_worker_pids: set[int],
 ) -> str | None:
+    # Returning None is what makes a process eligible for user-initiated
+    # termination in the UI, so every branch here is a reason to refuse: system
+    # processes, this app and its ancestors, known Studio/Ollama-managed workers,
+    # well-known OS process names, and anything not owned by the current user
+    # (ownership can't be verified, or belongs to someone else).
     normalized = _basename(name).casefold()
     if pid <= 4:
         return "System process"
@@ -207,6 +222,11 @@ def terminate_gpu_process(candidate: GpuProcess) -> tuple[int, ...]:
         raise PermissionError(candidate.protected_reason)
     try:
         process = psutil.Process(candidate.pid)
+        # `candidate` is a snapshot from an earlier inspect_gpu_memory() call; by the
+        # time the user confirms termination, that PID could have exited and been
+        # reused by an unrelated process. Re-checking create_time, owner, and
+        # executable path against the snapshot closes that race before anything is
+        # killed.
         if abs(process.create_time() - candidate.create_time) > 0.01:
             raise RuntimeError("Process identity changed; refresh GPU processes and try again.")
         if process.username().casefold() != candidate.username.casefold():
@@ -430,6 +450,8 @@ def _integer(value: object) -> int | None:
 
 
 def _megabytes(value: object) -> int | None:
+    # amd-smi can report a bare number (implicitly MB) or a {"value", "unit"}
+    # object; normalize both shapes to whole megabytes.
     if isinstance(value, dict):
         amount = value.get("value")
         unit = str(value.get("unit") or "MB").upper()
@@ -457,6 +479,9 @@ def _records(value: object) -> Iterable[dict[str, Any]]:
 
 
 def _find_value(record: dict[str, Any], *names: str) -> object | None:
+    # amd-smi/xpu-smi don't guarantee a stable JSON schema across driver/tool
+    # versions (e.g. "vram_total" vs "total_vram" vs "total"); callers pass every
+    # known alias for a field and this returns the first one present.
     wanted = {name.casefold() for name in names}
     for key, value in record.items():
         if str(key).casefold() in wanted:

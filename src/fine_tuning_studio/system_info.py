@@ -1,3 +1,13 @@
+"""Machine capability scan: OS, CPU, memory, disk, GPUs, and installed ML
+packages, backing the System page and `fine-tuning-studio doctor`.
+
+Every sub-probe here is independently best-effort: a missing vendor tool or
+failed subprocess call yields an empty/absent result rather than raising, so
+one unavailable tool (e.g. no `nvidia-smi` on an AMD-only machine) never
+prevents the rest of the scan from completing. Only booleans/versions are
+reported for credentials (see _hugging_face_token_present) — never values.
+"""
+
 from __future__ import annotations
 
 import importlib.metadata
@@ -59,6 +69,8 @@ class MachineReport:
 
 
 def _run(command: list[str], timeout: float = 4) -> subprocess.CompletedProcess[str] | None:
+    # None (not an exception) on a missing binary or a hang: every caller treats
+    # that the same as "this vendor tool isn't usable here" and moves on.
     try:
         return subprocess.run(
             command,
@@ -141,6 +153,9 @@ def _windows_display_adapters() -> list[GPUInfo]:
     for row in rows:
         name = str(row.get("Name") or "Unknown adapter")
         vendor = next((v for v in ("NVIDIA", "AMD", "Intel") if v.lower() in name.lower()), "Other")
+        # NVIDIA GPUs are already reported by _nvidia_gpus() via nvidia-smi, which
+        # has real memory figures; skip them here to avoid a duplicate, memory-less
+        # entry from the generic OS device enumeration.
         if vendor == "NVIDIA":
             continue
         memory = row.get("AdapterRAM")
@@ -174,7 +189,7 @@ def _linux_display_adapters() -> list[GPUInfo]:
             "Other",
         )
         if vendor == "NVIDIA":
-            continue
+            continue  # already reported by _nvidia_gpus(); see the comment there
         adapters.append(
             GPUInfo(
                 vendor=vendor,

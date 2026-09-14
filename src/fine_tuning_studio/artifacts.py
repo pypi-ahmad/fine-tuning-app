@@ -1,3 +1,9 @@
+"""Content-hash manifest for a finished job's artifact directory.
+
+Used by worker.py at the end of a run to record what was produced (adapter,
+merged model, logs) and let a caller verify nothing was altered afterward.
+"""
+
 from __future__ import annotations
 
 import hashlib
@@ -24,6 +30,8 @@ def write_artifact_manifest(root: Path) -> Path:
         for path in sorted(root.rglob("*"))
         if path.is_file() and path != output
     ]
+    # Write-then-rename so a crash mid-write never leaves a truncated manifest at the
+    # final path; `Path.replace` is an atomic rename on both POSIX and Windows.
     temporary = output.with_suffix(".tmp")
     temporary.write_text(json.dumps({"files": entries}, indent=2), encoding="utf-8")
     temporary.replace(output)

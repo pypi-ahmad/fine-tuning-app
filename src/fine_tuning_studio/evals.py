@@ -1,3 +1,11 @@
+"""Evaluation report writing and the optional Inspect AI benchmark integration.
+
+Writes the json/csv/html trio worker.py produces after a training run, and
+separately shells out to the `inspect` CLI (an optional dependency) to run
+standardized benchmarks. See recipes.py for the in-process GRPO reward
+functions, which are a different kind of "evaluation".
+"""
+
 from __future__ import annotations
 
 import csv
@@ -57,6 +65,10 @@ def compare_reports(reports: list[dict[str, float]]) -> dict[str, list[float]]:
 
 
 def inspect_command(model: Path, tasks: list[str], limit: int = 20) -> list[str]:
+    # `tasks` reaches here from the UI/manifest as free-form strings; checking them
+    # against the fixed TASKS allowlist before they become argv keeps this a plain
+    # arg list handed to subprocess.run (no shell=True), so there is no command
+    # injection surface even though the model path is also caller-controlled.
     unknown = set(tasks) - set(TASKS)
     if unknown:
         raise ValueError(f"Unknown Inspect task: {', '.join(sorted(unknown))}")
@@ -68,6 +80,8 @@ def inspect_command(model: Path, tasks: list[str], limit: int = 20) -> list[str]
 def run_inspect(model: Path, tasks: list[str], limit: int, output: Path) -> None:
     if not shutil.which("inspect"):
         raise RuntimeError("Install the optional Inspect AI evaluation profile first.")
+    # A full benchmark suite can run for hours; the generous timeout is a backstop
+    # against a hung process, not an expected duration.
     result = subprocess.run(
         inspect_command(model, tasks, limit), capture_output=True, text=True, timeout=86400
     )

@@ -1,3 +1,12 @@
+"""Job lifecycle: create, launch, query, cancel, and reconcile training jobs.
+
+A job has two persisted parts that must stay consistent: a row in
+studio.db (status/progress, queried frequently by the UI) and a
+manifest.json file under its job directory (the full configuration, read
+once by worker.py at launch). Next: worker.py, the subprocess launch_job
+starts.
+"""
+
 from __future__ import annotations
 
 import json
@@ -74,6 +83,9 @@ def create_job(
                 },
             ),
         )
+    # manifest.json is written before the DB row exists so a reader that finds the
+    # row can always read a complete manifest; the reverse order could expose a job
+    # ID with no manifest file yet.
     manifest_path = directory / "manifest.json"
     manifest_path.write_text(json.dumps(manifest.to_dict(), indent=2), encoding="utf-8")
     now = datetime.now(UTC).isoformat()
@@ -95,6 +107,9 @@ def resume_job(parent_job_id: str, checkpoint: Path) -> RunManifest:
     )
     if parent_manifest.training.objective == "ppo":
         raise ValueError("PPO checkpoint resume is unavailable with the experimental trainer.")
+    # `checkpoint` is a caller-supplied path (from the UI's checkpoint picker).
+    # This repeats domain.ensure_within's containment check by hand because the
+    # boundary here is the parent job's own checkpoints directory, not studio_home.
     checkpoint = checkpoint.resolve()
     checkpoints_root = (job_directory(parent_job_id) / "checkpoints").resolve()
     if checkpoint != checkpoints_root and checkpoints_root not in checkpoint.parents:
@@ -173,6 +188,9 @@ def launch_job(job_id: str) -> int:
         else:
             environment["CUDA_VISIBLE_DEVICES"] = selected
     if manifest.training.world_size > 1:
+        # Multi-GPU jobs are launched through `accelerate launch` instead of running
+        # the worker module directly; its config file (below) is generated fresh per
+        # job rather than relying on a shared, machine-wide accelerate config.
         strategy = manifest.training.distributed_strategy
         if strategy == "auto":
             strategy = "ddp"
@@ -209,6 +227,9 @@ def launch_job(job_id: str) -> int:
     stdout = (directory / "stdout.log").open("a", encoding="utf-8")
     stderr = (directory / "stderr.log").open("a", encoding="utf-8")
     try:
+        # No console window on Windows (this runs behind the Streamlit UI); a new
+        # POSIX session elsewhere so signals sent to this process's terminal/process
+        # group (e.g. Ctrl+C) don't also reach the worker.
         process = subprocess.Popen(
             command,
             cwd=Path.cwd(),
@@ -226,6 +247,9 @@ def launch_job(job_id: str) -> int:
 
 
 def _rotate_logs(directory: Path, limit: int = 10 * 1024 * 1024) -> None:
+    # Single-generation rotation: keeps at most one previous log (name + ".1") per
+    # relaunch (e.g. on resume), not a numbered history. Runs before a new worker
+    # starts, so its fresh stdout/stderr don't grow the current file unbounded.
     for name in ("stdout.log", "stderr.log"):
         path = directory / name
         if path.is_file() and path.stat().st_size >= limit:
@@ -260,6 +284,10 @@ def terminate_job(job_id: str) -> None:
 
 
 def reconcile_jobs() -> int:
+    # Crash recovery, run once at app startup (see cli.doctor / app.py's initial
+    # call): a job left in an "active" status whose recorded PID is no longer
+    # running means the app (or the worker) died without updating the row, so it's
+    # reclassified as interrupted rather than left looking like it's still going.
     active = {
         JobStatus.PREPARING,
         JobStatus.EVALUATING_BEFORE,
